@@ -1,17 +1,11 @@
 grammar Quantities;
 
-unit: velocity | distance | time;
-velocity: distance '/' time;
-distance: (REAL | INT) '[m]';
-time: (REAL | INT) '[s]';
+quantity: ID ':' type;
+type: value unit;
+value: REAL | INT;
+unit: '[' ID ']';
 
-quantities:
-	'velocitiy'
-	| 'distance'
-	| 'time'
-	| 'mass'
-	| 'temperature';
-
+ID: [a-zA-Z]+;
 REAL: INT '.' INT | '.' INT;
 INT: DIGIT+;
 DIGIT: [0-9];
