@@ -1,4 +1,4 @@
-// Generated from /home/ds/Desktop/Compiladores/compiladores-1819-g06/Grammars/General.g4 by ANTLR 4.7.1
+// Generated from /home/joao/Documents/2º_ano/2º_semestre/C/C/Projeto/compiladores-1819-g06/Grammars/General.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GeneralParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -22,19 +22,28 @@ public class GeneralParser extends Parser {
 	public static final int
 		RULE_main = 0, RULE_expr = 1, RULE_declaration = 2, RULE_operation = 3, 
 		RULE_quantity = 4, RULE_type = 5, RULE_value = 6, RULE_unit = 7;
-	public static final String[] ruleNames = {
-		"main", "expr", "declaration", "operation", "quantity", "type", "value", 
-		"unit"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"main", "expr", "declaration", "operation", "quantity", "type", "value", 
+			"unit"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "'\n'", "';'", "'='", "'('", "')'", "'*'", "'/'", "'+'", "'-'", 
-		"':'", "'real'", "'int'", "'['", "']'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, "VARID", "INT", "ID", "WS"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "'\n'", "';'", "'='", "'('", "')'", "'*'", "'/'", "'+'", "'-'", 
+			"':'", "'real'", "'int'", "'['", "']'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, "VARID", "INT", "ID", "WS"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -84,6 +93,7 @@ public class GeneralParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class MainContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(GeneralParser.EOF, 0); }
 		public List<ExprContext> expr() {

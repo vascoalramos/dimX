@@ -1,4 +1,4 @@
-// Generated from /home/ds/Desktop/Compiladores/compiladores-1819-g06/Grammars/Quantities.g4 by ANTLR 4.7.1
+// Generated from /home/joao/Documents/2º_ano/2º_semestre/C/C/Projeto/compiladores-1819-g06/Grammars/Quantities.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class QuantitiesParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -19,16 +19,25 @@ public class QuantitiesParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, ID=8, WS=9;
 	public static final int
 		RULE_quantity = 0, RULE_type = 1, RULE_value = 2, RULE_unit = 3;
-	public static final String[] ruleNames = {
-		"quantity", "type", "value", "unit"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"quantity", "type", "value", "unit"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, "':'", "'/'", "'*'", "'real'", "'int'", "'['", "']'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, null, "ID", "WS"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, "':'", "'/'", "'*'", "'real'", "'int'", "'['", "']'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, "ID", "WS"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -78,6 +87,7 @@ public class QuantitiesParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class QuantityContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(QuantitiesParser.ID, 0); }
 		public TypeContext type() {

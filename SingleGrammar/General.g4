@@ -10,6 +10,7 @@ expr:  quantity ';'
  declaration: ID ID '=' operation
             | ID ID
             | ID ID '=' operation
+            | funcDecl
             ;
             
 operation: operation ('*'|'/') operation
@@ -17,6 +18,9 @@ operation: operation ('*'|'/') operation
          | '(' operation ')'
          | INT
          | ID
+         | functionUse{
+                 
+         }
          ;
 
 
@@ -25,6 +29,16 @@ quantity: ID ':' type
         ;
 
 type: value unit;
+
+functionUse:ID '(' arguments? ')' ;
+
+funcDecl:ID ID '(' argumentsDecl? '){' funcBody '}';
+
+funcBody:operation*;
+
+arguments: operation (',' operation)*;
+
+argumentsDecl: ID operation (',' ID operation)*;
 
 value: 'real' | 'int';
 
