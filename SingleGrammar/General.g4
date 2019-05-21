@@ -7,9 +7,12 @@ expr:  quantity ';'
     | declaration ';'
     ;
 
+expr_func: operation ';'
+        | declaration ';'
+        ;
+
  declaration: ID ID '=' operation
             | ID ID
-            | ID ID '=' operation
             | funcDecl
             ;
             
@@ -18,9 +21,9 @@ operation: operation ('*'|'/') operation
          | '(' operation ')'
          | INT
          | ID
-         | functionUse{
+         | functionUse
                  
-         }
+         
          ;
 
 
@@ -32,13 +35,13 @@ type: value unit;
 
 functionUse:ID '(' arguments? ')' ;
 
-funcDecl:ID ID '(' argumentsDecl? '){' funcBody '}';
+funcDecl:ID ID '(' argumentsDecl? '){''\n'? funcBody '}';
 
-funcBody:operation*;
+funcBody:(expr_func';')*'\n'? ('return' ID)?;
 
 arguments: operation (',' operation)*;
 
-argumentsDecl: ID operation (',' ID operation)*;
+argumentsDecl: ID ID (',' ID ID)*;
 
 value: 'real' | 'int';
 
