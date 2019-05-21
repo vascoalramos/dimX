@@ -2,8 +2,8 @@ grammar Quantities;
 
 ////////////////////////LEXER RULES////////////////////////
 
-quantity: ID ':' type
-        | quantity ('/'|'*') quantity
+quantity: e1=ID ':' e2=type             #quantity_decl
+        | ID ':' ID ('/'|'*') ID        #complx_quantity_decl
         ;
 
 type: value unit;
