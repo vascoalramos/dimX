@@ -1,4 +1,7 @@
 // Generated from /home/joao/Documents/2º_ano/2º_semestre/C/C/Projeto/compiladores-1819-g06/SingleGrammar/General.g4 by ANTLR 4.7.2
+
+        import java.util.HashMap;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -82,6 +85,9 @@ public class GeneralLexer extends Lexer {
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
+
+
+	        HashMap <String,String[]> QuantityMap=new HashMap <> ();
 
 
 	public GeneralLexer(CharStream input) {

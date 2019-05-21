@@ -1,5 +1,11 @@
 grammar General;
 
+@header{
+        import java.util.HashMap;
+}
+@members{
+        HashMap <String,String[]> QuantityMap=new HashMap <> ();
+}
 main: (expr '\n')* EOF;
 
 expr:  quantity ';'
@@ -13,7 +19,7 @@ expr_func: operation ';'
 
  declaration: ID ID '=' operation
             | ID ID
-            | funcDecl
+            |   
             ;
             
 operation: operation ('*'|'/') operation
@@ -27,11 +33,14 @@ operation: operation ('*'|'/') operation
          ;
 
 
-quantity: ID ':' type
-        | quantity ('/'|'*') quantity
+quantity: e1=ID ':' e2=type #quantity_decl
+        | ID ':' ID ('/'|'*') ID #quantity_decl_complx
         ;
 
-type: value unit;
+type returns[String res=""]:
+        e1=value e2=unit
+
+        ;
 
 functionUse:ID '(' arguments? ')' ;
 
