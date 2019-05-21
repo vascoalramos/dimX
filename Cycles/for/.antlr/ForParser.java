@@ -1,4 +1,4 @@
-// Generated from For.g4 by ANTLR 4.7.2
+// Generated from /home/ds/Desktop/Compiladores/compiladores-1819-g06/for/For.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ForParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -22,28 +22,19 @@ public class ForParser extends Parser {
 	public static final int
 		RULE_main = 0, RULE_expr = 1, RULE_for_statement = 2, RULE_for_init = 3, 
 		RULE_operation = 4, RULE_expression = 5, RULE_for_update = 6;
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"main", "expr", "for_statement", "for_init", "operation", "expression", 
-			"for_update"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
+	public static final String[] ruleNames = {
+		"main", "expr", "for_statement", "for_init", "operation", "expression", 
+		"for_update"
+	};
 
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'\n'", "'oi'", "'for'", "'('", "';'", "'){ '", "'}'", "'='", "'*'", 
-			"'/'", "'+'", "'-'", "')'", "'<'", "'<='", "'>'", "'>='", "'=='", "'!='"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, "ID", "INT", "WS"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	private static final String[] _LITERAL_NAMES = {
+		null, "'\n'", "'oi'", "'for'", "'('", "';'", "'){ '", "'}'", "'='", "'*'", 
+		"'/'", "'+'", "'-'", "')'", "'<'", "'<='", "'>'", "'>='", "'=='", "'!='"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, "ID", "INT", "WS"
+	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -93,7 +84,6 @@ public class ForParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
-
 	public static class MainContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(ForParser.EOF, 0); }
 		public List<For_statementContext> for_statement() {
@@ -106,14 +96,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_main; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterMain(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitMain(this);
-		}
 	}
 
 	public final MainContext main() throws RecognitionException {
@@ -159,14 +141,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitExpr(this);
-		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {
@@ -210,14 +184,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_for_statement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterFor_statement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitFor_statement(this);
-		}
 	}
 
 	public final For_statementContext for_statement() throws RecognitionException {
@@ -284,14 +250,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_for_init; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterFor_init(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitFor_init(this);
-		}
 	}
 
 	public final For_initContext for_init() throws RecognitionException {
@@ -347,14 +305,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_operation; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterOperation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitOperation(this);
-		}
 	}
 
 	public final OperationContext operation() throws RecognitionException {
@@ -482,14 +432,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitExpression(this);
-		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -555,14 +497,6 @@ public class ForParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_for_update; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).enterFor_update(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ForListener ) ((ForListener)listener).exitFor_update(this);
-		}
 	}
 
 	public final For_updateContext for_update() throws RecognitionException {
