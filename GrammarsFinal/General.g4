@@ -1,14 +1,6 @@
 grammar General;
 import Quantities;
 
-@header {
-        import java.util.HashMap;
-}
-
-@members {
-        HashMap <String,String[]> QuantityMap=new HashMap <> ();
-}
-
 ////////////////////////LEXER RULES////////////////////////
 
 main: (expr '\n')* EOF;
