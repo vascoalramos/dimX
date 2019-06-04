@@ -5,7 +5,7 @@ import Quantities;
 
 main: (expr '\n')* EOF;
 
-expr: quantity ';' | declaration ';' | operation ';';
+expr: quantity ';' | prefix_declare ';' | declaration ';' | operation ';';
 declaration: ID ID ('=' operation)? | ID '=' operation;
 
 operation:
@@ -17,4 +17,3 @@ operation:
 
 ////////////////////////PARSER RULES////////////////////////
 
-INT: [0-9]+;
