@@ -26,7 +26,7 @@ public class QuantitiesMain {
          // create a parser that feeds off the tokens buffer:
          parser.setInputStream(tokens);
          // begin parsing at quantity rule:
-         ParseTree tree = parser.quantity();
+         ParseTree tree = parser.quantity_declare();
          if (parser.getNumberOfSyntaxErrors() == 0) {
             // print LISP-style tree:
             // System.out.println(tree.toStringTree(parser));

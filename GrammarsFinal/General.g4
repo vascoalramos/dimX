@@ -3,17 +3,40 @@ import Quantities;
 
 ////////////////////////LEXER RULES////////////////////////
 
-main: (expr '\n')* EOF;
+///Main Stuff///
 
-expr: quantity ';' | prefix_declare ';' | declaration ';' | operation ';';
-declaration: ID ID ('=' operation)? | ID '=' operation;
+main: statList EOF;
 
-operation:
+statList: (stat ';' '\n'?)*;
+
+stat: operation
+	| declaration
+	| assignment
+	//| conditional
+	;
+
+declaration:  quantity_declare
+			| prefix_declare
+			| var_declare
+			;
+
+assignment: var_assignment;
+
+
+///Other Stuff///
+
+var_declare: ID ID ('=' operation)?;	//Variable Declaration
+			 
+
+var_assignment:  ID '=' operation;		//Variable Assignment
+
+operation:		//Operations
 	operation ('*' | '/') operation
 	| operation ('+' | '-') operation
 	| '(' operation ')'
 	| INT
 	| ID;
+
 
 ////////////////////////PARSER RULES////////////////////////
 
