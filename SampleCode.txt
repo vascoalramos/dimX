@@ -16,13 +16,14 @@ time tempo = 1[km] / 5[m/s]; //Conversao para milisegundos e uso de literais
 //A luz da estrela polar demora 470 anos a chegar a terra. Calcula a distancia da estrela polar a terra expressa em quilometros e em parsec
 
 time tempo = 470[years];
-distance dist = const.c * tempo; //Neste caso nao definimos a grandeza do dist, MAS ao fazermos o calculo de const.c * tempo a linguagem deve automaticamente identificar que o output teria como grandeza: distance (metros)
+/*
+distance dist = const.c * tempo; Neste caso nao definimos a grandeza do dist, MAS ao fazermos o calculo de const.c * tempo a linguagem deve automaticamente identificar que o output teria como grandeza: distance (metros)
 
-print(dist)
+print dist
 
 
 for(distance i = 0 ; i < 10 ; i++){
 	print(i + " " + i.unit);
 }
 
-//Language name: DimX
+//Language name: DimX*/

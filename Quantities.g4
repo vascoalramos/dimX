@@ -1,13 +1,15 @@
 grammar Quantities;
 
 quantity_declare: ID ':' expr;
-expr: value unit | e1 = ID op = ('/' | '*') e2 = ID;
+expr: value unit | e1 = ID op = ('/' | '*') e2 = ID unit?;
 
 value: 'real' | 'int';
-unit: '[' ID ']';
+unit: '[' ID (op=('/'|'*') ID)? ']'; //TODO make it so you can have multiple complex units (i.e m*m*m)
+
 
 prefix_declare: 'prefix' ID ':' number_type;
-number_type: INT | FLOAT | SCF_NOTATION;
+number_type: number | SCF_NOTATION;
+number: INT | FLOAT;
 
 SCF_NOTATION: '10^' [0-9]*;
 
