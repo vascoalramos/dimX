@@ -1,28 +1,22 @@
-public abstract class Type
-{
-   protected Type(String name) {
-      assert name != null;
-      this.name = name;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Type {
+   private String value;
+   private List<String> units = new ArrayList<>();
+
+   public Type(String value, String unit) {
+      assert value != null;
+      assert unit != null;
+      this.value = value;
+      this.units.add(unit);
    }
 
-   public String name() {
-      return name;
+   public String value() {
+      return value;
    }
 
-   public boolean conformsTo(Type other) {
-      return name.equals(other.name());
+   public List<String> unit() {
+      return this.units;
    }
-
-   public boolean isNumeric() {
-      return false;
-   }
-
-   @Override
-   public String toString()
-   {
-      return name;
-   }
-
-   protected final String name;
 }
-

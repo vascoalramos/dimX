@@ -8,13 +8,13 @@ stat: quantity_declare
 
 quantity_declare: ID ':' type;
 
-type: value unit
-	| e1 = ID op = ('/' | '*') e2 = ID unit? // TODO ask mos
+type : value unit									#SimpleType
+	| e1 = ID op = ('/' | '*') e2 = ID unit		#ComplexType
 	;
 
-value returns[Type res]:
-	   'int' { $res = new IntegerType(); }
-	 | 'real' { $res = new RealType(); }
+value:
+	   'int'
+	 | 'real'
 	 ;
 
 //TODO make it so you can have multiple complex units (i.e m*m*m)

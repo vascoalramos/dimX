@@ -1,8 +1,6 @@
 grammar General;
 import Quantities;
 
-
-
 main: (stat TERM)* EOF;
 
 stat: print
@@ -10,31 +8,22 @@ stat: print
     | assignment
     ;
 
-assignment: ID? ID ('=' assignment_type)?; // check if it's already declared; can't write only the var 
+assignment: ID? ID ('=' expr)?; // check if it's already declared; can't write only the var 
 
-assignment_type: operation
-                | number unit
-                ;
-
-content: operation
-        | STRING
-        ;
-
-operation: e1=operation op=('*'|'/') e2=operation
-         | e1=operation op=( '+' | '-' ) e2=operation
-         |'(' operation ')'
-         | number unit?
+expr: e1=expr op=('*'|'/') e2=expr
+         | e1=expr op=( '+' | '-' ) e2=expr
+         |'(' expr ')'
+         | number_type unit?
          | ID
-         
-
+         | STRING
+         | BOOLEAN
          ; 
 
-print: 'print' '(' content ')' ; 
+print: 'print' '(' expr ')';
+
 declaration: quantity_declare
-            |prefix_declare;
-
- 
-
+           | prefix_declare
+           ;
 
 STRING: '"' .*? '"';
 BOOLEAN: 'true' | 'false';
