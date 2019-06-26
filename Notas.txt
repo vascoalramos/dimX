@@ -1,0 +1,8 @@
+How to run:
+    antlr4-build [grammar name]
+    antlr4-test [grammar name] [first rule] -gui
+    antrl4-visitor [grammar name]
+
+Verificar se declaraçao ja foi feita ou seja nao pode existir mais que um distance:real[m] e
+nao pode existir outro sufixo [m]
+
