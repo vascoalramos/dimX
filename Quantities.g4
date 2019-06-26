@@ -1,24 +1,36 @@
 grammar Quantities;
 
-quantity_declare: ID ':' expr;
-expr: value unit | e1 = ID op = ('/' | '*') e2 = ID unit?;
+main: (stat ';')* EOF;
 
-value: 'real' | 'int';
-unit:
-	'[' ID (op = ('/' | '*') ID)? ']';
-	//TODO make it so you can have multiple complex units (i.e m*m*m)
+stat: quantity_declare
+	| prefix_declare
+	;
+
+quantity_declare: ID ':' type;
+
+type: value unit
+	| e1 = ID op = ('/' | '*') e2 = ID unit? // TODO ask mos
+	;
+
+value returns[Type res]:
+	   'int' { $res = new IntegerType(); }
+	 | 'real' { $res = new RealType(); }
+	 ;
+
+//TODO make it so you can have multiple complex units (i.e m*m*m)
+unit: '[' ID (op = ('/' | '*') ID)? ']';
 
 prefix_declare: 'prefix' ID ':' number_type;
-number_type: number | SCF_NOTATION;
-number returns[Type res]:
-	INT {$res = new IntegerType();}
-	| FLOAT {$res = new RealType();}
-    ;
 
-SCF_NOTATION: '10^' [0-9]*;
+number_type:  INT
+			| FLOAT
+			| SCF_NOTATION
+			;
+
+SCF_NOTATION: '10^' [0-9]*; //TODO: later date
 
 ID: LETTER (LETTER | DIGIT)*;
-fragment LETTER: [a-zA-Z_];
+fragment LETTER: [a-zA-Z];
 
 INT: DIGIT+;
 FLOAT: DIGIT+ '.' DIGIT+ | '.' DIGIT+;
