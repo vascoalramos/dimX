@@ -37,11 +37,5 @@ declaration: quantity_declare
 
 
 STRING: '"' .*? '"';
-            
-
-
-
-
-
-
+BOOLEAN: 'true' | 'false';
 TERM: ';';

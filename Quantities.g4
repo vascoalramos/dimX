@@ -4,12 +4,16 @@ quantity_declare: ID ':' expr;
 expr: value unit | e1 = ID op = ('/' | '*') e2 = ID unit?;
 
 value: 'real' | 'int';
-unit: '[' ID (op=('/'|'*') ID)? ']'; //TODO make it so you can have multiple complex units (i.e m*m*m)
-
+unit:
+	'[' ID (op = ('/' | '*') ID)? ']';
+	//TODO make it so you can have multiple complex units (i.e m*m*m)
 
 prefix_declare: 'prefix' ID ':' number_type;
 number_type: number | SCF_NOTATION;
-number: INT | FLOAT;
+number returns[Type res]:
+	INT {$res = new IntegerType();}
+	| FLOAT {$res = new RealType();}
+    ;
 
 SCF_NOTATION: '10^' [0-9]*;
 
