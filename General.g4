@@ -1,41 +1,54 @@
 grammar General;
-import Quantities;
-
-
 
 main: (stat TERM)* EOF;
 
 stat: print
-    | declaration
-    | assignment
+    | assign
+    | input
+    ;
+print: 'print' '(' expr ')' ; 
+
+assign: type? ID ('=' expr)?; //String ola = 1+1; String ola; ola=1+1;
+
+input: 'input' '(' STRING ')';
+
+type returns[Type res]:
+     'Integer' {$res = new IntegerType();}
+   | 'Real'    {$res = new RealType();}
+   | 'Boolean' {$res = new BooleanType();}
+   | 'String'
+   ;
+
+expr:expr op=('*'|':') expr #multDiv
+    |expr op=('+'|'-') expr #addSun
+    | '(' expr ')' #parentheses
+    |number #numberValue
+    |input #inputValue
+    |ID #IDvalue
+    |STRING #StringValue
+    |BOOLEAN #BooleanValue
     ;
 
-assignment: ID? ID ('=' assignment_type)?; // check if it's already declared; can't write only the var 
 
-assignment_type: operation
-                | number unit
-                ;
+number returns[Type res]:
+	INT {$res = new IntegerType();}
+	| FLOAT {$res = new RealType();}
+    ;
+BOOLEAN: 'true' | 'false';
 
-content: operation
-        | STRING
-        ;
 
-operation: e1=operation op=('*'|'/') e2=operation
-         | e1=operation op=( '+' | '-' ) e2=operation
-         |'(' operation ')'
-         | number unit?
-         | ID
-         
+SCF_NOTATION: '10^' [0-9]*;
 
-         ; 
+ID: LETTER (LETTER | DIGIT)*;
+fragment LETTER: [a-zA-Z_];
 
-print: 'print' '(' content ')' ; 
-declaration: quantity_declare
-            |prefix_declare;
+INT: DIGIT+;
+FLOAT: DIGIT+ '.' DIGIT+ | '.' DIGIT+;
+fragment DIGIT: [0-9];
 
- 
-
+SINGLE_LINE_COMMENT: '//' .*? '\n' -> skip;
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
+WS: [ \r\n\t]+ -> skip;
 
 STRING: '"' .*? '"';
-BOOLEAN: 'true' | 'false';
 TERM: ';';

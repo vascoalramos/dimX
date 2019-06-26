@@ -1,0 +1,4 @@
+print ("joao");
+input ("joao: ");
+a=1+1;
+b=joao+adeus;
