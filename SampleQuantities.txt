@@ -1,0 +1,7 @@
+distance : real [m];
+
+time : real [s];
+
+prefix K : 1000;
+
+speed : distance / time [m/s];
