@@ -8,7 +8,9 @@ main: (stat TERM)* EOF;
 stat: print | assign | declaration | input;
 print: 'print' '(' expr ')';
 
-assign: declaration '=' expr | ID '=' expr;
+assign: declaration '=' expr #declareAndAssign
+	  | ID '=' expr			 #justAssign
+	  ;
 
 input: 'input' '(' STRING ')';
 
