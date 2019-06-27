@@ -1,0 +1,81 @@
+// Simple Translation Dictionaries
+
+booleanValue ::= [
+    "true"  : "true",
+    "false" : "false",
+    default : "null"
+]
+
+typeValue ::= [
+    "Integer"  : "int",
+    "Real"     : "double",
+    "Boolean"  : "boolean",
+    "String"   : "String",
+    default    : "null"
+]
+
+
+typeFormat ::= [
+    "Integer"  : "",
+    "Real"     : "",
+    "Boolean"  : "",
+    "String"   : "",
+    default    : "null"
+]
+
+operators ::= [
+    "*"  : "*",
+    ":"  : "/",
+    "+"  : "+",
+    "-"  : "-",
+    default    : "null"
+]
+
+
+// Actual String Templates aka mendes big gay
+
+//Generate Class
+module(name,stat) ::= <<
+    import java.util.Scanner;
+
+    public class <name> {        
+        private Scanner sc = new Scanner(System.in);
+
+        public static void main(String[] args){
+            <stats(stat)>
+        }
+    }
+>>
+
+
+//Declare Variable
+declare(stat,type,var) ::= <<
+    <stats(stat)>
+
+    <typeValue.(type)> <var>;
+>>
+
+
+//Initialize Variable
+assign(stat,type,var,value) ::= <<
+    <stats(stat)>
+
+    <var> = <value>;
+>>
+
+
+//Print expression
+print(stat,expr) ::= <<
+    <stats(stat)>
+
+    System.out.println(<expr>);
+>>
+
+
+//Input from user - TODO: ASK HOW TO DO INPUT PROPERLY
+input(stat, prompt) ::= <<
+    <stats(stat)>
+
+    System.out.print(<prompt>);
+    sc.nextLine();
+>>
