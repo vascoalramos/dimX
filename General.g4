@@ -2,40 +2,31 @@ grammar General;
 
 main: (stat TERM)* EOF;
 
-stat: print
-    | assign
-    | input
-    ;
-print: 'print' '(' expr ')' ; 
+stat: print | assign | input;
+print: 'print' '(' expr ')';
 
-assign: type? ID ('=' expr)?; //String ola = 1+1; String ola; ola=1+1;
+assign:
+	type? ID ('=' expr)?; //String ola = 1+1; String ola; ola=1+1;
 
 input: 'input' '(' STRING ')';
 
-type returns[Type res]:
-     'Integer' 
-   | 'Real'    
-   | 'Boolean'
-   | 'String'
-   ;
+type
+	returns[Type res]: 'Integer' | 'Real' | 'Boolean' | 'String';
 
-expr:expr op=('*'|':') expr #multDiv
-    |expr op=('+'|'-') expr #addSun
-    | '(' expr ')' #parentheses
-    |number #numberValue
-    |input #inputValue
-    |ID #IDvalue
-    |STRING #StringValue
-    |BOOLEAN #BooleanValue
-    ;
+expr
+	returns[Type exprType, String varName]:
+	expr op = ('*' | ':') expr		# multDiv
+	| expr op = ('+' | '-') expr	# addSun
+	| '(' expr ')'					# parentheses
+	| number						# numberValue
+	| input							# inputValue
+	| ID							# IDvalue
+	| STRING						# StringValue
+	| BOOLEAN						# BooleanValue;
 
-
-number returns[Type res]:
-	INT
-	| FLOAT 
-    ;
+number
+	returns[Type res]: INT | FLOAT;
 BOOLEAN: 'true' | 'false';
-
 
 SCF_NOTATION: '10^' [0-9]*;
 
