@@ -43,8 +43,17 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST printResult = this.stg.getInstanceOf("print");
         printResult.add("stat", visit(ctx.expr()));
         printResult.add("expr",ctx.expr().varName);
-
         return printResult;
+    }
+
+    @Override public ST visitAssign(GeneralParser.AssignContext ctx) { 
+        return visitChildren(ctx); 
+    }
+    
+    public ST visitDeclaration(GeneralParser.AssignContext ctx) {
+        ST res = stg.getInstanceOf("stats");
+
+        String id = ctx.ID().getText();
     }
 
 }
