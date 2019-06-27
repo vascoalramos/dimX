@@ -17,6 +17,10 @@ public abstract class Value {
         assert false;
     }
 
+    public void setStringValue(String val) {
+        assert false;
+    }
+
     public int intValue() {
         assert false;
         return 0;
@@ -30,5 +34,10 @@ public abstract class Value {
     public boolean boolValue() {
         assert false;
         return false;
+    }
+
+    public String stringValue() {
+        assert false;
+        return "";
     }
 }

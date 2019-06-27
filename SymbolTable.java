@@ -1,4 +1,4 @@
-import java.util.Hash;
+import java.util.Map;
 import java.util.HashMap;
 
 public class SymbolTable {
@@ -12,7 +12,7 @@ public class SymbolTable {
         table.put(name,value);
     } 
 
-    public String get(String name) {
+    public Symbol get(String name) {
         return table.get(name);
     }
 } 

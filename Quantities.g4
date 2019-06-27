@@ -8,10 +8,10 @@ stat: quantity_declare
 	| prefix_declare
 	;
 
-quantity_declare: ID ':' type;
+quantity_declare: TYPE_ID ':' type;
 
-type : value unit									#SimpleType
-	| e1 = ID op = ('/' | '*') e2 = ID unit		#ComplexType
+type : value unit											#SimpleType
+	| e1 = TYPE_ID op = ('/' | '*') e2 = TYPE_ID unit		#ComplexType
 	;
 
 value:
@@ -31,6 +31,7 @@ number_type:  INT
 
 SCF_NOTATION: '10^' [0-9]*; //TODO: later date
 
+TYPE_ID: [A-Z]LETTER+;
 ID: LETTER (LETTER | DIGIT)*;
 fragment LETTER: [a-zA-Z];
 
@@ -41,3 +42,4 @@ fragment DIGIT: [0-9];
 SINGLE_LINE_COMMENT: '//' .*? '\n' -> skip;
 MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
 WS: [ \r\n\t]+ -> skip;
+ERROR: .;

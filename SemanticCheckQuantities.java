@@ -15,7 +15,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
 
     @Override
     public String visitQuantity_declare(QuantitiesParser.Quantity_declareContext ctx) {
-        String typeName = ctx.ID().getText();
+        String typeName = ctx.TYPE_ID().getText();
         if (QuantitiesParser.quantityTable.exists(typeName)) {
             ErrorHandling.printError(ctx, "Quantity \"" + typeName + "\" already declared!");
             return null;

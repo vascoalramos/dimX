@@ -13,7 +13,7 @@ public class IntegerValue extends Value {
     }
 
     @Override
-    public void setIntValue(set val) {
+    public void setIntValue(int val) {
         this.val = val;
     }
 
