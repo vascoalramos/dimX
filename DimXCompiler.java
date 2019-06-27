@@ -137,6 +137,8 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         result.add("stat", e1Stats);
         result.add("stat",e2Stats);
         
+        System.out.println(type+","+varOut+","+var1+","+op+","+var2);
+
         ST expression = stg.getInstanceOf("expression");
         expression.add("type",type);
         expression.add("var",varOut);
@@ -157,6 +159,53 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         return result;
     }
+
+    @Override 
+    public ST visitAddSub(GeneralParser.AddSubContext ctx) { 
+        ctx.varName = newVar();
+        return getExprResult(ctx, 
+                                visit(ctx.e1).render(), 
+                                visit(ctx.e2).render(), 
+                                ctx.exprType.name(),
+                                ctx.e1.varName,
+                                ctx.op.getText(), 
+                                ctx.e2.varName,
+                                ctx.varName);
+    }
+
+
+    @Override 
+    public ST visitMultDiv(GeneralParser.MultDivContext ctx) {
+        ctx.varName = newVar();
+        return getExprResult(ctx, 
+                                visit(ctx.e1).render(), 
+                                visit(ctx.e2).render(), 
+                                ctx.exprType.name(),
+                                ctx.e1.varName,
+                                ctx.op.getText(), 
+                                ctx.e2.varName,
+                                ctx.varName);
+    }
+
+
+    @Override 
+    public ST visitPow(GeneralParser.PowContext ctx) {
+        ctx.varName = newVar();
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", visit(ctx.e1).render());
+        result.add("stat",visit(ctx.e2).render());
+
+        ST powResult = stg.getInstanceOf("powerExpr");
+        powResult.add("type", ctx.exprType.name());
+        powResult.add("var", ctx.varName);
+        powResult.add("e1", ctx.e1.varName);
+        powResult.add("e2", ctx.e2.varName);
+        
+        result.add("stat", powResult.render());
+
+        return result;
+    }
+
 
 
     /* LITERAL EXPR */

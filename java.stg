@@ -31,6 +31,12 @@ operators ::= [
     default    : "null"
 ]
 
+powerTypeCast ::= [
+    "Integer" : "(int)",
+    "Real" : "(double)",
+    default : "null"
+]
+
 
 // Actual String Templates aka mendes big gay
 
@@ -75,3 +81,6 @@ sc.nextLine();
 
 //Expression (will always be binary)
 expression(type,var,e1,op,e2) ::= "<declaration(type,var,[e1,\" \",operators.(op),\" \",e2])>"
+
+//Power expression
+powerExpr(type,var,e1,e2) ::= "<declaration(type,var,[powerTypeCast.(type),\"Math.pow(\", e1, \", \", e2, \")\"])>"

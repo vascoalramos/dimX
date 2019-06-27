@@ -1,9 +1,8 @@
 public class Output {        
     public static void main(String[] args){
-        int v0;
         int v1 = 5;
-        v0 = v1;
-        int v2 = 4;
-        System.out.println(v2);
+        int v2 = 2;
+        int v0 = (int)Math.pow(v1, v2);
+        System.out.println(v0);
     }
 }

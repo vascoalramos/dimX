@@ -26,21 +26,20 @@ type returns[Type res]:
 	;
 
 expr returns[Type exprType, String varName]:
-	  e1 = expr op = ('*' | '/') e2 = expr	# multDiv
+	  <assoc=right> e1=expr '^' e2=expr		# Pow
+	| e1 = expr op = ('*' | '/') e2 = expr	# multDiv
 	| e1 = expr op = ('+' | '-') e2 = expr	# addSub
-	| '(' expr ')'					# parentheses
-	| input							# inputValue
-	| ID							# IDvalue
-	| STRING						# StringValue
-	| BOOLEAN						# BooleanValue
-	| INT							# IntValue
-	| REAL							# RealValue
+	| '(' expr ')'							# parentheses
+	| input									# inputValue
+	| ID									# IDvalue
+	| STRING								# StringValue
+	| BOOLEAN								# BooleanValue
+	| INT									# IntValue
+	| REAL									# RealValue
 	;
 
 
 BOOLEAN: 'true' | 'false';
-
-SCF_NOTATION: '10^' [0-9]*;
 
 TYPE_ID: [A-Z]LETTER+;
 ID: LETTER (LETTER | DIGIT)*;
