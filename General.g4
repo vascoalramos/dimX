@@ -13,8 +13,11 @@ assign:
 
 input: 'input' '(' STRING ')';
 
-type
-	returns[Type res]: 'Integer' | 'Real' | 'Boolean' | 'String';
+type returns[Type res]: 'Integer' { $res = new IntegerType(); } 
+	| 'Real' { $res = new RealType(); }
+	| 'Boolean' { $res = new BooleanType(); }
+	| 'String' { $res = new StringType(); }
+	;
 
 expr
 	returns[Type exprType, String varName]:
