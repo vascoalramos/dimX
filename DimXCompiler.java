@@ -30,7 +30,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST resultModule = this.stg.getInstanceOf("module"); // Final result
         ST resultStats = this.stg.getInstanceOf("stats"); // Intermediate results of all stats
 
-        for (CalcParser.StatContext sc : ctx.stat())
+        for (GeneralParser.StatContext sc : ctx.stat())
             resultStats.add("stat", visit(sc));
 
         resultModule.add("stat", resultStats);

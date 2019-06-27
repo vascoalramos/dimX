@@ -1,5 +1,7 @@
 grammar Quantities;
-
+@parser::members{
+    public static final TypeTable typeTable = new TypeTable();
+}
 main: (stat ';')* EOF;
 
 stat: quantity_declare

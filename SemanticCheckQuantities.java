@@ -3,7 +3,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
-    private Map<String, Type> typeTable = new HashMap<>();
 
     @Override
     public String visitMain(QuantitiesParser.MainContext ctx) {
@@ -17,7 +16,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
     @Override
     public String visitQuantity_declare(QuantitiesParser.Quantity_declareContext ctx) {
         String typeName = ctx.ID().getText();
-        if (typeTable.containsKey(typeName)) {
+        if (QuantitiesParser.typeTable.exists(typeName)) {
             ErrorHandling.printError(ctx, "Quantity \"" + typeName + "\" already declared!");
             return null;
         }
@@ -25,7 +24,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         String value = visit(ctx.type());
         if(value!=null){
             String[] tokens=value.split("-");
-            typeTable.put(typeName,new Type(tokens[1],tokens[0]));
+            QuantitiesParser.typeTable.put(typeName,new Type(tokens[1],tokens[0]));
 
         }
         else{
@@ -47,11 +46,11 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         String var1=ctx.e1.getText(),var2=ctx.e2.getText(),unit=visit(ctx.unit()),value="";
         Boolean check=true;
         
-        if (!typeTable.containsKey(var1)) {
+        if (!QuantitiesParser.typeTable.exists(var1)) {
             ErrorHandling.printError(ctx, "Quantity \"" + var1 + "\" is not declared!");
             check=false;
         }
-        if (!typeTable.containsKey(var2)) {
+        if (!QuantitiesParser.typeTable.exists(var2)) {
             ErrorHandling.printError(ctx, "Quantity \"" + var2 + "\" is not declared!");
             check=false;
         }
@@ -62,8 +61,8 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         
         Type a,b;
         
-        a=typeTable.get(var1);
-        b=typeTable.get(var2);
+        a=QuantitiesParser.typeTable.get(var1);
+        b=QuantitiesParser.typeTable.get(var2);
         if (a.value().equals(b.value()))
             value=a.value();
         else
