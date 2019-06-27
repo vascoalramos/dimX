@@ -1,4 +1,7 @@
 grammar General;
+@parser::members{
+    public static final SymbolTable map=new SymbolTable();
+}
 
 main: (stat TERM)* EOF;
 
