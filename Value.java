@@ -27,5 +27,8 @@ public abstract class Value {
         return 0;
     }
 
-    public boolean boolValue()
+    public boolean boolValue() {
+        assert false;
+        return false;
+    }
 }
