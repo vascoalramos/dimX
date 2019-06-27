@@ -47,6 +47,9 @@ module(name,stat) ::= <<
     }
 >>
 
+stats(stat) ::= <<
+    <if(stat)><stat ; separator="\n"><endif>
+>>
 
 //Declare Variable
 declare(stat,type,var) ::= <<
