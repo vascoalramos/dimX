@@ -47,9 +47,18 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     }
 
     @Override public ST visitAssign(GeneralParser.AssignContext ctx) { 
+        ST assignResult = this.stg.getInstanceOf("assign");
+
+        if(ctx.type != null){
+            visitDeclaration(ctx);
+        }
+                
+
+        String id = ctx.ID().getText();
         return visitChildren(ctx); 
     }
     
+    //The delaration is only called if we have a type
     public ST visitDeclaration(GeneralParser.AssignContext ctx) {
         ST res = stg.getInstanceOf("stats");
 
