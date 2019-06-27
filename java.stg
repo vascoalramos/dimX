@@ -80,5 +80,5 @@ input(stat, prompt) ::= <<
     sc.nextLine();
 >>
 
-//Expression (always binary)
-binaryExpression(type,var,e1,op,e2) ::= "<decl(type,var,[e1,\" \",operators.(op),\" \",e2])>"
+//Expression (will always be binary)
+expression(type,var,e1,op,e2) ::= "<decl(type,var,[e1,\" \",operators.(op),\" \",e2])>"

@@ -15,4 +15,5 @@ public class SymbolTable {
     public Symbol get(String name) {
         return table.get(name);
     }
+
 } 

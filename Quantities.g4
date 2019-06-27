@@ -1,7 +1,9 @@
 grammar Quantities;
+
 @parser::members{
     public static final QuantityTable quantityTable = new QuantityTable();
 }
+
 main: (stat ';')* EOF;
 
 stat: quantity_declare

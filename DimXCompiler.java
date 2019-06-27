@@ -58,7 +58,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     public ST visitJustAssign(GeneralParser.JustAssignContext ctx) {
         ST assignResult = stg.getInstanceOf("assign");
         String id = ctx.ID().getText();
-        Symbol symbol = SymbolTable.symbolTable.get(id);
+        Symbol symbol = GeneralParser.map.get(id);
 
         assignResult.add("stat", visit(ctx.expr()).render());
         assignResult.add("var",symbol.name());
@@ -73,7 +73,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST decResult = stg.getInstanceOf("declare");
 
         String id = ctx.ID().getText();
-        Symbol symbol = SymbolTable.symbolTable.get(id);
+        Symbol symbol = GeneralParser.map.get(id);
         
         symbol.setVarName(newVar()); //Change var name to vX
 
@@ -97,7 +97,6 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         //Write both declaration and assignment in seperate lines
         result.add("stat",decResult.render());
-        result.add("stat",assResult.render());
 
         return result;
     }
@@ -105,6 +104,50 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
     /* EXPR RULES */
 
+    //Base Expr ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    private ST getExprResult(ParserRuleContext ctx, String e1Stats, String e2Stats, String type, String var1,String op, String var2, String varOut){
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", e1Stats);
+        result.add("stat",e2Stats);
+        
+        ST expression = stg.getInstanceOf("expression");
+        expression.add("type",type);
+        expression.add("var",varOut);
+        expression.add("e1",var1);
+        expression.add("op",op);
+        expression.add("e2",var2);
+
+        result.add("stat",expression.render());
+
+        return result;
+    }
+
+    //Base int expression
+    @Override 
+    public ST visitIntValue(GeneralParser.IntValueContext ctx) { 
+        ST result = stg.getInstanceOf("declaration");
+        ctx.varName = newVar();
+
+        result.add("type","Integer");
+        result.add("var",ctx.varName);
+        result.add("value",ctx.INT().getText());
+
+        return result;
+    }
+
+    //Base real expression
+    @Override public ST visitRealValue(GeneralParser.RealValueContext ctx) {
+        ST result = stg.getInstanceOf("declaration");
+        ctx.varName = newVar();
+
+        result.add("type","Real");
+        result.add("var",ctx.varName);
+        result.add("value",ctx.REAL().getText());
+
+        return result;
+    } 
+    
+    
 
 
 }

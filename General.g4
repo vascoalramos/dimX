@@ -1,4 +1,5 @@
 grammar General;
+
 @parser::members{
     public static final SymbolTable map = new SymbolTable();
 }
@@ -21,18 +22,18 @@ type returns[Type res]:
 	| 'Real' { $res = new RealType(); }
 	| 'Boolean' { $res = new BooleanType(); }
 	| 'String' { $res = new StringType(); }
-	| TYPE_ID
+	| TYPE_ID { $res = new Quantity($TYPE_ID.text); }
 	;
 expr returns[Type exprType, String varName]:
-	  e1=expr op = ('*' | '/') e2=expr	# multDiv
-	| e1=expr op = ('+' | '-') e2=expr	# addSun
-	| '(' expr ')'						# parentheses
-	| input								# inputValue
-	| ID								# IDvalue
-	| STRING							# StringValue
-	| BOOLEAN							# BooleanValue
-	| INT								# IntValue
-	| REAL								# RealValue
+	  e1 = expr op = ('*' | '/') e2 = expr	# multDiv
+	| e1 = expr op = ('+' | '-') e2 = expr	# addSun
+	| '(' expr ')'					# parentheses
+	| input							# inputValue
+	| ID							# IDvalue
+	| STRING						# StringValue
+	| BOOLEAN						# BooleanValue
+	| INT							# IntValue
+	| REAL							# RealValue
 	;
 
 
