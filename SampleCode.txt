@@ -5,6 +5,8 @@ Boolean perc = 1; //Deve ser capaz de converter de km para m automatico
 
 Velocity vel = 5; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
 
+print(vel+perc);
+/*
 String tempo = perc/vel; //Neste caso teriamos m / (m/s) == s
 
 //Alternativamente poderiamos ter:
@@ -16,6 +18,7 @@ Integer tempo = 1 / 5; //Conversao para milisegundos e uso de literais
 //A luz da estrela polar demora 470 anos a chegar a terra. Calcula a distancia da estrela polar a terra expressa em quilometros e em parsec
 
 Time tempo = 470;
+*/
 /*
 distance dist = const.c * tempo; Neste caso nao definimos a grandeza do dist, MAS ao fazermos o calculo de const.c * tempo a linguagem deve automaticamente identificar que o output teria como grandeza: distance (metros)
 
