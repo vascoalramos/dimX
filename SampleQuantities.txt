@@ -2,6 +2,10 @@ distance : real [m];
 
 distance : real [m];
 
-time : real [s];
+time : int [s];
 
 speed : distance / time [m/h];
+
+speed1 : distancea / timeb [m/h];
+
+speed2 : distance / timea [m/h];

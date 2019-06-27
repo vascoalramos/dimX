@@ -21,12 +21,17 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
             ErrorHandling.printError(ctx, "Quantity \"" + typeName + "\" already declared!");
             return null;
         }
+        
         String value = visit(ctx.type());
-        String [] tokens=value.split("-");
-        System.out.println(value);
+        if(value!=null){
+            String[] tokens=value.split("-");
+            typeTable.put(typeName,new Type(tokens[1],tokens[0]));
 
-
-        typeTable.put(typeName,new Type(tokens[0],tokens[1]));
+        }
+        else{
+            return null;
+        }
+        
         return "success";
     }
 
@@ -39,22 +44,32 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
 
     @Override
     public String visitComplexType(QuantitiesParser.ComplexTypeContext ctx) {
-        String var1=ctx.e1.getText(),var2=ctx.e2.getText(),unit=visit(ctx.unit());
+        String var1=ctx.e1.getText(),var2=ctx.e2.getText(),unit=visit(ctx.unit()),value="";
+        Boolean check=true;
         
         if (!typeTable.containsKey(var1)) {
-            ErrorHandling.printError(ctx, "Quantity \"" + var1 + "\" already declared!");
-            return null;
+            ErrorHandling.printError(ctx, "Quantity \"" + var1 + "\" is not declared!");
+            check=false;
         }
         if (!typeTable.containsKey(var2)) {
-            ErrorHandling.printError(ctx, "Quantity \"" + var2 + "\" already declared!");
+            ErrorHandling.printError(ctx, "Quantity \"" + var2 + "\" is not declared!");
+            check=false;
+        }
+
+        if(!check){
             return null;
         }
+        
         Type a,b;
+        
         a=typeTable.get(var1);
         b=typeTable.get(var2);
-        System.out.println(a.value());
+        if (a.value().equals(b.value()))
+            value=a.value();
+        else
+            value="real";
         
-        return null;
+        return unit+"-"+value;
     }
 
     @Override
@@ -67,14 +82,6 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         return ctx.getText().replace("[","").replace("]","");
     }
 
-    @Override
-    public String visitPrefix_declare(QuantitiesParser.Prefix_declareContext ctx) {
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public String visitNumber_type(QuantitiesParser.Number_typeContext ctx) {
-        return visitChildren(ctx);
-    }
+    
 
 }
