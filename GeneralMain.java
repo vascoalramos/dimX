@@ -1,10 +1,17 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import java.io.FileInputStream;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import org.stringtemplate.v4.*;
+
 
 public class GeneralMain {
    public static void main(String[] args) throws Exception {
       // create a CharStream that reads from standard input:
-      CharStream input = CharStreams.fromStream(System.in);
+      CharStream input = CharStreams.fromStream(new FileInputStream(args[0]));
       // create a lexer that feeds off of input CharStream:
       GeneralLexer lexer = new GeneralLexer(input);
       // create a buffer of tokens pulled from the lexer:
@@ -19,8 +26,34 @@ public class GeneralMain {
       if (parser.getNumberOfSyntaxErrors() == 0) {
          // print LISP-style tree:
          // System.out.println(tree.toStringTree(parser));
-         SemanticCheckGeneral visitorGeneral = new SemanticCheckGeneral();
-         visitorGeneral.visit(tree);
+         
+         /*SemanticCheckGeneral visitorGeneral = new SemanticCheckGeneral();
+         visitorGeneral.visit(tree);*/
+
+         DimXCompiler compiler = new DimXCompiler();
+         String outputLang = "java";
+
+         if(!compiler.validTarget(outputLang)){
+            System.err.println("ERROR: Can't find template group file for JAVA");
+            System.exit(1);
+         }
+
+         compiler.setTarget(outputLang);
+         ST code = compiler.visit(tree);
+
+         String outputFile = "Output." + outputLang;
+
+         try{
+            code.add("name", "Output");
+            PrintWriter pw = new PrintWriter(new File(outputFile));
+            pw.print(code.render());
+            pw.close();
+
+         }catch(FileNotFoundException e){
+            System.err.println("ERROR: Failed to write code file");
+            System.exit(1);
+         }
+
       }
    }
 }

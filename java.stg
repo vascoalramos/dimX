@@ -36,49 +36,42 @@ operators ::= [
 
 //Generate Class
 module(name,stat) ::= <<
-    import java.util.Scanner;
-
-    public class <name> {        
-        private Scanner sc = new Scanner(System.in);
-
-        public static void main(String[] args){
-            <stats(stat)>
-        }
+public class <name> {        
+    public static void main(String[] args){
+        <stats(stat)>
     }
+}
 >>
 
 stats(stat) ::= <<
-    <if(stat)><stat ; separator="\n"><endif>
+<if(stat)><stat; separator="\n"><endif>
 >>
 
 //Declare New Variable (and assign it a value if need-be)
 init(value) ::= "<if(value)> = <value><endif>" //Check if there's a value
-declare(type,var,value) ::= "<typeValue.(type)> <var> <init(value)>;"
+declaration(type,var,value) ::= "<typeValue.(type)> <var><init(value)>;"
 
 
 //Assign Value to Variable
 assign(stat,var,value) ::= <<
-    <stats(stat)>
-
-    <var> = <value>;
+<stats(stat)>
+<var> = <value>;
 >>
 
 
 //Print expression
 print(stat,expr) ::= <<
-    <stats(stat)>
-
-    System.out.println(<expr>);
+<stats(stat)>
+System.out.println(<expr>);
 >>
 
 
 //Input from user - TODO: ASK HOW TO DO INPUT PROPERLY
 input(stat, prompt) ::= <<
-    <stats(stat)>
-
-    System.out.print(<prompt>);
-    sc.nextLine();
+<stats(stat)>
+System.out.print(<prompt>);
+sc.nextLine();
 >>
 
 //Expression (will always be binary)
-expression(type,var,e1,op,e2) ::= "<decl(type,var,[e1,\" \",operators.(op),\" \",e2])>"
+expression(type,var,e1,op,e2) ::= "<declaration(type,var,[e1,\" \",operators.(op),\" \",e2])>"
