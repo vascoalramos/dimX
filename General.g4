@@ -1,6 +1,6 @@
 grammar General;
 @parser::members{
-    public static final SymbolTable map=new SymbolTable();
+    public static final SymbolTable map = new SymbolTable();
 }
 
 main: (stat TERM)* EOF;
@@ -13,25 +13,26 @@ assign:
 
 input: 'input' '(' STRING ')';
 
-type returns[Type res]: 'Integer' { $res = new IntegerType(); } 
-	| 'Real' { $res = new RealType(); }
+type returns[Type res]:
+	  'Integer' { $res = new IntegerType(); } 
+	| 'Real' 	{ $res = new RealType(); }
 	| 'Boolean' { $res = new BooleanType(); }
-	| 'String' { $res = new StringType(); }
+	| 'String' 	{ $res = new StringType(); }
 	;
 
-expr
-	returns[Type exprType, String varName]:
+expr returns[Type exprType, String varName]:
 	expr op = ('*' | ':') expr		# multDiv
 	| expr op = ('+' | '-') expr	# addSun
 	| '(' expr ')'					# parentheses
-	| number						# numberValue
 	| input							# inputValue
 	| ID							# IDvalue
 	| STRING						# StringValue
-	| BOOLEAN						# BooleanValue;
+	| BOOLEAN						# BooleanValue
+	| INT							# IntValue
+	| REAL							# RealValue
+	;
 
-number
-	returns[Type res]: INT | FLOAT;
+
 BOOLEAN: 'true' | 'false';
 
 SCF_NOTATION: '10^' [0-9]*;
@@ -40,7 +41,7 @@ ID: LETTER (LETTER | DIGIT)*;
 fragment LETTER: [a-zA-Z_];
 
 INT: DIGIT+;
-FLOAT: DIGIT+ '.' DIGIT+ | '.' DIGIT+;
+REAL: DIGIT+ '.' DIGIT+ | '.' DIGIT+;
 fragment DIGIT: [0-9];
 
 SINGLE_LINE_COMMENT: '//' .*? '\n' -> skip;
