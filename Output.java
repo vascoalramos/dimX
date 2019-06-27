@@ -1,8 +1,9 @@
+import java.util.Scanner;
 public class Output {        
     public static void main(String[] args){
-        int v1 = 5;
-        int v2 = 2;
-        int v0 = (int)Math.pow(v1, v2);
+        Scanner userInput = new Scanner(System.in);
+        System.out.print("Oi: ");
+        String v0 = userInput.nextLine();
         System.out.println(v0);
     }
 }

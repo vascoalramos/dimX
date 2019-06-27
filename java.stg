@@ -42,8 +42,10 @@ powerTypeCast ::= [
 
 //Generate Class
 module(name,stat) ::= <<
+import java.util.Scanner;
 public class <name> {        
     public static void main(String[] args){
+        Scanner userInput = new Scanner(System.in);
         <stats(stat)>
     }
 }
@@ -73,10 +75,10 @@ System.out.println(<expr>);
 
 
 //Input from user - TODO: ASK HOW TO DO INPUT PROPERLY
-input(stat, prompt) ::= <<
+input(stat, prompt,var) ::= <<
 <stats(stat)>
 System.out.print(<prompt>);
-sc.nextLine();
+String <var> = userInput.nextLine();
 >>
 
 //Expression (will always be binary)

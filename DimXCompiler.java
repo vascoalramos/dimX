@@ -129,6 +129,8 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     }
 
 
+
+
     /* EXPR RULES */
 
     //Base Expr ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
@@ -278,6 +280,19 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
             result.add("stat",idVarDecl.render());
 
             return result;
+        }
+
+        /* INPUT RULE */
+        @Override 
+        public ST visitInputValue(GeneralParser.InputValueContext ctx){ 
+            ST result = stg.getInstanceOf("input");
+
+            ctx.varName = newVar();
+            result.add("prompt", ctx.input().STRING().getText());
+            result.add("var",ctx.varName);
+
+            return result;
+
         }
 
 }
