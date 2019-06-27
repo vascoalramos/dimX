@@ -1,6 +1,6 @@
 public class IntegerType extends Type {
     public IntegerType() {
-        super("integer");
+        super("Integer");
     }
 
     public boolean isNumeric() {

@@ -40,7 +40,6 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
           sym.setValueDefined();
       }
     }
-
     return res;
   }
 
@@ -66,6 +65,26 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     }
 
     return res;
+  }
+
+  @Override
+  public Boolean visitDeclaration(GeneralParser.DeclarationContext ctx) {
+    String id = ctx.ID().getText();
+    if (GeneralParser.map.exists(id)) {
+      ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
+      return false;
+    } else {
+      Type type = ctx.type().res;
+      Symbol s = new Symbol(id, type);
+      s.setValueDefined();
+      GeneralParser.map.put(id, s);
+    }
+    return true;
+  }
+  
+  public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
+    ctx.exprType = integerType;
+    return true;
   }
 
   @Override
