@@ -1,6 +1,6 @@
 grammar Quantities;
 @parser::members{
-    public static final TypeTable typeTable = new TypeTable();
+    public static final QuantityTable quantityTable = new QuantityTable();
 }
 main: (stat ';')* EOF;
 

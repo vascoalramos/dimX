@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Type {
+public class Quantity {
    private String value;
    private List<String> units = new ArrayList<>();
 
-   public Type(String value, String unit) {
+   public Quantity(String value, String unit) {
       assert value != null;
       assert unit != null;
       this.value = value;
