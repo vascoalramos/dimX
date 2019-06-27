@@ -24,7 +24,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         String value = visit(ctx.type());
         if (value != null) {
             String[] tokens = value.split("-");
-            QuantitiesParser.quantityTable.put(typeName, new Quantity(tokens[1], tokens[0]));
+            QuantitiesParser.quantityTable.put(typeName, new Quantity(tokens[1], tokens[0],typeName));
 
         } else {
             return null;
