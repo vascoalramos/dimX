@@ -21,7 +21,6 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       }
 
     }
-    System.out.println(ctx.exprType.toString());
     return res;
   }
 
@@ -37,11 +36,25 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         Type type = ctx.declaration().type().res;
         Symbol s = new Symbol(id, type);
         s.setValueDefined();
-        GeneralParser.map.put(id, s);
-      }
+        GeneralParser.map.put(id, s);      }
     }
 
     return false;
+  }
+
+  @Override
+  public Boolean visitDeclaration(GeneralParser.DeclarationContext ctx) {
+    String id = ctx.ID().getText();
+    if (GeneralParser.map.exists(id)) {
+      ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
+      return false;
+    } else {
+      Type type = ctx.type().res;
+      Symbol s = new Symbol(id, type);
+      s.setValueDefined();
+      GeneralParser.map.put(id, s);
+    }
+    return true;
   }
 
   @Override
