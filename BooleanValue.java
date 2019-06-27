@@ -1,5 +1,5 @@
 public class BooleanValue extends Value {
-    
+
     private boolean val;
     private static BooleanType type = new BooleanType();
 
@@ -17,7 +17,8 @@ public class BooleanValue extends Value {
         this.val = val;
     }
 
-    @Override public boolValue() {
+    @Override
+    public boolean boolValue() {
         return val;
     }
 

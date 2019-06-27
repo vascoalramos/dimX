@@ -20,10 +20,11 @@ type returns[Type res]:
 	  'Integer' { $res = new IntegerType(); }
 	| 'Real' { $res = new RealType(); }
 	| 'Boolean' { $res = new BooleanType(); }
-	| 'String' { $res = new StringType(); };
-
+	| 'String' { $res = new StringType(); }
+	| TYPE_ID
+	;
 expr returns[Type exprType, String varName]:
-	expr op = ('*' | ':') expr		# multDiv
+	expr op = ('*' | '/') expr		# multDiv
 	| expr op = ('+' | '-') expr	# addSun
 	| '(' expr ')'					# parentheses
 	| input							# inputValue
@@ -39,6 +40,7 @@ BOOLEAN: 'true' | 'false';
 
 SCF_NOTATION: '10^' [0-9]*;
 
+TYPE_ID: [A-Z]LETTER+;
 ID: LETTER (LETTER | DIGIT)*;
 fragment LETTER: [a-zA-Z_];
 
@@ -52,3 +54,4 @@ WS: [ \r\n\t]+ -> skip;
 
 STRING: '"' .*? '"';
 TERM: ';';
+ERROR: .;
