@@ -24,15 +24,15 @@ type returns[Type res]:
 	| TYPE_ID
 	;
 expr returns[Type exprType, String varName]:
-	expr op = ('*' | '/') expr		# multDiv
-	| expr op = ('+' | '-') expr	# addSun
-	| '(' expr ')'					# parentheses
-	| input							# inputValue
-	| ID							# IDvalue
-	| STRING						# StringValue
-	| BOOLEAN						# BooleanValue
-	| INT							# IntValue
-	| REAL							# RealValue
+	  e1=expr op = ('*' | '/') e2=expr	# multDiv
+	| e1=expr op = ('+' | '-') e2=expr	# addSun
+	| '(' expr ')'						# parentheses
+	| input								# inputValue
+	| ID								# IDvalue
+	| STRING							# StringValue
+	| BOOLEAN							# BooleanValue
+	| INT								# IntValue
+	| REAL								# RealValue
 	;
 
 
