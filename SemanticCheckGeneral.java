@@ -9,7 +9,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     Boolean res = true;
     String id = ctx.ID().getText();
     if (!GeneralParser.map.exists(id)) {
-      ErrorHandling.printError(ctx, "Variable \"" + id + "\" not defined!");
+      ErrorHandling.printError(ctx, "Variable \"" + id + "\" does not exists!");
       res = false;
     } else {
       Symbol sym = GeneralParser.map.get(id);
@@ -19,8 +19,29 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       } else {
         ctx.exprType = sym.type();
       }
+
     }
+    System.out.println(ctx.exprType.toString());
     return res;
+  }
+
+  @Override
+  public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
+    Boolean res = visit(ctx.expr());
+    String id = ctx.declaration().ID().getText();
+    if (res) {
+      if (GeneralParser.map.exists(id)) {
+        ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
+        res = false;
+      } else {
+        Type type = ctx.declaration().type().res;
+        Symbol s = new Symbol(id, type);
+        s.setValueDefined();
+        GeneralParser.map.put(id, s);
+      }
+    }
+
+    return false;
   }
 
   @Override

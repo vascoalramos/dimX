@@ -24,9 +24,10 @@ type returns[Type res]:
 	| 'String' { $res = new StringType(); }
 	| TYPE_ID { $res = new Quantity($TYPE_ID.text); }
 	;
+
 expr returns[Type exprType, String varName]:
 	  e1 = expr op = ('*' | '/') e2 = expr	# multDiv
-	| e1 = expr op = ('+' | '-') e2 = expr	# addSun
+	| e1 = expr op = ('+' | '-') e2 = expr	# addSub
 	| '(' expr ')'					# parentheses
 	| input							# inputValue
 	| ID							# IDvalue
