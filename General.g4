@@ -1,8 +1,4 @@
 grammar General;
-<<<<<<< HEAD
-import Quantities;
-=======
->>>>>>> 19a5ef27c160e8b5e8fd8793dc2b029302cca27f
 
 main: (stat TERM)* EOF;
 
@@ -33,24 +29,6 @@ expr:expr op=('*'|':') expr #multDiv
     |BOOLEAN #BooleanValue
     ;
 
-<<<<<<< HEAD
-assignment: ID? ID ('=' expr)?; // check if it's already declared; can't write only the var 
-
-expr: e1=expr op=('*'|'/') e2=expr
-         | e1=expr op=( '+' | '-' ) e2=expr
-         |'(' expr ')'
-         | number_type unit?
-         | ID
-         | STRING
-         | BOOLEAN
-         ; 
-
-print: 'print' '(' expr ')';
-
-declaration: quantity_declare
-           | prefix_declare
-           ;
-=======
 
 number returns[Type res]:
 	INT {$res = new IntegerType();}
@@ -71,7 +49,6 @@ fragment DIGIT: [0-9];
 SINGLE_LINE_COMMENT: '//' .*? '\n' -> skip;
 MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
 WS: [ \r\n\t]+ -> skip;
->>>>>>> 19a5ef27c160e8b5e8fd8793dc2b029302cca27f
 
 STRING: '"' .*? '"';
 TERM: ';';
