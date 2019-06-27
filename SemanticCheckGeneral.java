@@ -45,6 +45,12 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   }
 
   @Override
+  public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
+    ctx.exprType = integerType;
+    return true;
+  }
+
+  @Override
   public Boolean visitParentheses(GeneralParser.ParenthesesContext ctx) {
     Boolean res = visit(ctx.expr());
     if (res)
