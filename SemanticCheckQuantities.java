@@ -52,9 +52,9 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         Type a,b;
         a=typeTable.get(var1);
         b=typeTable.get(var2);
+        System.out.println(a.value());
         
-        
-        return ;
+        return null;
     }
 
     @Override

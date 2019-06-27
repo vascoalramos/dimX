@@ -13,9 +13,9 @@ assign: type? ID ('=' expr)?; //String ola = 1+1; String ola; ola=1+1;
 input: 'input' '(' STRING ')';
 
 type returns[Type res]:
-     'Integer' {$res = new IntegerType();}
-   | 'Real'    {$res = new RealType();}
-   | 'Boolean' {$res = new BooleanType();}
+     'Integer' 
+   | 'Real'    
+   | 'Boolean'
    | 'String'
    ;
 
@@ -31,8 +31,8 @@ expr:expr op=('*'|':') expr #multDiv
 
 
 number returns[Type res]:
-	INT {$res = new IntegerType();}
-	| FLOAT {$res = new RealType();}
+	INT
+	| FLOAT 
     ;
 BOOLEAN: 'true' | 'false';
 
