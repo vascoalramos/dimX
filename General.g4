@@ -1,23 +1,25 @@
 grammar General;
-@parser::members{
+@parser::members {
     public static final SymbolTable map=new SymbolTable();
 }
 
 main: (stat TERM)* EOF;
 
-stat: print | assign | input;
+stat: print | assign | declaration | input;
 print: 'print' '(' expr ')';
 
-assign:
-	type? ID ('=' expr)?; //String ola = 1+1; String ola; ola=1+1;
+assign: declaration '=' expr | ID '=' expr;
 
 input: 'input' '(' STRING ')';
 
-type returns[Type res]: 'Integer' { $res = new IntegerType(); } 
+declaration: type ID;
+
+type
+	returns[Type res]:
+	'Integer' { $res = new IntegerType(); }
 	| 'Real' { $res = new RealType(); }
 	| 'Boolean' { $res = new BooleanType(); }
-	| 'String' { $res = new StringType(); }
-	;
+	| 'String' { $res = new StringType(); };
 
 expr
 	returns[Type exprType, String varName]:
