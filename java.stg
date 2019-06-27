@@ -51,16 +51,13 @@ stats(stat) ::= <<
     <if(stat)><stat ; separator="\n"><endif>
 >>
 
-//Declare Variable
-declare(stat,type,var) ::= <<
-    <stats(stat)>
-
-    <typeValue.(type)> <var>;
->>
+//Declare New Variable (and assign it a value if need-be)
+init(value) ::= "<if(value)> = <value><endif>" //Check if there's a value
+declare(type,var,value) ::= "<typeValue.(type)> <var> <init(value)>;"
 
 
-//Initialize Variable
-assign(stat,type,var,value) ::= <<
+//Assign Value to Variable
+assign(stat,var,value) ::= <<
     <stats(stat)>
 
     <var> = <value>;
@@ -82,3 +79,6 @@ input(stat, prompt) ::= <<
     System.out.print(<prompt>);
     sc.nextLine();
 >>
+
+//Expression (always binary)
+binaryExpression(type,var,e1,op,e2) ::= "<decl(type,var,[e1,\" \",operators.(op),\" \",e2])>"
