@@ -1,2 +1,5 @@
-print(4);
+print(5);
 Integer a = 5;
+Integer b = 2 * 3;
+print("ola");
+print(b + "d");

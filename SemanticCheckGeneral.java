@@ -77,11 +77,13 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
       return false;
     } else {
-      visit(ctx.type());
-      Type type = ctx.type().res;
-      Symbol s = new Symbol(id, type);
-      s.setValueDefined();
-      GeneralParser.map.put(id, s);
+      Boolean res = visit(ctx.type());
+      if (res) {
+        Type type = ctx.type().res;
+        Symbol s = new Symbol(id, type);
+        s.setValueDefined();
+        GeneralParser.map.put(id, s);
+      }
     }
     return true;
   }
@@ -104,11 +106,37 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return check; 
   }
 
+  /* Conditional expressions */
+  @Override 
+  public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
+    visit(ctx.e1);
+    visit(ctx.e2);
+    System.out.println(ctx.e1.exprType);
+    System.out.println(ctx.e2.exprType);
+    Boolean res = true;
+    if(!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+      res = false;
+    }
+    ctx.exprType = booleanType;
+    return res;
+  }
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
-    ctx.exprType = integerType;
-    
-    return true;
+    visit(ctx.e1);
+    visit(ctx.e2);
+    Type t1 = ctx.e1.exprType;
+    Type t2 = ctx.e2.exprType;
+    Boolean res = true;
+    if (!t1.isNumeric() && !t2.isNumeric()) {
+      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+      res = false;
+    }
+    else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
+      ctx.exprType = realType;
+    else
+      ctx.exprType = integerType;
+    return res;
   }
 
   @Override
@@ -144,7 +172,17 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Quantity \"" + type_name + "\" does not exist!");
       return false;
     }
+    String v = QuantitiesParser.quantityTable.get(type_name).value();
+    switch (v) {
+      case "Real":
+        ctx.res = new RealType();
+        break;
+      case "Integer":
+        ctx.res = new IntegerType();
+        break;
+    }
     return true;
+
   }
 
   @Override
