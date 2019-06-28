@@ -4,6 +4,8 @@ Distance : real [m];
 
 Time : int [s];
 
+OLa: int [s];
+
 Speed : Distance / Time [m/h];
 
 Speeda : Distancea / Timeb [m/h];
