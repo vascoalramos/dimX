@@ -21,7 +21,7 @@ public class Quantity extends Type {
       return true;
    }
 
-   @Override public boolean conformsTo(Type other) {
+   @Override public boolean conformsTo(Type other) { // compor esta merda
       return super.conformsTo(other) || other.name().equals("real");
   }
 

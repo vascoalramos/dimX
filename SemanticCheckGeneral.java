@@ -52,6 +52,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
         res = false;
       } else {
+        visit(ctx.declaration().type());
         Type type = ctx.declaration().type().res;
         Symbol s = new Symbol(id, type);
         if (!ctx.expr().exprType.conformsTo(s.type())) {
@@ -111,6 +112,15 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitStrType(GeneralParser.StrTypeContext ctx) {
     ctx.res = new StringType();
     return true;
+  }
+
+  @Override
+  public Boolean visitCustomType(GeneralParser.CustomTypeContext ctx) {
+    String type_name = ctx.TYPE_ID().getText();
+    if (!QuantitiesParser.quantityTable.exists(type_name)) {
+      ErrorHandling.printError(ctx, "Quantity \"" + type_name + "\" does not exist!");
+      return false;
+    }
   }
 
   @Override

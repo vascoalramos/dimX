@@ -38,8 +38,8 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| ID													# IDvalue
 	| STRING												# StringValue
 	| BOOLEAN												# BooleanValue
-	| INT unitID?													# IntValue
-	| REAL unitID?													# RealValue
+	| INT unitID?											# IntValue
+	| REAL unitID?											# RealValue
 	;
 
 BOOLEAN: 'true' | 'false';
