@@ -81,9 +81,34 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     }
     return true;
   }
-  
+
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     ctx.exprType = integerType;
+    return true;
+  }
+
+  @Override
+  public Boolean visitIntType(GeneralParser.IntTypeContext ctx) {
+    ctx.res = new IntegerType();
+    return true;
+  }
+
+  @Override
+  public Boolean visitRealType(GeneralParser.RealTypeContext ctx) {
+    ctx.res = new RealType();
+    return true;
+
+  }
+
+  @Override
+  public Boolean visitBoolType(GeneralParser.BoolTypeContext ctx) {
+    ctx.res = new BooleanType();
+    return true;
+  }
+
+  @Override
+  public Boolean visitStrType(GeneralParser.StrTypeContext ctx) {
+    ctx.res = new StringType();
     return true;
   }
 
