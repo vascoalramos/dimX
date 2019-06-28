@@ -121,6 +121,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Quantity \"" + type_name + "\" does not exist!");
       return false;
     }
+    return true;
   }
 
   @Override
