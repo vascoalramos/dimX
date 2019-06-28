@@ -18,11 +18,11 @@ input: 'input' '(' STRING ')';
 declaration: type ID;
 
 type returns[Type res]:
-	  'Integer' { $res = new IntegerType(); }
-	| 'Real' { $res = new RealType(); }
-	| 'Boolean' { $res = new BooleanType(); }
-	| 'String' { $res = new StringType(); }
-	| TYPE_ID { $res = new Quantity($TYPE_ID.text); }
+	  'Integer'			#intType
+	| 'Real'			#realType
+	| 'Boolean'			#boolType
+	| 'String'			#strType
+	| TYPE_ID			#customType
 	;
 
 expr returns[Type exprType, String varName, String dimension, String unit]:
