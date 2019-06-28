@@ -1,1 +1,2 @@
 print("oi"*3);
+Double b;

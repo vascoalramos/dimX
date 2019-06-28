@@ -1,2 +1,4 @@
-print(4);
+print(5);
 Integer a = 5;
+Integer b = "ola" * "ola";
+print("ola");
