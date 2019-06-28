@@ -1,4 +1,1 @@
-print(5);
-Real a = 5; 
-Real b = 2.0 + 3.0;
-print(a + " | " + 3);
+print("string" + 2);

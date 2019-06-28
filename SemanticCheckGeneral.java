@@ -91,8 +91,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitAddSub(GeneralParser.AddSubContext ctx) {
     // check if there weren' errors in e1 and e2 and if both are numeric
-    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkNumericType(ctx, ctx.e1.exprType)
-        && checkNumericType(ctx, ctx.e2.exprType);
+    Boolean check = visit(ctx.e1) && visit(ctx.e2);
 
     // check if both belong to the same dimension
     // check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
@@ -102,7 +101,13 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     // assign same type (Real,Integer,...) to operands. Maybe we should assign same
     // unit??
     if (check) {
-      ctx.exprType = fetchType(ctx.e1.exprType, ctx.e2.exprType);
+      Type tp = fetchType(ctx.e1.exprType, ctx.e2.exprType, ctx.op.getText());
+      if (tp == null) {
+        ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+        check = false;
+      }
+      else
+        ctx.exprType = tp;
     }
 
     return check;
@@ -236,7 +241,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return res;
   }
 
-  private Type fetchType(Type t1, Type t2) {
+  private Type fetchType(Type t1, Type t2, String op) {
     Type res = null;
     if (t1.isNumeric() && t2.isNumeric()) {
       if ("Real".equals(t1.name()))
@@ -245,9 +250,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = t2;
       else
         res = t1;
-    } else if ("String".equals(t1.name())) {
+    } else if ("String".equals(t1.name()) && op.equals("+")) {
       res = t1;
-    } else if ("String".equals(t2.name())) {
+    } else if ("String".equals(t2.name()) && op.equals("+")) {
       res = t2;
     } else if ("Boolean".equals(t1.name()) && "Boolean".equals(t2.name()))
       res = t1;

@@ -1,0 +1,8 @@
+Integer a;
+Real b;
+Boolean c;
+String d;
+a = 1;
+b = 9.12;
+c = true;
+d = "string";
