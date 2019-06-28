@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.ParserRuleContext;
 
+
 public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   private final RealType realType = new RealType();
   private final IntegerType integerType = new IntegerType();
@@ -37,11 +38,32 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         Symbol sym = GeneralParser.map.get(id);
-        if (!sym.type().conformsTo(ctx.expr().exprType)) {
-          ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
-          res = false;
-        } else
-          sym.setValueDefined();
+        String unitSym=sym.unit();
+        
+        if(sym.type().getClass().getName().equals("Quantity")){
+          if(ctx.expr().unit!=null){
+            String unit=ctx.expr().unit.replace("[", "").replace("]", "");
+            if(!unitSym.equals(unit)){
+              ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension "+sym.name());
+              res = false;
+  
+            }
+          }else{
+            ErrorHandling.printError(ctx, "You need to indicate a prefix for  \"" + sym.name() + "\"  dimension");
+            res = false;
+          }
+          
+        }
+        if(res){
+          if (!sym.type().conformsTo(ctx.expr().exprType)) {
+            ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
+            res = false;
+  
+          }else
+            sym.setValueDefined();
+
+        }
+        
       }
     }
     return res;
@@ -49,7 +71,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
-    Boolean res =visit(ctx.expr());
+    Boolean res =true ; //visit(ctx.expr());
     String id = ctx.declaration().ID().getText();
     if (res) {
       if (GeneralParser.map.exists(id)) {
@@ -59,14 +81,30 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res=visit(ctx.declaration().type());
         if (res){
           Type type = ctx.declaration().type().res;
-          System.out.println(type.getClass());
-          Symbol s = new Symbol(id, type);
-          if (!s.type().conformsTo(ctx.expr().exprType)) {
-            ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
-            res = false;
-          } else {
-            s.setValueDefined();
-            GeneralParser.map.put(id, s);
+          if(type.getClass().getName().equals("Quantity")){
+            if(ctx.expr().unit!=null){
+              String unit=ctx.expr().unit.replace("[", "").replace("]", "");
+              Quantity temp=(Quantity)type;
+              if(temp.checkUnit(unit)){
+                ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension "+temp.name());
+                res = false;
+
+              }
+            }else{
+              ErrorHandling.printError(ctx, "You need to indicate a prefix for  \"" + ctx.declaration().type().getText() + "\"  dimension");
+              res = false;
+            }
+          }
+          if(res){
+            Symbol s = new Symbol(id, type);
+            if (!s.type().conformsTo(ctx.expr().exprType)) {
+              ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
+              res = false;
+            } else {
+              s.setValueDefined();
+              GeneralParser.map.put(id, s);
+            }
+          
         }
         }
         
@@ -199,15 +237,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Quantity \"" + type_name + "\" does not exist!");
       return false;
     }
-    String v = QuantitiesParser.quantityTable.get(type_name).value();
-    switch (v) {
-    case "Real":
-      ctx.res = new RealType();
-      break;
-    case "Integer":
-      ctx.res = new IntegerType();
-      break;
-    }
+    Quantity v = QuantitiesParser.quantityTable.get(type_name);
+    ctx.res=v;
     return true;
 
   }

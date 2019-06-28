@@ -3,13 +3,11 @@
 
 //Boolean perc = true; //Deve ser capaz de converter de km para m automatico
 
-Integer a = 5 ; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
-Integer b = 51 ; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
-
+Velocity vel = 5 [m/s]; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
 //vel= 10 [m]+10[m]
-print(2+a);
+print(2+2);
 
-String tempo = perc/vel; //Neste caso teriamos m / (m/s) == s
+//String tempo = perc/vel; //Neste caso teriamos m / (m/s) == s
 
 //Alternativamente poderiamos ter:
 

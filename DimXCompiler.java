@@ -65,7 +65,31 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         printResult.add("stat", visit(ctx.expr()));
         printResult.add("expr",ctx.expr().varName);
-        printResult.add("unit",ctx.expr().unit);
+
+        if(!ctx.expr().unit.equals("Void"))
+            printResult.add("unit",ctx.expr().unit);
+
+        return printResult;
+    }
+
+    //Check dimension rule -> Prints expression's dimension
+    @Override
+    public ST visitDimensionCheck(GeneralParser.DimensionCheckContext ctx) {
+        ST printResult = this.stg.getInstanceOf("print");
+
+        printResult.add("stat", visit(ctx.expr()));
+        printResult.add("expr",ctx.expr().getText() + " is " + ctx.expr().dimension);
+
+        return printResult;
+    }
+
+    //Check unit rule -> Prints expression's unit
+    @Override 
+    public ST visitUnitCheck(GeneralParser.UnitCheckContext ctx) { 
+        ST printResult = this.stg.getInstanceOf("print");
+
+        printResult.add("stat", visit(ctx.expr()));
+        printResult.add("expr",ctx.expr().getText() + " is " + ctx.expr().unit);
 
         return printResult;
     }
@@ -198,6 +222,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         result.add("stat",visit(ctx.e2).render());
 
         ST powResult = stg.getInstanceOf("powerExpr");
+        System.out.println(ctx.exprType);
         powResult.add("type", ctx.exprType.name());
         powResult.add("var", ctx.varName);
         powResult.add("e1", ctx.e1.varName);
@@ -497,5 +522,4 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                             ctx.expr().varName,
                             ctx.varName);
         }
-
 }
