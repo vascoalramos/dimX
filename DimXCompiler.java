@@ -313,6 +313,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         return result;
     }
+
     //Base Expr NOT .EQUALS() ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
     private ST getExprNotEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2, String varOut){
         ST result = stg.getInstanceOf("stats");
@@ -330,6 +331,21 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
+    //Base Expr NOT ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    private ST getExprNot(ParserRuleContext ctx, String e1Stats, String var1, String varOut){
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", e1Stats);
+
+        ST expression = stg.getInstanceOf("expressionNot");
+        expression.add("type","Boolean");
+        expression.add("var",varOut);
+        expression.add("e1",var1);
+
+        result.add("stat",expression.render());
+
+        return result;
+    }
+
     //If-Else Rule
     @Override 
     public ST visitConditional(GeneralParser.ConditionalContext ctx) { 
@@ -338,8 +354,13 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         result.add("var", ctx.expr().varName);
         result.add("trueStats", visit(ctx.trueStats).render());
 
-        if(ctx.falseStats != null)
-            result.add("falseStats", visit(ctx.falseStats).render());
+        if(ctx.falseStats != null){
+            if(ctx.falseStats.conditional() != null)
+                result.add("falseStats", visit(ctx.falseStats).render());
+            else{
+                result.add("falseStats", visit(ctx.falseStats.statList()).render());
+            }
+        }
         return result;
     }
 
@@ -403,6 +424,17 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                                     ctx.e2.varName,
                                     ctx.varName);
         }
+
+        @Override 
+        public ST visitConditionalNegation(GeneralParser.ConditionalNegationContext ctx) {
+            ctx.varName = newVar();
+
+            return getExprNot(ctx, 
+                            visit(ctx.expr()).render(), 
+                            ctx.expr().varName,
+                            ctx.varName);
+        }
+
 
 
 

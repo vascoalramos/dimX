@@ -1,5 +1,5 @@
-if 6>5 and 4<3 {
+if not 6<5{
 print("oi");
-}else if 3>2{
-print("boi");
+}else{
+print("rip");
 };

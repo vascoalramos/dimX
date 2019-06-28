@@ -105,6 +105,9 @@ expressionEquals(type,var,e1,e2) ::= "<declaration(type,var,[e1,\".equals(\",e2,
 //Expression !Equals
 expressionNotEquals(type,var,e1,e2) ::= "<declaration(type,var,[\"!\",e1,\".equals(\",e2,\")\"])>"
 
+//Expression !Equals
+expressionNot(type,var,e1) ::= "<declaration(type,var,[\"!\",e1])>"
+
 
 //Conditional IF-ELSE
 conditional(stat,var,trueStats,falseStats) ::= <<
