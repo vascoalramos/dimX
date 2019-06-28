@@ -7,7 +7,7 @@ grammar General;
 main: statList EOF;
 statList : (stat TERM)*;
 
-stat: print | assign | declaration | input;
+stat: print | assign | declaration | input | conditional;
 print: 'print' '(' expr ')';
 
 assign: declaration '=' expr #declareAndAssign
@@ -30,10 +30,10 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	: <assoc=right> e1=expr '^' e2=expr						# Pow
 	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv //TODO - Add Resto e Modulo
 	| e1 = expr op = ('+' | '-') e2 = expr					# addSub
-	| e1=expr op=('or' | 'and') e2=expr						# conditionalAndOr
 	| 'not' expr											# conditionalNegation
 	| e1=expr op=('==' | '!=' | '===' | '!==') e2=expr		# conditionalEquality
 	| e1=expr op=('<' | '>' | '<=' | '>=') e2=expr 			# conditionalRelational
+	| e1=expr op=('or' | 'and') e2=expr						# conditionalAndOr
 	| '(' expr ')'											# parentheses
 	| input													# inputValue
 	| ID													# IDvalue
@@ -44,7 +44,8 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	;
 
 
-conditional: 'if' expr '{' trueStats=statList '}'('else' '{' falseStats= statList '}')? ;
+conditional: 'if' expr '{' trueStats=statList '}'('else' falseStats = elseConditon)? ;
+elseConditon: conditional|'{' statList '}';
 
 BOOLEAN: 'true' | 'false';
 

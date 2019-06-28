@@ -1,11 +1,11 @@
 //EX 1:
 //Sabendo que te deslocas a uma velocidade de 5 m/s  queres percorrer 1 km quanto tempo demoras?
 
-Boolean perc = true; //Deve ser capaz de converter de km para m automatico
+//Boolean perc = true; //Deve ser capaz de converter de km para m automatico
 
-Velocity vel = 5 [m/s]; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
-
-print(vel+perc);
+//Velocity vel = 5 [m/s]; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
+vel= 10 [m]+10[m]
+print(true+2);
 
 String tempo = perc/vel; //Neste caso teriamos m / (m/s) == s
 
