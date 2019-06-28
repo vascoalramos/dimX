@@ -111,11 +111,14 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
     visit(ctx.e1);
     visit(ctx.e2);
+    System.out.println(ctx.e1.exprType);
+    System.out.println(ctx.e2.exprType);
     Boolean res = true;
     if(!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
+    ctx.exprType = booleanType;
     return res;
   }
 
