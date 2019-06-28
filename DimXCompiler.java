@@ -60,6 +60,8 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         printResult.add("stat", visit(ctx.expr()));
         printResult.add("expr",ctx.expr().varName);
+        printResult.add("unit",ctx.expr().unit);
+
         return printResult;
     }
 

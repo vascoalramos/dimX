@@ -13,8 +13,13 @@ public class GeneralMain {
       CharStream input = null;
       try {
          input = CharStreams.fromStream(new FileInputStream(args[0]));
+
+         if(!args[0].split("\\.")[1].equals("dmx")){
+            ErrorHandling.printError("Unrecognisable file extension! Use .dmx");
+            System.exit(1);
+         }
       } catch (Exception e) {
-         System.err.println("ERROR: Unable to read from file");
+         ErrorHandling.printError("Couldn't find specified file \" " + args[0] + "\"");
          System.exit(1);
       }
       // create a lexer that feeds off of input CharStream:
@@ -40,23 +45,27 @@ public class GeneralMain {
             String outputLang = "java";
 
             if (!compiler.validTarget(outputLang)) {
-               System.err.println("ERROR: Can't find template group file for JAVA");
+               ErrorHandling.printError("Can't find template group file for " + outputLang);
                System.exit(1);
             }
 
             compiler.setTarget(outputLang);
             ST code = compiler.visit(tree);
 
-            String outputFile = "Output." + outputLang;
+            String outputFileName = args[0].split("\\.")[0];
+
+            String outputFileExtension =  "." + outputLang;
+
+            String outputFile = outputFileName + outputFileExtension;
 
             try {
-               code.add("name", "Output");
+               code.add("name", outputFileName);
                PrintWriter pw = new PrintWriter(new File(outputFile));
                pw.print(code.render());
                pw.close();
 
             } catch (FileNotFoundException e) {
-               System.err.println("ERROR: Failed to write code file");
+               System.err.println("Failed to write code file");
                System.exit(1);
             }
          }

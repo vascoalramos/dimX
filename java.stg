@@ -38,12 +38,14 @@ powerTypeCast ::= [
 ]
 
 
-// Actual String Templates aka mendes big gay
+// Actual String Templates
 
 //Generate Class
 module(name,stat) ::= <<
 import java.util.Scanner;
-public class <name> {        
+
+public class <name> {  
+
     public static void main(String[] args){
         Scanner userInput = new Scanner(System.in);
         <stats(stat)>
@@ -68,9 +70,10 @@ assign(stat,var,value) ::= <<
 
 
 //Print expression
-print(stat,expr) ::= <<
+initUnit(unit) ::= "<if(unit)> + \"<unit>\"<endif>" //Check if there's a unit
+print(stat,expr,unit) ::= <<
 <stats(stat)>
-System.out.println(<expr>);
+System.out.println(<expr><initUnit(unit)>);
 >>
 
 
