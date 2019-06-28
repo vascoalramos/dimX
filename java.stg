@@ -28,6 +28,15 @@ operators ::= [
     ":"  : "/",
     "+"  : "+",
     "-"  : "-",
+    "==" : "==",
+    "!=" : "!=",
+    "<"  : "<",
+    ">"  : ">",
+    "<=" : "<=",
+    ">=" : ">=",
+    "not": "!",
+    "or" : "||",
+    "and": "&&",
     default    : "null"
 ]
 
@@ -90,13 +99,20 @@ expression(type,var,e1,op,e2) ::= "<declaration(type,var,[e1,\" \",operators.(op
 //Power expression
 powerExpr(type,var,e1,e2) ::= "<declaration(type,var,[powerTypeCast.(type),\"Math.pow(\", e1, \", \", e2, \")\"])>"
 
+//Expression Equals
+expressionEquals(type,var,e1,e2) ::= "<declaration(type,var,[e1,\".equals(\",e2,\")\"])>"
+
+//Expression !Equals
+expressionNotEquals(type,var,e1,e2) ::= "<declaration(type,var,[\"!\",e1,\".equals(\",e2,\")\"])>"
+
+
 //Conditional IF-ELSE
-conditional(stat,var,stat_true,stat_false) ::= <<
+conditional(stat,var,trueStats,falseStats) ::= <<
 <stats(stat)>
 if (<var>) {
-   <stat_true>
-}<if(stat_false)>
+   <trueStats>
+}<if(falseStats)>
 else {
-   <stat_false>
+   <falseStats>
 }<endif>
 >>

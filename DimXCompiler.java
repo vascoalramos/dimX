@@ -294,4 +294,118 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         }
 
+    
+    /* CONDITIONAL EXPRESSIONS */
+
+    //Base Expr .EQUALS() ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    private ST getExprEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2, String varOut){
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", e1Stats);
+        result.add("stat",e2Stats);
+
+        ST expression = stg.getInstanceOf("expressionEquals");
+        expression.add("type","Boolean");
+        expression.add("var",varOut);
+        expression.add("e1",var1);
+        expression.add("e2",var2);
+
+        result.add("stat",expression.render());
+
+        return result;
+    }
+    //Base Expr NOT .EQUALS() ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    private ST getExprNotEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2, String varOut){
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", e1Stats);
+        result.add("stat",e2Stats);
+
+        ST expression = stg.getInstanceOf("expressionNotEquals");
+        expression.add("type","Boolean");
+        expression.add("var",varOut);
+        expression.add("e1",var1);
+        expression.add("e2",var2);
+
+        result.add("stat",expression.render());
+
+        return result;
+    }
+
+    //If-Else Rule
+    @Override 
+    public ST visitConditional(GeneralParser.ConditionalContext ctx) { 
+        ST result = stg.getInstanceOf("conditional");
+        result.add("stat", visit(ctx.expr()).render());
+        result.add("var", ctx.expr().varName);
+        result.add("trueStats", visit(ctx.trueStats).render());
+
+        if(ctx.falseStats != null)
+            result.add("falseStats", visit(ctx.falseStats).render());
+        return result;
+    }
+
+        /* CONDITIONAL CHECKS */
+        @Override 
+        public ST visitConditionalEquality(GeneralParser.ConditionalEqualityContext ctx) { 
+            ctx.varName = newVar();
+
+            if(ctx.op.getText().equals("===")){
+                return getExprEquals(ctx, 
+                                    visit(ctx.e1).render(), 
+                                    visit(ctx.e2).render(), 
+                                    ctx.e1.varName,
+                                    ctx.e2.varName,
+                                    ctx.varName);
+            }else if(ctx.op.getText().equals("!==")){
+                return getExprNotEquals(ctx, 
+                                    visit(ctx.e1).render(), 
+                                    visit(ctx.e2).render(), 
+                                    ctx.e1.varName,
+                                    ctx.e2.varName,
+                                    ctx.varName);
+
+            }else{
+                return getExprResult(ctx, 
+                                    visit(ctx.e1).render(), 
+                                    visit(ctx.e2).render(), 
+                                    "Boolean",
+                                    ctx.e1.varName,
+                                    ctx.op.getText(), 
+                                    ctx.e2.varName,
+                                    ctx.varName);
+            }
+        }
+
+        @Override 
+        public ST visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) { 
+            ctx.varName = newVar();
+
+            return getExprResult(ctx, 
+                                    visit(ctx.e1).render(), 
+                                    visit(ctx.e2).render(), 
+                                    "Boolean",
+                                    ctx.e1.varName,
+                                    ctx.op.getText(), 
+                                    ctx.e2.varName,
+                                    ctx.varName);
+        }
+
+
+        @Override 
+        public ST visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) { 
+            ctx.varName = newVar();
+
+            return getExprResult(ctx, 
+                                    visit(ctx.e1).render(), 
+                                    visit(ctx.e2).render(), 
+                                    "Boolean",
+                                    ctx.e1.varName,
+                                    ctx.op.getText(), 
+                                    ctx.e2.varName,
+                                    ctx.varName);
+        }
+
+
+
+
+
 }

@@ -1,2 +1,5 @@
-print(4);
-Integer a = 5;
+if 6>5 and 4<3 {
+print("oi");
+}else if 3>2{
+print("boi");
+};
