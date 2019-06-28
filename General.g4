@@ -45,12 +45,15 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 
 conditionalExpr: conditional
 			   | whileConditional
+			   | forConditional
 			   ;
 
-conditional: 'if' expr '{' trueStats=statList '}'('else' falseStats = elseConditon)? ;
+conditional: 'if' expr '{' trueStats=statList '}'('else' falseStats = elseConditon)? ; //Semantic Check whether expr is boolean
 elseConditon: conditional|'{' statList '}';
 
-whileConditional: 'while' expr '{' trueStats=statList '}';
+whileConditional: 'while' expr '{' trueStats=statList '}'; //Semantic Check whether expr is boolean
+
+forConditional: 'for' incVarDec=assign ',' breakCond=expr ',' incCond=expr   '{' trueStats=statList '}'; //Semantic Check whether breakCond is boolean AND incCond is NOT boolean
 
 BOOLEAN: 'true' | 'false';
 
