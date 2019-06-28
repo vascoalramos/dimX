@@ -65,7 +65,31 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         printResult.add("stat", visit(ctx.expr()));
         printResult.add("expr",ctx.expr().varName);
-        printResult.add("unit",ctx.expr().unit);
+
+        if(!ctx.expr().unit.equals("Void"))
+            printResult.add("unit",ctx.expr().unit);
+
+        return printResult;
+    }
+
+    //Check dimension rule -> Prints expression's dimension
+    @Override
+    public ST visitDimensionCheck(GeneralParser.DimensionCheckContext ctx) {
+        ST printResult = this.stg.getInstanceOf("print");
+
+        printResult.add("stat", visit(ctx.expr()));
+        printResult.add("expr",ctx.expr().getText() + " is " + ctx.expr().dimension);
+
+        return printResult;
+    }
+
+    //Check unit rule -> Prints expression's unit
+    @Override 
+    public ST visitUnitCheck(GeneralParser.UnitCheckContext ctx) { 
+        ST printResult = this.stg.getInstanceOf("print");
+
+        printResult.add("stat", visit(ctx.expr()));
+        printResult.add("expr",ctx.expr().getText() + " is " + ctx.expr().unit);
 
         return printResult;
     }
@@ -377,6 +401,52 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
+    //For Rule
+    @Override 
+    public ST visitForConditional(GeneralParser.ForConditionalContext ctx) { 
+        ST result = stg.getInstanceOf("conditionalFor");
+
+        String incrementVarDec = visit(ctx.incVarDec).render();
+        String breakCond = visit(ctx.breakCond).render();
+        String incrementCond = visit(ctx.incCond).render();
+
+        String incVar = incrementVarDec.split("\n")[0].split(" ")[1].replace(";","");
+        
+        String incCondition;
+        String lastIncCondStatement = incrementCond.split("\n")[incrementCond.split("\n").length-1];
+        incCondition = incVar + " = " + lastIncCondStatement.split(" = ")[1];
+
+        String incDec;
+        String lastIncDec = incrementVarDec.split("\n")[incrementVarDec.split("\n").length-1];
+        incDec = incVar + " = " + lastIncDec.split(" = ")[1];
+
+
+        String breakCondUpdate = "";
+        for(int i = 0 ; i < breakCond.split("\n").length ; i++){
+            breakCondUpdate += breakCond.split("\n")[i].substring(breakCond.split("\n")[i].indexOf(' ')+1);
+        }
+
+        String updateIncrement = "";
+        for(int i = 0 ; i < incrementCond.split("\n").length ; i++){
+            updateIncrement += incrementCond.split("\n")[i].substring(incrementCond.split("\n")[i].indexOf(' ')+1);
+        }
+
+
+        result.add("stat", incrementVarDec + "\n\n" + breakCond + "\n\n" + incrementCond);
+        result.add("var", incDec);
+        result.add("cond", ctx.breakCond.varName);
+        result.add("inc", incCondition.replace(";", ""));
+
+        result.add("updateIncr", updateIncrement);
+        result.add("updateCond", breakCondUpdate);
+
+
+        result.add("trueStats", visit(ctx.trueStats).render());
+
+        return result; 
+    }
+
+
         /* CONDITIONAL CHECKS */
 
         //Equality Expressions (includes ==, ===, !=, !==)
@@ -451,5 +521,4 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                             ctx.expr().varName,
                             ctx.varName);
         }
-
 }

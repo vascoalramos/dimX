@@ -132,12 +132,14 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return true;
   }
 
-  @Override public Boolean visitAddSub(GeneralParser.AddSubContext ctx) { 
-    //check if there weren' errors in e1 and e2 and if both are numeric
-    Boolean check=visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx,ctx.e1.exprType) && checkBooleanType(ctx, ctx.e2.exprType);
-    
-    //check if both belong to the same dimension
-    check=checkDimension(ctx,ctx.e2.dimension,ctx.e1.dimension);
+  @Override
+  public Boolean visitAddSub(GeneralParser.AddSubContext ctx) {
+    // check if there weren' errors in e1 and e2 and if both are numeric
+    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
+        && checkBooleanType(ctx, ctx.e2.exprType);
+
+    // check if both belong to the same dimension
+    check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
 
     // check if both belong to the same dimension
     // check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
@@ -151,8 +153,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       if (tp == null) {
         ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
         check = false;
-      }
-      else
+      } else
         ctx.exprType = tp;
     }
 
@@ -164,14 +165,24 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
     visit(ctx.e1);
     visit(ctx.e2);
-    System.out.println(ctx.e1.exprType);
-    System.out.println(ctx.e2.exprType);
     Boolean res = true;
     if (!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
     ctx.exprType = booleanType;
+    return res;
+  }
+
+  @Override
+  public Boolean visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) {
+    visit(ctx.e1);
+    visit(ctx.e2);
+    Boolean res = true;
+    if (!ctx.e1.exprType.isNumeric() || !ctx.e2.exprType.isNumeric()) {
+      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+      res = false;
+    }
     return res;
   }
 
@@ -184,20 +195,19 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       if (!t1.isNumeric() && !t2.isNumeric()) {
         ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
         check = false;
-      }
-      else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
+      } else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
         ctx.exprType = realType;
       else
         ctx.exprType = integerType;
     }
-    
+
     return check;
   }
 
   @Override
   public Boolean visitIntType(GeneralParser.IntTypeContext ctx) {
     ctx.res = new IntegerType();
-    
+
     return true;
   }
 
@@ -253,17 +263,17 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitIntValue(GeneralParser.IntValueContext ctx) {
     ctx.exprType = integerType;
-    if(ctx.unitID()!=null){
-      Boolean check=false;
-      String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
-      for(Quantity q:QuantitiesParser.quantityTable.values()){
-        if(!q.checkUnit(unit)){
-          ctx.dimension=q.name();
-          ctx.unit=unit;
-          check=true;
+    if (ctx.unitID() != null) {
+      Boolean check = false;
+      String unit = ctx.unitID().getText().replace("[", "").replace("]", "");
+      for (Quantity q : QuantitiesParser.quantityTable.values()) {
+        if (!q.checkUnit(unit)) {
+          ctx.dimension = q.name();
+          ctx.unit = unit;
+          check = true;
         }
       }
-      if(!check){
+      if (!check) {
         ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
         return false;
       }
@@ -279,17 +289,17 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitRealValue(GeneralParser.RealValueContext ctx) {
     ctx.exprType = realType;
 
-    if(ctx.unitID()!=null){
-      Boolean check=false;
-      String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
-      for(Quantity q:QuantitiesParser.quantityTable.values()){
-        if(!q.checkUnit(unit)){
-          ctx.dimension=q.name();
-          ctx.unit=unit;
-          check=true;
+    if (ctx.unitID() != null) {
+      Boolean check = false;
+      String unit = ctx.unitID().getText().replace("[", "").replace("]", "");
+      for (Quantity q : QuantitiesParser.quantityTable.values()) {
+        if (!q.checkUnit(unit)) {
+          ctx.dimension = q.name();
+          ctx.unit = unit;
+          check = true;
         }
       }
-      if(!check){
+      if (!check) {
         ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
         return false;
       }
@@ -310,15 +320,13 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return true;
   }
 
-  private Boolean checkBooleanType(ParserRuleContext ctx, Type t)
-   {
-      Boolean res = true;
-      if (t.isBoolean())
-      {
-         ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
-         res = false;
-      }
-      return res;
+  private Boolean checkBooleanType(ParserRuleContext ctx, Type t) {
+    Boolean res = true;
+    if (t.isBoolean()) {
+      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+      res = false;
+    }
+    return res;
   }
 
   private Type fetchType(Type t1, Type t2, String op) {
