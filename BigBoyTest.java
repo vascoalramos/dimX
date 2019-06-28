@@ -4,25 +4,23 @@ public class BigBoyTest {
 
     public static void main(String[] args){
         Scanner userInput = new Scanner(System.in);
-<<<<<<< HEAD
-        boolean v0 = true;
-        while (v0) {
-            String v1 = "hi";
-            System.out.println(v1);
+        int v0;
+        int v1 = 0;
+        v0 = v1;
+
+        int v3 = v0;
+        int v4 = 5;
+        boolean v2 = v3 < v4;
+
+        int v6 = v0;
+        int v7 = 1;
+        int v5 = v6 + v7;
+        for(v0 = v1;v2;v0 = v6 + v7){
+            int v8 = v0;
+            System.out.println(v8);
+
+            v6 = v0;v7 = 1;v5 = v6 + v7;
+            v3 = v0;v4 = 5;v2 = v3 < v4;
         }
-=======
-        int v0 = 5;
-        System.out.println(v0);
-        int v1;
-        int v2 = 5;
-        v1 = v2;
-        int v3;
-        int v5 = 2;
-        int v6 = 3;
-        int v4 = v5 * v6;
-        v3 = v4;
-        String v7 = "ola";
-        System.out.println(v7);
->>>>>>> 34fc405abed3cd7e962bd96aed644d560e66679f
     }
 }

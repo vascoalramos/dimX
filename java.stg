@@ -127,3 +127,14 @@ while (<var>) {
     <trueStats>
 }
 >>
+
+//Conditional FOR
+conditionalFor(stat,var,cond,updateCond,updateIncr,inc,trueStats) ::= <<
+<stats(stat)>
+for(<var><cond>;<inc>){
+    <trueStats>
+
+    <updateIncr>
+    <updateCond>
+}
+>>

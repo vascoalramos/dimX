@@ -257,11 +257,11 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA,String dimensionB)
    {
       Boolean res = true;
-      if (!dimensionA.equals(dimensionB))
+      /*if (!dimensionA.equals(dimensionB))
       {
          ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
          res = false;
-      }
+      }*/
       return res;
   }
 
