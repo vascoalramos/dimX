@@ -7,7 +7,7 @@ grammar General;
 main: statList EOF;
 statList : (stat TERM)*;
 
-stat: print | assign | declaration | input | conditionalExpr;
+stat: print | assign | declaration | input | conditionalExpr | dimCheck;
 print: 'print' '(' expr ')';
 
 assign: declaration '=' expr #declareAndAssign
@@ -42,6 +42,14 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| INT unitID?											# IntValue
 	| REAL unitID?											# RealValue
 	;
+
+dimCheck : dimensionCheck
+		 | unitCheck
+		 ;
+
+dimensionCheck : '(' expr ').dimension';
+
+unitCheck : '(' expr ').unit';
 
 conditionalExpr: conditional
 			   | whileConditional
