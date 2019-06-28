@@ -104,6 +104,18 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return check; 
   }
 
+  /* Conditional expressions */
+  @Override 
+  public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
+    visit(ctx.e1);
+    visit(ctx.e2);
+    Boolean res = true;
+    if(!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+      res = false;
+    }
+    return res;
+  }
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     ctx.exprType = integerType;
