@@ -128,7 +128,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     Type t1 = ctx.e1.exprType;
     Type t2 = ctx.e2.exprType;
     Boolean res = true;
-    if (t1.equals(stringType) || t1.equals(booleanType) || t2.equals(stringType) || t2.equals(booleanType)) {
+    if (!t1.isNumeric() && !t2.isNumeric()) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
