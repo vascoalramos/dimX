@@ -16,15 +16,35 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
     @Override
     public String visitQuantity_declare(QuantitiesParser.Quantity_declareContext ctx) {
         String typeName = ctx.TYPE_ID().getText();
+        Boolean checkUnit=true,check=true;
         if (QuantitiesParser.quantityTable.exists(typeName)) {
             ErrorHandling.printError(ctx, "Quantity \"" + typeName + "\" already declared!");
-            return null;
+            check=false;
         }
 
+        
+
         String value = visit(ctx.type());
+        
         if (value != null) {
             String[] tokens = value.split("-");
-            QuantitiesParser.quantityTable.put(typeName, new Quantity(tokens[1], tokens[0],typeName));
+            for(Quantity q: QuantitiesParser.quantityTable.values()){
+                if(!q.checkUnit(tokens[0])){
+                    checkUnit=false;
+                    break;
+                }
+            }
+            
+            if(!checkUnit){
+                ErrorHandling.printError(ctx, "Unit \"" + tokens[0] + "\" already present in another Quantity!");
+                return null;
+            }else{
+                if(!check){ //Se o primeiro erro ja occorreu e verificamos que o segundo nao chegou a ocorrer, nao podemos continuar na mesma
+                    return null;
+                }   
+                QuantitiesParser.quantityTable.put(typeName, new Quantity(tokens[1], tokens[0],typeName));
+
+            }
 
         } else {
             return null;

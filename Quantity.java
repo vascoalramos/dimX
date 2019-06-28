@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Quantity extends Type {
@@ -31,5 +32,14 @@ public class Quantity extends Type {
 
    public List<String> unit() {
       return this.units;
+   }
+
+   public boolean checkUnit(String unit) {
+      Iterator<String> it=units.listIterator();
+      while(it.hasNext()){
+         if(it.next().equals(unit))
+            return false;
+      }
+      return true;
    }
 }

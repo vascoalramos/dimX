@@ -77,7 +77,7 @@ System.out.println(<expr><initUnit(unit)>);
 >>
 
 
-//Input from user - TODO: ASK HOW TO DO INPUT PROPERLY
+//Input from user
 input(stat, prompt,var) ::= <<
 <stats(stat)>
 System.out.print(<prompt>);
@@ -89,3 +89,14 @@ expression(type,var,e1,op,e2) ::= "<declaration(type,var,[e1,\" \",operators.(op
 
 //Power expression
 powerExpr(type,var,e1,e2) ::= "<declaration(type,var,[powerTypeCast.(type),\"Math.pow(\", e1, \", \", e2, \")\"])>"
+
+//Conditional IF-ELSE
+conditional(stat,var,stat_true,stat_false) ::= <<
+<stats(stat)>
+if (<var>) {
+   <stat_true>
+}<if(stat_false)>
+else {
+   <stat_false>
+}<endif>
+>>
