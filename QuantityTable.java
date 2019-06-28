@@ -15,5 +15,9 @@ public class QuantityTable {
         return table.get(name);
     }
 
+    public Collection<Quantity> values(){
+        return table.values();
+    }
+
     private HashMap<String, Quantity> table = new HashMap<String, Quantity>();
 }
