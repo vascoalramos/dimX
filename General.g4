@@ -33,13 +33,16 @@ expr returns[Type exprType, String varName]:
 	| input																		# inputValue
 	| ID																			# IDvalue
 	| STRING																	# StringValue
-	| BOOLEAN																	# BooleanValue
-	| INT																			# IntValue
-	| REAL																		# RealValue
+	| BOOLEAN																# BooleanValue
+	| INT  unit? 																	# IntValue
+	| REAL unit?																	# RealValue
 	;
 
 
 BOOLEAN: 'true' | 'false';
+
+unit: '[' ID (op = ('/' | '*') ID)? ']';
+
 
 TYPE_ID: [A-Z]LETTER+;
 ID: LETTER (LETTER | DIGIT)*;
