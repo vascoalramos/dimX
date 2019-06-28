@@ -30,9 +30,9 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv
 	| e1 = expr op = ('+' | '-') e2 = expr					# addSub
 	| e1=expr op=('or' | 'and') e2=expr						# conditionalAndOr
-	| e1=expr op=('==' | '!=') 	e2=expr						# conditionalEquality
-	| e1=expr op=('<' | '>' | '<=' | '>=') e2=expr 			# conditionalRelational
 	| 'not' expr											# conditionalNegation
+	| e1=expr op=('==' | '!=' | '===' | '!==') e2=expr		# conditionalEquality
+	| e1=expr op=('<' | '>' | '<=' | '>=') e2=expr 			# conditionalRelational
 	| '(' expr ')'											# parentheses
 	| input													# inputValue
 	| ID													# IDvalue
