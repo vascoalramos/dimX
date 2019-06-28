@@ -1,3 +1,5 @@
+import org.antlr.v4.runtime.ParserRuleContext;
+
 public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   private final RealType realType = new RealType();
   private final IntegerType integerType = new IntegerType();
@@ -83,6 +85,25 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return true;
   }
 
+  @Override public Boolean visitAddSub(GeneralParser.AddSubContext ctx) { 
+    //check if there weren' errors in e1 and e2 and if both are numeric
+    Boolean check=visit(ctx.e1) && visit(ctx.e2) && checkNumericType(ctx,ctx.e1.exprType) && checkNumericType(ctx, ctx.e2.exprType);
+    
+    //check if both belong to the same dimension
+    check=checkDimension(ctx,ctx.e2.dimension,ctx.e1.dimension);
+
+    //check if both have same unit? check if unit belongs to that dimension
+
+
+    //assign same type (Real,Integer,...) to operands. Maybe we should assign same unit??
+    if(check){
+      ctx.exprType=fetchType(ctx.e1.exprType,ctx.e2.exprType);
+    }
+ 
+    return check; 
+  }
+
+
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     ctx.exprType = integerType;
     return true;
@@ -143,6 +164,45 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitStringValue(GeneralParser.StringValueContext ctx) {
     ctx.exprType = stringType;
     return true;
+  }
+
+  private Boolean checkNumericType(ParserRuleContext ctx, Type t)
+   {
+      Boolean res = true;
+      if (!t.isNumeric())
+      {
+         ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+         res = false;
+      }
+      return res;
+  }
+
+  private Type fetchType(Type t1, Type t2)
+   {
+      Type res = null;
+      if (t1.isNumeric() && t2.isNumeric())
+      {
+         if ("real".equals(t1.name()))
+            res = t1;
+         else if ("real".equals(t2.name()))
+            res = t2;
+         else
+            res = t1;
+      }
+      else if ("boolean".equals(t1.name()) && "boolean".equals(t2.name()))
+         res = t1;
+      return res;
+   }
+
+  private Boolean checkDimension(ParserRuleContext ctx, String dimensionA,String dimensionB)
+   {
+      Boolean res = true;
+      if (!dimensionA.equals(dimensionB))
+      {
+         ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
+         res = false;
+      }
+      return res;
   }
 
 }
