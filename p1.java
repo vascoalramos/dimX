@@ -44,12 +44,9 @@ public class p1 {
         System.out.println(v22);
         String v23 = v18;
         System.out.println(v23);
-        int v24;
-        int v26 = v0;
-        int v27 = v12;
-        int v25 = v26 + v27;
-        v24 = v25;
-        int v28 = v24;
-        System.out.println(v28);
+        int v25 = 2;
+        int v26 = 2;
+        int v24 = v25 + v26;
+        System.out.println(v24);
     }
 }
