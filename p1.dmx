@@ -24,6 +24,3 @@ print(f);
 print(g);
 print(h);
 
-// ISTO AQUI NAO FUNCIONA, NEM NENHUMA OPERACAO
-Integer i = a + e;
-print(i);
