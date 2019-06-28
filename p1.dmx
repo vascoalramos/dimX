@@ -1,0 +1,29 @@
+Integer a;
+Real b;
+Boolean c;
+String d;
+
+a = 1;
+b = 2.0;
+c = true;
+d = "string";
+
+print(a);
+print(b);
+print(c);
+print(d);
+
+
+Integer e = 2;
+Real f = 0.3;
+Boolean g = false;
+String h = "another_string";
+
+print(e);
+print(f);
+print(g);
+print(h);
+
+// ISTO AQUI NAO FUNCIONA, NEM NENHUMA OPERACAO
+Integer i = a + e;
+print(i);

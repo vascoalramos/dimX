@@ -1,8 +1,0 @@
-String b = "0.3";
-print(b);
-Real r = 214.123;
-print(r);
-Boolean a = true;
-print(a);
-a = false;
-print(a);
