@@ -119,3 +119,11 @@ else {
    <falseStats>
 }<endif>
 >>
+
+//Conditional WHILE
+conditionalWhile(stat,var,trueStats) ::= <<
+<stats(stat)>
+while (<var>) {
+    <trueStats>
+}
+>>

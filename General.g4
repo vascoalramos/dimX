@@ -7,7 +7,7 @@ grammar General;
 main: statList EOF;
 statList : (stat TERM)*;
 
-stat: print | assign | declaration | input | conditional;
+stat: print | assign | declaration | input | conditionalExpr;
 print: 'print' '(' expr ')';
 
 assign: declaration '=' expr #declareAndAssign
@@ -28,7 +28,7 @@ type returns[Type res]:
 
 expr returns[Type exprType, String varName, String dimension, String unit]
 	: <assoc=right> e1=expr '^' e2=expr						# Pow
-	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv //TODO - Add Resto e Modulo
+	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv 
 	| e1 = expr op = ('+' | '-') e2 = expr					# addSub
 	| 'not' expr											# conditionalNegation
 	| e1=expr op=('==' | '!=' | '===' | '!==') e2=expr		# conditionalEquality
@@ -43,9 +43,14 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| REAL unitID?											# RealValue
 	;
 
+conditionalExpr: conditional
+			   | whileConditional
+			   ;
 
 conditional: 'if' expr '{' trueStats=statList '}'('else' falseStats = elseConditon)? ;
 elseConditon: conditional|'{' statList '}';
+
+whileConditional: 'while' expr '{' trueStats=statList '}';
 
 BOOLEAN: 'true' | 'false';
 

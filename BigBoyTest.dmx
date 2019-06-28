@@ -1,5 +1,4 @@
 print(5);
-Integer a = 5;
-Integer b = 2 * 3;
-print("ola");
-print(b + "d");
+Real a = 5; 
+Real b = 2.0 + 3.0;
+print(a + " | " + 3);

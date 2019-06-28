@@ -35,7 +35,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         Symbol sym = GeneralParser.map.get(id);
-        if (!ctx.expr().exprType.conformsTo(sym.type())) {
+        if (!sym.type().conformsTo(ctx.expr().exprType)) {
           ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
           res = false;
         } else
@@ -57,7 +57,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         visit(ctx.declaration().type());
         Type type = ctx.declaration().type().res;
         Symbol s = new Symbol(id, type);
-        if (!ctx.expr().exprType.conformsTo(s.type())) {
+        if (!s.type().conformsTo(ctx.expr().exprType)) {
           ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
           res = false;
         } else {
@@ -95,26 +95,29 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     //check if both belong to the same dimension
     check=checkDimension(ctx,ctx.e2.dimension,ctx.e1.dimension);
 
-    //check if both have same unit? check if unit belongs to that dimension
+    // check if both belong to the same dimension
+    // check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
 
+    // check if both have same unit? check if unit belongs to that dimension
 
-    //assign same type (Real,Integer,...) to operands. Maybe we should assign same unit??
-    if(check){
-      ctx.exprType=fetchType(ctx.e1.exprType,ctx.e2.exprType);
+    // assign same type (Real,Integer,...) to operands. Maybe we should assign same
+    // unit??
+    if (check) {
+      ctx.exprType = fetchType(ctx.e1.exprType, ctx.e2.exprType);
     }
- 
-    return check; 
+
+    return check;
   }
 
   /* Conditional expressions */
-  @Override 
+  @Override
   public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
     visit(ctx.e1);
     visit(ctx.e2);
     System.out.println(ctx.e1.exprType);
     System.out.println(ctx.e2.exprType);
     Boolean res = true;
-    if(!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
+    if (!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
@@ -175,12 +178,12 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     }
     String v = QuantitiesParser.quantityTable.get(type_name).value();
     switch (v) {
-      case "Real":
-        ctx.res = new RealType();
-        break;
-      case "Integer":
-        ctx.res = new IntegerType();
-        break;
+    case "Real":
+      ctx.res = new RealType();
+      break;
+    case "Integer":
+      ctx.res = new IntegerType();
+      break;
     }
     return true;
 
@@ -274,32 +277,31 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       return res;
   }
 
-  private Type fetchType(Type t1, Type t2)
-   {
-      Type res = null;
-      if (t1.isNumeric() && t2.isNumeric())
-      {
-         if ("real".equals(t1.name()))
-            res = t1;
-         else if ("real".equals(t2.name()))
-            res = t2;
-         else
-            res = t1;
-      }
-      else if ("boolean".equals(t1.name()) && "boolean".equals(t2.name()))
-         res = t1;
-      return res;
-   }
+  private Type fetchType(Type t1, Type t2) {
+    Type res = null;
+    if (t1.isNumeric() && t2.isNumeric()) {
+      if ("Real".equals(t1.name()))
+        res = t1;
+      else if ("Real".equals(t2.name()))
+        res = t2;
+      else
+        res = t1;
+    } else if ("String".equals(t1.name())) {
+      res = t1;
+    } else if ("String".equals(t2.name())) {
+      res = t2;
+    } else if ("Boolean".equals(t1.name()) && "Boolean".equals(t2.name()))
+      res = t1;
+    return res;
+  }
 
-  private Boolean checkDimension(ParserRuleContext ctx, String dimensionA,String dimensionB)
-   {
-      Boolean res = true;
-      if (!dimensionA.equals(dimensionB))
-      {
-         ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
-         res = false;
-      }
-      return res;
+  private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
+    Boolean res = true;
+    if (!dimensionA.equals(dimensionB)) {
+      ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
+      res = false;
+    }
+    return res;
   }
 
 }
