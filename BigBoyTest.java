@@ -6,15 +6,19 @@ public class BigBoyTest {
         Scanner userInput = new Scanner(System.in);
         int v0 = 5;
         System.out.println(v0);
-        int v1;
+        double v1;
         int v2 = 5;
         v1 = v2;
-        int v3;
-        int v5 = 2;
-        int v6 = 3;
-        int v4 = v5 * v6;
+        double v3;
+        double v5 = 2.0;
+        double v6 = 3.0;
+        double v4 = v5 + v6;
         v3 = v4;
-        String v7 = "ola";
+        double v9 = v1;
+        String v10 = " | ";
+        String v8 = v9 + v10;
+        int v11 = 3;
+        String v7 = v8 + v11;
         System.out.println(v7);
     }
 }
