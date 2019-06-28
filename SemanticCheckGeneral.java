@@ -128,7 +128,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     Type t1 = ctx.e1.exprType;
     Type t2 = ctx.e2.exprType;
     Boolean res = true;
-    if (t1.equals(stringType) || t1.equals(booleanType) || t2.equals(stringType) || t2.equals(booleanType)) {
+    if (!t1.isNumeric() && !t2.isNumeric()) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
@@ -142,6 +142,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitIntType(GeneralParser.IntTypeContext ctx) {
     ctx.res = new IntegerType();
+    
     return true;
   }
 
@@ -195,12 +196,19 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitBooleanValue(GeneralParser.BooleanValueContext ctx) {
     ctx.exprType = booleanType;
+    ctx.dimension="adimensional";
+    ctx.unit="";
+    
     return true;
   }
 
   @Override
   public Boolean visitIntValue(GeneralParser.IntValueContext ctx) {
     ctx.exprType = integerType;
+    if(ctx.unitID()!=null){
+      String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
+      System.out.println(unit);
+    }
     return true;
   }
 
@@ -213,6 +221,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitStringValue(GeneralParser.StringValueContext ctx) {
     ctx.exprType = stringType;
+    ctx.dimension="adimensional";
+    ctx.unit="";
     return true;
   }
 
