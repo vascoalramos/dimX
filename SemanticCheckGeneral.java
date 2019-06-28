@@ -107,12 +107,14 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     ctx.exprType = integerType;
+    
     return true;
   }
 
   @Override
   public Boolean visitIntType(GeneralParser.IntTypeContext ctx) {
     ctx.res = new IntegerType();
+    
     return true;
   }
 
@@ -156,12 +158,19 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitBooleanValue(GeneralParser.BooleanValueContext ctx) {
     ctx.exprType = booleanType;
+    ctx.dimension="adimensional";
+    ctx.unit="";
+    
     return true;
   }
 
   @Override
   public Boolean visitIntValue(GeneralParser.IntValueContext ctx) {
     ctx.exprType = integerType;
+    if(ctx.unitID()!=null){
+      String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
+      System.out.println(unit);
+    }
     return true;
   }
 
@@ -174,6 +183,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitStringValue(GeneralParser.StringValueContext ctx) {
     ctx.exprType = stringType;
+    ctx.dimension="adimensional";
+    ctx.unit="";
     return true;
   }
 
