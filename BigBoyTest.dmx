@@ -1,6 +1,2 @@
 print(4);
 Integer a = 5;
-Integer b = a;
-
-print(input("oi: "));
-

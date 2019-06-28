@@ -39,17 +39,22 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         this.stg = new STGroupFile("java.stg");
 
         ST resultModule = this.stg.getInstanceOf("module"); // Final result
-        ST resultStats = this.stg.getInstanceOf("stats"); // Intermediate results of all stats
+        resultModule.add("stat",visit(ctx.statList()));
+        
+        return resultModule;
+    }
 
+    @Override 
+    public ST visitStatList(GeneralParser.StatListContext ctx) { 
+        ST resultStats = this.stg.getInstanceOf("stats"); // Intermediate results of all stats
 
         for (GeneralParser.StatContext sc : ctx.stat()){
             resultStats.add("stat", visit(sc));
         }
 
-        resultModule.add("stat", resultStats);
-
-        return resultModule;
+        return resultStats;
     }
+
 
     /* PRINT RULES */
 

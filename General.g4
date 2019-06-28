@@ -4,7 +4,8 @@ grammar General;
     public static final SymbolTable map = new SymbolTable();
 }
 
-main: (stat TERM)* EOF;
+main: statList EOF;
+statList : (stat TERM)*;
 
 stat: print | assign | declaration | input;
 print: 'print' '(' expr ')';
@@ -41,6 +42,9 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| INT unitID?													# IntValue
 	| REAL unitID?													# RealValue
 	;
+
+
+conditional: 'if' expr '{' trueStats=statList '}'('else' '{' falseStats= statList '}')? ;
 
 BOOLEAN: 'true' | 'false';
 

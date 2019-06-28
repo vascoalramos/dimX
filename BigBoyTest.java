@@ -7,6 +7,5 @@ public class BigBoyTest {
         int v0 = 4;
         System.out.println(v0);
         int v1;
-	
     }
 }
