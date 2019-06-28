@@ -74,6 +74,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
       return false;
     } else {
+      visit(ctx.type());
       Type type = ctx.type().res;
       Symbol s = new Symbol(id, type);
       s.setValueDefined();
