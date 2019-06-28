@@ -4,6 +4,13 @@ public class BigBoyTest {
 
     public static void main(String[] args){
         Scanner userInput = new Scanner(System.in);
+<<<<<<< HEAD
+        boolean v0 = true;
+        while (v0) {
+            String v1 = "hi";
+            System.out.println(v1);
+        }
+=======
         int v0 = 5;
         System.out.println(v0);
         double v1;
@@ -20,5 +27,6 @@ public class BigBoyTest {
         int v11 = 3;
         String v7 = v8 + v11;
         System.out.println(v7);
+>>>>>>> 34fc405abed3cd7e962bd96aed644d560e66679f
     }
 }
