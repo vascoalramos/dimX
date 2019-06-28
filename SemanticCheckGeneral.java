@@ -2,7 +2,6 @@ import javax.print.DocFlavor.STRING;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-
 public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   private final RealType realType = new RealType();
   private final IntegerType integerType = new IntegerType();
@@ -23,8 +22,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         ctx.exprType = sym.type();
-        ctx.dimension=sym.dimension();
-        ctx.unit=sym.unit();
+        ctx.dimension = sym.dimension();
+        ctx.unit = sym.unit();
       }
     }
     return res;
@@ -40,32 +39,32 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         Symbol sym = GeneralParser.map.get(id);
-        String unitSym=sym.unit();
-        
-        if(sym.type().getClass().getName().equals("Quantity")){
-          if(ctx.expr().unit!=null){
-            String unit=ctx.expr().unit.replace("[", "").replace("]", "");
-            if(!unitSym.equals(unit)){
-              ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension "+sym.name());
+        String unitSym = sym.unit();
+
+        if (sym.type().getClass().getName().equals("Quantity")) {
+          if (ctx.expr().unit != null) {
+            String unit = ctx.expr().unit.replace("[", "").replace("]", "");
+            if (!unitSym.equals(unit)) {
+              ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension " + sym.name());
               res = false;
-  
+
             }
-          }else{
+          } else {
             ErrorHandling.printError(ctx, "You need to indicate a prefix for  \"" + sym.name() + "\"  dimension");
             res = false;
           }
-          
+
         }
-        if(res){
+        if (res) {
           if (!sym.type().conformsTo(ctx.expr().exprType)) {
             ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
             res = false;
-  
-          }else
+
+          } else
             sym.setValueDefined();
 
         }
-        
+
       }
     }
     return res;
@@ -73,7 +72,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
-    Boolean res =true ; //visit(ctx.expr());
+    Boolean res = true; // visit(ctx.expr());
     String id = ctx.declaration().ID().getText();
     visit(ctx.expr());
     if (res) {
@@ -81,26 +80,27 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
         res = false;
       } else {
-        res=visit(ctx.declaration().type());
-        if (res){
+        res = visit(ctx.declaration().type());
+        if (res) {
           Type type = ctx.declaration().type().res;
-          if(type.getClass().getName().equals("Quantity")){
-            if(ctx.expr().unit!=null){
-              String unit=ctx.expr().unit.replace("[", "").replace("]", "");
-              Quantity temp=(Quantity)type;
-              if(temp.checkUnit(unit)){
-                ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension "+temp.name());
+          if (type.getClass().getName().equals("Quantity")) {
+            if (ctx.expr().unit != null) {
+              String unit = ctx.expr().unit.replace("[", "").replace("]", "");
+              Quantity temp = (Quantity) type;
+              if (temp.checkUnit(unit)) {
+                ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension " + temp.name());
                 res = false;
 
               }
-            }else{
-              ErrorHandling.printError(ctx, "You need to indicate a prefix for  \"" + ctx.declaration().type().getText() + "\"  dimension");
+            } else {
+              ErrorHandling.printError(ctx,
+                  "You need to indicate a prefix for  \"" + ctx.declaration().type().getText() + "\"  dimension");
               res = false;
             }
           }
-          if(res){
+          if (res) {
             Symbol s = new Symbol(id, type);
-            //System.out.println(ctx.expr().exprType);
+            // System.out.println(ctx.expr().exprType);
             if (!s.type().conformsTo(ctx.expr().exprType)) {
               ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
               res = false;
@@ -108,10 +108,10 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
               s.setValueDefined();
               GeneralParser.map.put(id, s);
             }
-          
+
+          }
         }
-        }
-        
+
       }
     }
 
@@ -145,26 +145,24 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     // check if both belong to the same dimension
     check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
     System.out.println(ctx.e1.unit);
-    if(ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")){
-      ctx.unit="Void";
+    if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
+      ctx.unit = "Void";
 
-    }
-    else if((ctx.e2.unit.equals("Void") &  !ctx.e1.unit.equals("Void")) | (ctx.e1.unit.equals("Void") &  !ctx.e2.unit.equals("Void"))){
+    } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
+        | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
       ErrorHandling.printError(ctx, "You must specify unit for both operads");
       check = false;
-    }
-    else if(!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")){
-       String unit1=ctx.e1.unit,unit2=ctx.e2.unit;
+    } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+      String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
 
-       if(unit1.equals(unit2)){
-        ctx.unit=unit1;
+      if (unit1.equals(unit2)) {
+        ctx.unit = unit1;
 
-       }
-       else{
+      } else {
         ErrorHandling.printError(ctx, "Both operands must have the same unit");
         check = false;
-       }
-      
+      }
+
     }
 
     // check if both belong to the same dimension
@@ -181,7 +179,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         check = false;
       } else
         ctx.exprType = tp;
-        ctx.dimension=ctx.e2.dimension;
+      ctx.dimension = ctx.e2.dimension;
 
     }
 
@@ -206,6 +204,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) {
     visit(ctx.e1);
     visit(ctx.e2);
+
     Boolean res = true;
     if (!ctx.e1.exprType.isNumeric() || !ctx.e2.exprType.isNumeric()) {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
@@ -214,40 +213,74 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return res;
   }
 
+  @Override
+  public Boolean visitConditionalEquality(GeneralParser.ConditionalEqualityContext ctx) {
+    String operation = ctx.op.getText();
+    visit(ctx.e1);
+    visit(ctx.e2);
+    Boolean res = true;
+    if (operation.equals("===") || operation.equals("!==")) {
+      if (!ctx.e1.exprType.conformsTo(stringType) || !ctx.e2.exprType.conformsTo(stringType)) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+        res = false;
+      }
+    } else {
+      if (ctx.e1.exprType.conformsTo(stringType) || ctx.e2.exprType.conformsTo(stringType)) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+        res = false;
+      } else if ((ctx.e1.exprType.conformsTo(booleanType) || ctx.e2.exprType.conformsTo(booleanType))
+          && !ctx.e1.exprType.conformsTo(ctx.e2.exprType)) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+        res = false;
+      }
+    }
+    return res;
+  }
+
+  @Override
+  public Boolean visitConditionalNegation(GeneralParser.ConditionalNegationContext ctx) {
+    visit(ctx.expr());
+    Boolean res = true;
+    if (!ctx.expr().exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad operand type for operator \"not\"");
+      res = false;
+    }
+    ctx.exprType = booleanType;
+    return res;
+  }
+
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
-    Boolean check=visit(ctx.e1) &&     visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
-    && checkBooleanType(ctx, ctx.e2.exprType);
-    String op=ctx.op.getText();
-    //associate dimension and calculate new unit
-    if (check){
+    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
+        && checkBooleanType(ctx, ctx.e2.exprType);
+    String op = ctx.op.getText();
+    // associate dimension and calculate new unit
+    if (check) {
       Type t1 = ctx.e1.exprType;
       Type t2 = ctx.e2.exprType;
-      ctx.dimension=ctx.e1.dimension;
+      ctx.dimension = ctx.e1.dimension;
 
-      if(ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")){
-        ctx.unit="Void";
-  
-      }
-      else if((ctx.e2.unit.equals("Void") &  !ctx.e1.unit.equals("Void")) | (ctx.e1.unit.equals("Void") &  !ctx.e2.unit.equals("Void"))){
+      if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
+        ctx.unit = "Void";
+
+      } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
+          | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
         ErrorHandling.printError(ctx, "You must specify unit for both operads");
         check = false;
-      }
-      else if(!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")){
-         String unit1=ctx.e1.unit,unit2=ctx.e2.unit;
-        switch(op){
-          case "*":{
-              ctx.unit=unit1+"."+unit2;
-              break;
-          }
-          case "/":{
-              ctx.unit=unit1+"/"+unit2;
-              break;
-          }
+      } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+        String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
+        switch (op) {
+        case "*": {
+          ctx.unit = unit1 + "." + unit2;
+          break;
         }
-         
-        
+        case "/": {
+          ctx.unit = unit1 + "/" + unit2;
+          break;
+        }
+        }
+
       }
-      if(check){
+      if (check) {
         if (!t1.isNumeric() && !t2.isNumeric()) {
           ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
           check = false;
@@ -257,27 +290,20 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
           ctx.exprType = integerType;
 
       }
-      
+
     }
 
     return check;
   }
 
-  @Override 
+  @Override
   public Boolean visitPow(GeneralParser.PowContext ctx) {
-    
-    
-    
-    
-    
-    return visitChildren(ctx); 
-    }
-
+    return visitChildren(ctx);
+  }
 
   @Override
   public Boolean visitIntType(GeneralParser.IntTypeContext ctx) {
     ctx.res = new IntegerType();
-
     return true;
   }
 
@@ -308,7 +334,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       return false;
     }
     Quantity v = QuantitiesParser.quantityTable.get(type_name);
-    ctx.res=v;
+    ctx.res = v;
     return true;
 
   }
@@ -324,9 +350,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitBooleanValue(GeneralParser.BooleanValueContext ctx) {
     ctx.exprType = booleanType;
-    ctx.dimension="Adimensional";
-    ctx.unit="Void";
-    
+    ctx.dimension = "Adimensional";
+    ctx.unit = "Void";
+
     return true;
   }
 
@@ -347,10 +373,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
         return false;
       }
-    }
-    else{
-      ctx.dimension="Adimensional";
-      ctx.unit="Void";
+    } else {
+      ctx.dimension = "Adimensional";
+      ctx.unit = "Void";
     }
     return true;
   }
@@ -373,10 +398,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
         return false;
       }
-    }
-    else{
-      ctx.dimension="Adimensional";
-      ctx.unit="Void";
+    } else {
+      ctx.dimension = "Adimensional";
+      ctx.unit = "Void";
     }
 
     return true;
@@ -385,8 +409,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitStringValue(GeneralParser.StringValueContext ctx) {
     ctx.exprType = stringType;
-    ctx.dimension="Adimensional";
-    ctx.unit="Void";
+    ctx.dimension = "Adimensional";
+    ctx.unit = "Void";
     return true;
   }
 
@@ -419,7 +443,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
-    
+
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
       res = false;

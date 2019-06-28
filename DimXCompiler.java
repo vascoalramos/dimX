@@ -62,14 +62,11 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     @Override
     public ST visitPrint(GeneralParser.PrintContext ctx) {
         ST printResult = this.stg.getInstanceOf("print");
-
+        
         printResult.add("stat", visit(ctx.expr()));
         printResult.add("expr",ctx.expr().varName);
-        System.out.println(ctx.expr().unit);
         if(!ctx.expr().unit.equals("Void"))
-            
             printResult.add("unit",ctx.expr().unit);
-
         return printResult;
     }
 
