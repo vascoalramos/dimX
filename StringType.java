@@ -4,3 +4,4 @@ public class StringType extends Type {
         super("String");
     }
 }
+
