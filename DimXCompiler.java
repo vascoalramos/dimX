@@ -161,6 +161,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
+    //Addition/Subtraction Expr
     @Override 
     public ST visitAddSub(GeneralParser.AddSubContext ctx) { 
         ctx.varName = newVar();
@@ -174,7 +175,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                                 ctx.varName);
     }
 
-
+    //Multiplication/Division Expr
     @Override 
     public ST visitMultDiv(GeneralParser.MultDivContext ctx) {
         ctx.varName = newVar();
@@ -188,7 +189,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                                 ctx.varName);
     }
 
-
+    //Power Expr
     @Override 
     public ST visitPow(GeneralParser.PowContext ctx) {
         ctx.varName = newVar();
@@ -297,7 +298,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     
     /* CONDITIONAL EXPRESSIONS */
 
-    //Base Expr .EQUALS() ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    //Base Expr .EQUALS() ST Builder -> Used for comparing using the === operator
     private ST getExprEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2, String varOut){
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
@@ -314,7 +315,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    //Base Expr NOT .EQUALS() ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    //Base Expr NOT .EQUALS() ST Builder -> Used for comparing using the !== operator
     private ST getExprNotEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2, String varOut){
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
@@ -331,7 +332,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    //Base Expr NOT ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of 2nd operand ;  type : Result type ; var1 : VarName of 1st operand ; op - Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    //Base Expr NOT ST Builder -> Used for the Not <expr> rules
     private ST getExprNot(ParserRuleContext ctx, String e1Stats, String var1, String varOut){
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
@@ -364,7 +365,21 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
+    //While Rule
+    @Override 
+    public ST visitWhileConditional(GeneralParser.WhileConditionalContext ctx){
+        ST result = stg.getInstanceOf("conditionalWhile");
+
+        result.add("stat", visit(ctx.expr()).render());
+        result.add("var", ctx.expr().varName);
+        result.add("trueStats", visit(ctx.trueStats).render());
+
+        return result;
+    }
+
         /* CONDITIONAL CHECKS */
+
+        //Equality Expressions (includes ==, ===, !=, !==)
         @Override 
         public ST visitConditionalEquality(GeneralParser.ConditionalEqualityContext ctx) { 
             ctx.varName = newVar();
@@ -396,6 +411,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
             }
         }
 
+        //Binary Equality Expressions (includes ==, ===, !=, !==)
         @Override 
         public ST visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) { 
             ctx.varName = newVar();
@@ -410,7 +426,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                                     ctx.varName);
         }
 
-
+        //Binary AND/OR Expressions
         @Override 
         public ST visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) { 
             ctx.varName = newVar();
@@ -425,6 +441,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                                     ctx.varName);
         }
 
+        //Unary Negation Expression
         @Override 
         public ST visitConditionalNegation(GeneralParser.ConditionalNegationContext ctx) {
             ctx.varName = newVar();
@@ -434,10 +451,5 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                             ctx.expr().varName,
                             ctx.varName);
         }
-
-
-
-
-
 
 }

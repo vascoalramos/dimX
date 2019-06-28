@@ -1,5 +1,3 @@
-if not 6<5{
-print("oi");
-}else{
-print("rip");
+while true {
+ print("hi");
 };
