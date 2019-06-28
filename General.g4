@@ -38,13 +38,13 @@ expr returns[Type exprType, String varName, String dimension, String unit]
 	| ID													# IDvalue
 	| STRING												# StringValue
 	| BOOLEAN												# BooleanValue
-	| INT													# IntValue
-	| REAL													# RealValue
+	| INT unitID?													# IntValue
+	| REAL unitID?													# RealValue
 	;
 
 BOOLEAN: 'true' | 'false';
 
-unit: '[' ID (op = ('/' | '*') ID)? ']';
+unitID: '[' ID (op = ('/' | '*') ID)? ']';
 
 
 TYPE_ID: [A-Z]LETTER+;
