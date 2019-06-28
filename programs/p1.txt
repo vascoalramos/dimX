@@ -6,3 +6,21 @@ a = 1;
 b = 9.12;
 c = true;
 d = "string";
+Integer e = 1;
+Real f = 0.3;
+Boolean g = false;
+String h = "anotherString";
+
+print(a);
+print(b);
+print(c);
+print(d);
+print(e);
+print(f);
+print(g);
+print(h);
+
+String i = input("prompt>> ");
+print(i);
+
+print(input("prompt>> "));

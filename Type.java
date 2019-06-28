@@ -19,6 +19,10 @@ public abstract class Type {
         return false;
     }
 
+    public boolean isBoolean(){
+        return false;
+    }
+
     @Override
     public String toString() {
         return name;

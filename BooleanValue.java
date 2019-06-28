@@ -22,6 +22,8 @@ public class BooleanValue extends Value {
         return val;
     }
 
+   
+
     @Override
     public String toString() {
         return "" + val;

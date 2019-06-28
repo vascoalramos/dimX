@@ -88,10 +88,12 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return true;
   }
 
-  @Override
-  public Boolean visitAddSub(GeneralParser.AddSubContext ctx) {
-    // check if there weren' errors in e1 and e2 and if both are numeric
-    Boolean check = visit(ctx.e1) && visit(ctx.e2);
+  @Override public Boolean visitAddSub(GeneralParser.AddSubContext ctx) { 
+    //check if there weren' errors in e1 and e2 and if both are numeric
+    Boolean check=visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx,ctx.e1.exprType) && checkBooleanType(ctx, ctx.e2.exprType);
+    
+    //check if both belong to the same dimension
+    check=checkDimension(ctx,ctx.e2.dimension,ctx.e1.dimension);
 
     // check if both belong to the same dimension
     // check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
@@ -130,19 +132,21 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   }
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
-    visit(ctx.e1);
-    visit(ctx.e2);
-    Type t1 = ctx.e1.exprType;
-    Type t2 = ctx.e2.exprType;
-    Boolean res = true;
-    if (!t1.isNumeric() && !t2.isNumeric()) {
-      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
-      res = false;
-    } else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
-      ctx.exprType = realType;
-    else
-      ctx.exprType = integerType;
-    return res;
+    Boolean check=visit(ctx.e1) &&     visit(ctx.e2);;
+    if (check){
+      Type t1 = ctx.e1.exprType;
+      Type t2 = ctx.e2.exprType;
+      if (!t1.isNumeric() && !t2.isNumeric()) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+        check = false;
+      }
+      else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
+        ctx.exprType = realType;
+      else
+        ctx.exprType = integerType;
+    }
+    
+    return check;
   }
 
   @Override
@@ -212,8 +216,23 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   public Boolean visitIntValue(GeneralParser.IntValueContext ctx) {
     ctx.exprType = integerType;
     if(ctx.unitID()!=null){
+      Boolean check=false;
       String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
-      System.out.println(unit);
+      for(Quantity q:QuantitiesParser.quantityTable.values()){
+        if(!q.checkUnit(unit)){
+          ctx.dimension=q.name();
+          ctx.unit=unit;
+          check=true;
+        }
+      }
+      if(!check){
+        ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
+        return false;
+      }
+    }
+    else{
+      ctx.dimension="adimensional";
+      ctx.unit="";
     }
     return true;
   }
@@ -221,6 +240,27 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitRealValue(GeneralParser.RealValueContext ctx) {
     ctx.exprType = realType;
+
+    if(ctx.unitID()!=null){
+      Boolean check=false;
+      String unit=ctx.unitID().getText().replace("[", "").replace("]", "");
+      for(Quantity q:QuantitiesParser.quantityTable.values()){
+        if(!q.checkUnit(unit)){
+          ctx.dimension=q.name();
+          ctx.unit=unit;
+          check=true;
+        }
+      }
+      if(!check){
+        ErrorHandling.printError(ctx, "Prefix \"" + ctx.unitID().getText() + "\" does not exist!");
+        return false;
+      }
+    }
+    else{
+      ctx.dimension="adimensional";
+      ctx.unit="";
+    }
+
     return true;
   }
 
@@ -232,13 +272,15 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return true;
   }
 
-  private Boolean checkNumericType(ParserRuleContext ctx, Type t) {
-    Boolean res = true;
-    if (!t.isNumeric()) {
-      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
-      res = false;
-    }
-    return res;
+  private Boolean checkBooleanType(ParserRuleContext ctx, Type t)
+   {
+      Boolean res = true;
+      if (t.isBoolean())
+      {
+         ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+         res = false;
+      }
+      return res;
   }
 
   private Type fetchType(Type t1, Type t2, String op) {
