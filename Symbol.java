@@ -13,7 +13,6 @@ public class Symbol {
     public Symbol(String name, Type type) {
         assert name != null;
         assert type != null;
-
         this.name = name;
         this.type = type;
     }

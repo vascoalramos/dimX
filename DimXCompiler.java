@@ -38,10 +38,6 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         this.stg = new STGroupFile("java.stg");
 
-        GeneralParser.map.put("a", new Symbol("a",new IntegerType()));
-        GeneralParser.map.put("b", new Symbol("b",new IntegerType()));
-
-
         ST resultModule = this.stg.getInstanceOf("module"); // Final result
         ST resultStats = this.stg.getInstanceOf("stats"); // Intermediate results of all stats
 
@@ -89,12 +85,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     public ST visitDeclaration(GeneralParser.DeclarationContext ctx) {
 
         ST decResult = stg.getInstanceOf("declaration");
-        
         String id = ctx.ID().getText();
-        Symbol symbol = GeneralParser.map.get(id);
-        
-        symbol.setVarName(newVar()); //Change var name to vX
 
+        Symbol symbol = GeneralParser.map.get(id);
+        symbol.setVarName(newVar()); //Change var name to v
         decResult.add("type", symbol.type().name());
         decResult.add("var",symbol.varName());
 
@@ -138,8 +132,6 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
         result.add("stat",e2Stats);
-        
-        System.out.println(type+","+varOut+","+var1+","+op+","+var2);
 
         ST expression = stg.getInstanceOf("expression");
         expression.add("type",type);

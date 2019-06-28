@@ -19,9 +19,27 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       } else {
         ctx.exprType = sym.type();
       }
-
     }
-    System.out.println(ctx.exprType.toString());
+    return res;
+  }
+
+  @Override
+  public Boolean visitJustAssign(GeneralParser.JustAssignContext ctx) {
+    Boolean res = visit(ctx.expr());
+    String id = ctx.ID().getText();
+    if (res) {
+      if (!GeneralParser.map.exists(id)) {
+        ErrorHandling.printError(ctx, "Variable \"" + id + "\" does not exists!");
+        res = false;
+      } else {
+        Symbol sym = GeneralParser.map.get(id);
+        if (!ctx.expr().exprType.conformsTo(sym.type())) {
+          ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
+          res = false;
+        } else
+          sym.setValueDefined();
+      }
+    }
     return res;
   }
 
@@ -36,15 +54,34 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       } else {
         Type type = ctx.declaration().type().res;
         Symbol s = new Symbol(id, type);
-        s.setValueDefined();
-        GeneralParser.map.put(id, s);
+        if (!ctx.expr().exprType.conformsTo(s.type())) {
+          ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
+          res = false;
+        } else {
+          s.setValueDefined();
+          GeneralParser.map.put(id, s);
+        }
       }
     }
 
-    return false;
+    return res;
   }
 
   @Override
+  public Boolean visitDeclaration(GeneralParser.DeclarationContext ctx) {
+    String id = ctx.ID().getText();
+    if (GeneralParser.map.exists(id)) {
+      ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
+      return false;
+    } else {
+      Type type = ctx.type().res;
+      Symbol s = new Symbol(id, type);
+      s.setValueDefined();
+      GeneralParser.map.put(id, s);
+    }
+    return true;
+  }
+  
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     ctx.exprType = integerType;
     return true;
