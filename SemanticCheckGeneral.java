@@ -20,6 +20,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         ctx.exprType = sym.type();
+        ctx.dimension=sym.dimension();
+        ctx.unit=sym.unit();
       }
     }
     return res;
@@ -47,23 +49,27 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
-    Boolean res = visit(ctx.expr());
+    Boolean res =visit(ctx.expr());
     String id = ctx.declaration().ID().getText();
     if (res) {
       if (GeneralParser.map.exists(id)) {
         ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
         res = false;
       } else {
-        visit(ctx.declaration().type());
-        Type type = ctx.declaration().type().res;
-        Symbol s = new Symbol(id, type);
-        if (!s.type().conformsTo(ctx.expr().exprType)) {
-          ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
-          res = false;
-        } else {
-          s.setValueDefined();
-          GeneralParser.map.put(id, s);
+        res=visit(ctx.declaration().type());
+        if (res){
+          Type type = ctx.declaration().type().res;
+          System.out.println(type.getClass());
+          Symbol s = new Symbol(id, type);
+          if (!s.type().conformsTo(ctx.expr().exprType)) {
+            ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
+            res = false;
+          } else {
+            s.setValueDefined();
+            GeneralParser.map.put(id, s);
         }
+        }
+        
       }
     }
 
@@ -133,6 +139,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     Boolean check=visit(ctx.e1) &&     visit(ctx.e2);;
+    //associate dimension and calculate new unit
     if (check){
       Type t1 = ctx.e1.exprType;
       Type t2 = ctx.e2.exprType;
@@ -206,8 +213,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitBooleanValue(GeneralParser.BooleanValueContext ctx) {
     ctx.exprType = booleanType;
-    ctx.dimension="adimensional";
-    ctx.unit="";
+    ctx.dimension="Adimensional";
+    ctx.unit="null";
     
     return true;
   }
@@ -231,8 +238,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       }
     }
     else{
-      ctx.dimension="adimensional";
-      ctx.unit="";
+      ctx.dimension="Adimensional";
+      ctx.unit="null";
     }
     return true;
   }
@@ -257,8 +264,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       }
     }
     else{
-      ctx.dimension="adimensional";
-      ctx.unit="";
+      ctx.dimension="Adimensional";
+      ctx.unit="null";
     }
 
     return true;
@@ -267,8 +274,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitStringValue(GeneralParser.StringValueContext ctx) {
     ctx.exprType = stringType;
-    ctx.dimension="adimensional";
-    ctx.unit="";
+    ctx.dimension="Adimensional";
+    ctx.unit="null";
     return true;
   }
 
@@ -303,6 +310,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
+    
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
       res = false;
