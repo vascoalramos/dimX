@@ -7,7 +7,7 @@ grammar General;
 main: statList EOF;
 statList : (stat TERM)*;
 
-stat: print | assign | declaration | input | conditionalExpr | dimCheck;
+stat: print | assign | declaration | conditionalExpr | dimCheck;
 print: 'print' '(' expr ')';
 
 assign: declaration '=' expr #declareAndAssign
