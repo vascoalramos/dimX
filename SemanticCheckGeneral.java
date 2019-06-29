@@ -330,7 +330,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         if (!t1.isNumeric() && !t2.isNumeric()) {
           ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
           check = false;
-        } else if (ctx.e1.exprType.equals(realType) || ctx.e2.exprType.equals(realType))
+        } else if (ctx.e1.exprType.conformsTo(realType) || ctx.e2.exprType.conformsTo(realType))
           ctx.exprType = realType;
         else
           ctx.exprType = integerType;
