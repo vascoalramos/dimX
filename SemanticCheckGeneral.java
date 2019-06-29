@@ -295,6 +295,51 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return res;
   }
 
+  /* Conditional expressions */
+  @Override
+  public Boolean visitConditional(GeneralParser.ConditionalContext ctx) {
+    Boolean res = true;
+
+    visit(ctx.expr());
+    if (!ctx.expr().exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad conditional expression for \"if\" statement");
+      res = false;
+    }
+    ctx.expr().exprType = booleanType;
+    return res;
+  }
+
+  @Override
+  public Boolean visitWhileConditional(GeneralParser.WhileConditionalContext ctx) {
+    Boolean res = true;
+    visit(ctx.expr());
+    if (!ctx.expr().exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad conditional expression for \"while\" statement");
+      res = false;
+    }
+    ctx.expr().exprType = booleanType;
+    return res;
+  }
+
+  @Override
+  public Boolean visitForConditional(GeneralParser.ForConditionalContext ctx) {
+    Boolean res = true;
+    visit(ctx.breakCond);
+    if (!ctx.breakCond.exprType.conformsTo(booleanType)) {
+      ErrorHandling.printError(ctx, "Bad break conditional expression for \"for\" statement");
+      res = false;
+    }
+    ctx.breakCond.exprType = booleanType;
+
+    visit(ctx.incCond);
+    if (!ctx.incCond.exprType.isNumeric()) {
+      ErrorHandling.printError(ctx, "Bad increment conditional expression for \"for\" statement");
+      res = false;
+    }
+    ctx.incCond.exprType = booleanType;
+    return res;
+  }
+
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
     Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
         && checkBooleanType(ctx, ctx.e2.exprType);
