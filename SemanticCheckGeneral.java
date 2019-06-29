@@ -232,7 +232,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return check;
   }
 
-  /* Conditional expressions */
+  /* Comparassion expressions */
   @Override
   public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
     visit(ctx.e1);
@@ -243,6 +243,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       res = false;
     }
     ctx.exprType = booleanType;
+    ctx.unit = "Void";
+    ctx.dimension = "Adimensional";
     return res;
   }
 
@@ -256,6 +258,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
+    ctx.unit = "Void";
+    ctx.dimension = "Adimensional";
+    ;
     return res;
   }
 
@@ -280,6 +285,10 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       }
     }
+
+    ctx.unit = "Void";
+    ctx.dimension = "Adimensional";
+
     return res;
   }
 
@@ -292,6 +301,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       res = false;
     }
     ctx.exprType = booleanType;
+    ctx.unit = "Void";
+    ctx.dimension = "Adimensional";
     return res;
   }
 
@@ -463,6 +474,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     ctx.exprType = booleanType;
     ctx.dimension = "Adimensional";
     ctx.unit = "Void";
+    System.out.println("hi");
 
     return true;
   }

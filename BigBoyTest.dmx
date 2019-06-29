@@ -1,1 +1,1 @@
-input("oi: ");
+print( 1 < 5 );
