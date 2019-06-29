@@ -1,3 +1,5 @@
+String ola = input("ola"); // FIX
+
 Integer a;
 Real b;
 Boolean c;

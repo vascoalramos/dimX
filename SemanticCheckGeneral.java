@@ -1,12 +1,50 @@
+import java.io.*;
+
 import javax.print.DocFlavor.STRING;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
 
 public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   private final RealType realType = new RealType();
   private final IntegerType integerType = new IntegerType();
   private final BooleanType booleanType = new BooleanType();
   private final StringType stringType = new StringType();
+
+  @Override
+  public Boolean visitImportQuantities(GeneralParser.ImportQuantitiesContext ctx) {
+    Boolean res = true;
+    String fileName = ctx.ID().getText() + ".txt";
+    InputStream in_stream = null;
+    CharStream input = null;
+    try {
+      in_stream = new FileInputStream(new File(fileName));
+      // create a CharStream that reads from standard input:
+      input = CharStreams.fromStream(in_stream);
+    } catch (IOException e) {
+      ErrorHandling.printError(ctx, "ERROR: reading file!");
+      res = false;
+    }
+    // create a lexer that feeds off of input CharStream:
+    QuantitiesLexer lexer = new QuantitiesLexer(input);
+    // create a buffer of tokens pulled from the lexer:
+    CommonTokenStream tokens = new CommonTokenStream(lexer);
+    // create a parser that feeds off the tokens buffer:
+    QuantitiesParser parser = new QuantitiesParser(tokens);
+    // replace error listener:
+    // parser.removeErrorListeners(); // remove ConsoleErrorListener
+    // parser.addErrorListener(new ErrorHandlingListener());
+    // begin parsing at main rule:
+    ParseTree tree = parser.main();
+    if (parser.getNumberOfSyntaxErrors() == 0) {
+      // print LISP-style tree:
+      // System.out.println(tree.toStringTree(parser));
+      SemanticCheckQuantities visitor0 = new SemanticCheckQuantities();
+      visitor0.visit(tree);
+    }
+    return res;
+  }
 
   @Override
   public Boolean visitIDvalue(GeneralParser.IDvalueContext ctx) {

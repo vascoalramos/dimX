@@ -1,0 +1,10 @@
+import sampleQuantities;
+
+Distance d = 2[m];
+Integer a;
+Real b;
+Boolean c;
+a = 1;
+b = 2.0;
+print("Ola");
+print(d);

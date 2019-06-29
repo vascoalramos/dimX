@@ -4,8 +4,9 @@ grammar General;
     public static final SymbolTable map = new SymbolTable();
 }
 
-main: statList EOF;
+main: (importQuantities)? statList EOF;
 statList : (stat TERM)*;
+importQuantities: 'import' ID TERM;
 
 stat: print | assign | declaration | conditionalExpr | dimCheck;
 print: 'print' '(' expr ')';

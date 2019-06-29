@@ -1,0 +1,9 @@
+Distance : real [m];
+
+// Distance : real [m];
+
+Time : int [s];
+
+// Ola: int [s];
+
+// Speed : Distance * Time [h];
