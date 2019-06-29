@@ -1,4 +1,5 @@
-String ola = input("ola"); // FIX
+String ola = input("ola>> "); // FIX
+print(ola);
 
 Integer a;
 Real b;
@@ -37,10 +38,10 @@ print(b - f);
 print(4 + 3 + 5);
 print(4 * 3 - 5);
 print(b^a);
-*/
-Real b = 2.0;
-Real f = 3.0;
+
+f = 3.0;
 print(b / f);
-/* String a = input("prompt>>");
+String myVar = input("prompt>>");
 print(b * f); // - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
-print(b / f);//  - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)*/
+print(b / f); //  - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
+print(myVar);
