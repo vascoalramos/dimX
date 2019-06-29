@@ -5,7 +5,7 @@ Real b;
 Boolean c;
 String d;
 
-a = 1;
+a = 2;
 b = 2.0;
 c = true;
 d = "string";
@@ -35,10 +35,10 @@ print(b + f);
 print(b - f);
 
 // String a = input("prompt>>");
-//print(a ^ e); //- causa: esqueceram-se de declarar qual é que o o exprType
+print(a ^ e); //- causa: esqueceram-se de declarar qual é que o o exprType
 print(4 + 3 - 5);//  - erro semântico  causa: as dimensoes nao sao do mesmo tipo 
 print(1 * 5 * 6);//  - erro semântico causa: as dimensoes nao sao do mesmo tipo 
-//print(b * f); // - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
-//print(b / f);//  - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
+print(b * f); // - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
+print(b / f);//  - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
 
 
