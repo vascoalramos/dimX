@@ -144,7 +144,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
     // check if both belong to the same dimension
     check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
-    System.out.println(ctx.e1.unit);
+    //System.out.println(ctx.e1.unit);
     if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
       ctx.unit = "Void";
 
@@ -298,7 +298,27 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitPow(GeneralParser.PowContext ctx) {
-    return visitChildren(ctx);
+    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
+        && checkBooleanType(ctx, ctx.e2.exprType);
+
+    if(ctx.e2.dimension!="Adimensional" | ctx.e2.unit!="Void" | ctx.e2.exprType.equals(realType)){
+      ErrorHandling.printError(ctx, "Bad operand types for exponent \"" + ctx.e2.getText() + "\"");
+      check = false;
+    }
+
+    if(check){
+      Type t1 = ctx.e1.exprType;
+      Type t2 = ctx.e2.exprType;
+      if (!t1.isNumeric() && !t2.isNumeric()) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator ^");
+        check = false;
+      }
+      ctx.unit=ctx.e1.unit;
+      ctx.dimension=ctx.e1.dimension;
+      ctx.exprType=ctx.e1.exprType;
+
+    }
+    return check;
   }
 
   @Override

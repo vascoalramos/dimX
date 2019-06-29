@@ -1,6 +1,96 @@
-public class p1
-{
-    public static void main(String[] args) {
-        
+import java.util.Scanner;
+
+public class p1 {  
+
+    public static void main(String[] args){
+        Scanner userInput = new Scanner(System.in);
+        int v0;
+        double v1;
+        boolean v2;
+        String v3;
+        int v4 = 2;
+        v0 = v4;
+        double v5 = 2.0;
+        v1 = v5;
+        boolean v6 = true;
+        v2 = v6;
+        String v7 = "string";
+        v3 = v7;
+        int v8 = v0;
+        System.out.println(v8);
+        double v9 = v1;
+        System.out.println(v9);
+        boolean v10 = v2;
+        System.out.println(v10);
+        String v11 = v3;
+        System.out.println(v11);
+        int v12;
+        int v13 = 2;
+        v12 = v13;
+        double v14;
+        double v15 = 0.3;
+        v14 = v15;
+        boolean v16;
+        boolean v17 = false;
+        v16 = v17;
+        String v18;
+        String v19 = "another_string";
+        v18 = v19;
+        int v20 = v12;
+        System.out.println(v20);
+        double v21 = v14;
+        System.out.println(v21);
+        boolean v22 = v16;
+        System.out.println(v22);
+        String v23 = v18;
+        System.out.println(v23);
+        int v25 = v0;
+        int v26 = v12;
+        int v24 = v25 + v26;
+        System.out.println(v24);
+        int v28 = v0;
+        int v29 = v12;
+        int v27 = v28 * v29;
+        System.out.println(v27);
+        int v31 = v0;
+        int v32 = v12;
+        int v30 = v31 - v32;
+        System.out.println(v30);
+        int v34 = v0;
+        int v35 = v12;
+        int v33 = v34 / v35;
+        System.out.println(v33);
+        double v37 = v1;
+        double v38 = v14;
+        double v36 = v37 + v38;
+        System.out.println(v36);
+        double v40 = v1;
+        double v41 = v14;
+        double v39 = v40 - v41;
+        System.out.println(v39);
+        int v43 = v0;
+        int v44 = v12;
+        int v42 = (int)Math.pow(v43, v44);
+        System.out.println(v42);
+        int v47 = 4;
+        int v48 = 3;
+        int v46 = v47 + v48;
+        int v49 = 5;
+        int v45 = v46 - v49;
+        System.out.println(v45);
+        int v52 = 1;
+        int v53 = 5;
+        int v51 = v52 * v53;
+        int v54 = 6;
+        int v50 = v51 * v54;
+        System.out.println(v50);
+        double v56 = v1;
+        double v57 = v14;
+        int v55 = v56 * v57;
+        System.out.println(v55);
+        double v59 = v1;
+        double v60 = v14;
+        int v58 = v59 / v60;
+        System.out.println(v58);
     }
 }
