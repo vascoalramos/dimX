@@ -58,7 +58,7 @@ conditionalExpr: conditional
 			   ;
 
 conditional: 'if' expr '{' trueStats=statList '}'('else' falseStats = elseConditon)? ; //Semantic Check whether expr is boolean
-elseConditon: conditional|'{' statList '}';
+elseConditon: conditional |'{' statList '}';
 
 whileConditional: 'while' expr '{' trueStats=statList '}'; //Semantic Check whether expr is boolean
 
