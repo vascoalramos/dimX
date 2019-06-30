@@ -276,9 +276,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
       res = false;
     }
+    ctx.exprType = booleanType;
     ctx.unit = "Void";
     ctx.dimension = "Adimensional";
-    ;
     return res;
   }
 
@@ -303,7 +303,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       }
     }
-
+    ctx.exprType = booleanType;
     ctx.unit = "Void";
     ctx.dimension = "Adimensional";
 
@@ -324,7 +324,6 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return res;
   }
 
-  /* Conditional expressions */
   @Override
   public Boolean visitConditional(GeneralParser.ConditionalContext ctx) {
     Boolean res = true;
@@ -334,7 +333,14 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Bad conditional expression for \"if\" statement");
       res = false;
     }
+    visit(ctx.trueStats);
     ctx.expr().exprType = booleanType;
+    ctx.expr().unit = "Void";
+    ctx.expr().dimension = "Adimensional";
+
+    if(ctx.falseStats != null) {
+      visit(ctx.falseStats);
+    }
     return res;
   }
 
@@ -346,6 +352,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Bad conditional expression for \"while\" statement");
       res = false;
     }
+    visit(ctx.trueStats);
     ctx.expr().exprType = booleanType;
     return res;
   }
@@ -365,6 +372,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "Bad increment conditional expression for \"for\" statement");
       res = false;
     }
+    visit(ctx.incVarDec);
+    visit(ctx.trueStats);
     ctx.incCond.exprType = booleanType;
     return res;
   }
