@@ -29,7 +29,7 @@ type returns[Type res]:
 
 expr returns[Type exprType, String varName, String dimension, String unit]
 	: <assoc=right> e1=expr '^' e2=expr						# Pow
-	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv 
+	| e1 = expr op = ('*' | '/') e2 = expr					# multDiv //TODO resto e modulo
 	| e1 = expr op = ('+' | '-') e2 = expr					# addSub
 	| 'not' expr											# conditionalNegation
 	| e1=expr op=('==' | '!=' | '===' | '!==') e2=expr		# conditionalEquality

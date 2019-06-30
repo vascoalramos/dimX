@@ -1,6 +1,16 @@
 import sampleQuantities;
 
-Distance d = 2[m];
+Distance d;
+Distance h;
+Speed v;
+v=40.0 [m/s];
+Time t;
+h=2.0 [m];
+t=2.0 [s];
+d=2.0[m];
+d=d-h;
+v=h/t*h;
+h=h^4;  
 Integer a;
 Real b;
 Boolean c;

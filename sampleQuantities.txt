@@ -6,4 +6,4 @@ Time : int [s];
 
 // Ola: int [s];
 
-// Speed : Distance * Time [h];
+Speed : Distance * Time [m/s];

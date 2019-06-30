@@ -61,6 +61,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       } else {
         ctx.exprType = sym.type();
         ctx.dimension = sym.dimension();
+        //System.out.println(ctx.dimension);
         ctx.unit = sym.unit();
       }
     }
@@ -77,12 +78,13 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         res = false;
       } else {
         Symbol sym = GeneralParser.map.get(id);
-        String unitSym = sym.unit();
 
         if (sym.type().getClass().getName().equals("Quantity")) {
           if (ctx.expr().unit != null) {
             String unit = ctx.expr().unit.replace("[", "").replace("]", "");
-            if (!unitSym.equals(unit)) {
+            Quantity temp = (Quantity) sym.type();
+
+            if (temp.checkUnit(unit)) {
               ErrorHandling.printError(ctx, "Prefix \"" + unit + "\" not declared for dimension " + sym.name());
               res = false;
 
@@ -94,12 +96,20 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
         }
         if (res) {
+          System.out.println(sym.type());
+          System.out.println(ctx.expr().exprType);
+
           if (!sym.type().conformsTo(ctx.expr().exprType)) {
             ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
             res = false;
 
-          } else
+          } else{
+            sym.setDimension(ctx.expr().dimension);
+            sym.setUnit(ctx.expr().unit);
             sym.setValueDefined();
+
+          }
+            
 
         }
 
@@ -111,7 +121,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
     Boolean res = true; // visit(ctx.expr());
-    String id = ctx.declaration().ID().getText();
+    String id = ctx.declaration().ID().getText(),typeStr=ctx.declaration().type().getText();
     visit(ctx.expr());
     if (res) {
       if (GeneralParser.map.exists(id)) {
@@ -138,12 +148,16 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
           }
           if (res) {
             Symbol s = new Symbol(id, type);
-            // System.out.println(ctx.expr().exprType);
+            
+            
             if (!s.type().conformsTo(ctx.expr().exprType)) {
               ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
               res = false;
             } else {
               s.setValueDefined();
+              s.setDimension(typeStr);
+              s.setUnit(ctx.expr().unit);
+              
               GeneralParser.map.put(id, s);
             }
 
@@ -158,7 +172,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitDeclaration(GeneralParser.DeclarationContext ctx) {
-    String id = ctx.ID().getText();
+    String id = ctx.ID().getText(),typeStr=ctx.type().getText();
     if (GeneralParser.map.exists(id)) {
       ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
       return false;
@@ -166,7 +180,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       Boolean res = visit(ctx.type());
       if (res) {
         Type type = ctx.type().res;
-        Symbol s = new Symbol(id, type);
+        Symbol s = new Symbol(typeStr, type);
+        
         s.setValueDefined();
         GeneralParser.map.put(id, s);
       }
@@ -189,6 +204,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         && checkBooleanType(ctx, ctx.e2.exprType);
 
     // check if both belong to the same dimension
+    //System.out.println(ctx.e1.dimension);
+    //System.out.println(ctx.e2.dimension);
     check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
     // System.out.println(ctx.e1.unit);
     if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
@@ -373,6 +390,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         switch (op) {
         case "*": {
           ctx.unit = unit1 + "." + unit2;
+          
           break;
         }
         case "/": {
@@ -474,7 +492,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     ctx.exprType = booleanType;
     ctx.dimension = "Adimensional";
     ctx.unit = "Void";
-    System.out.println("hi");
+    //System.out.println("hi");
 
     return true;
   }
