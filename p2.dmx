@@ -22,4 +22,10 @@ Boolean c;
 a = 1;
 b = 2.0;
 print("Ola");
+Real d1 = h/h;
+print(d1);
+print("d -> " + d);
 print(d);
+
+String myStr = input("Write a string: ");
+print("myStr -> " + myStr);

@@ -21,7 +21,6 @@ value:
 	 | 'real'
 	 ;
 
-//TODO make it so you can have multiple complex units (i.e m*m*m)
 unit: '[' ID (op = ('/' | '*') ID)? ']';
 
 prefix_declare: 'prefix' ID ':' number_type; //TODO especificar uma grandeza para estar associado o prefixo

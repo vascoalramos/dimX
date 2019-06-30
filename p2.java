@@ -49,7 +49,26 @@ public class p2 {
         v27 = v30;
         String v31 = "Ola";
         System.out.println(v31);
-        double v32 = v0;
-        System.out.println(v32 + "m");
+        double v32;
+        double v34 = v1;
+        double v35 = v1;
+        double v33 = v34 / v35;
+        v32 = v33;
+        double v36 = v32;
+        System.out.println(v36);
+        String v38 = "d -> ";
+        double v39 = v0;
+        String v37 = v38 + v39;
+        System.out.println(v37);
+        double v40 = v0;
+        System.out.println(v40 + "m");
+        String v41;
+        System.out.print("Write a string: ");
+        String v42 = userInput.nextLine();
+        v41 = v42;
+        String v44 = "myStr -> ";
+        String v45 = v41;
+        String v43 = v44 + v45;
+        System.out.println(v43);
     }
 }

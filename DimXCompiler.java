@@ -220,7 +220,6 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         result.add("stat",visit(ctx.e2).render());
 
         ST powResult = stg.getInstanceOf("powerExpr");
-        System.out.println(ctx.exprType);
         powResult.add("type", ctx.exprType.getType());
         powResult.add("var", ctx.varName);
         powResult.add("e1", ctx.e1.varName);
