@@ -97,8 +97,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
         }
         if (res) {
-          //System.out.println(sym.type());
-          //System.out.println(ctx.expr().exprType);
+          System.out.println(sym.type());
+          System.out.println(ctx.expr().exprType);
 
           if (!sym.type().conformsTo(ctx.expr().exprType)) {
             ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");

@@ -41,8 +41,15 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
             }else{
                 if(!check){ //Se o primeiro erro ja occorreu e verificamos que o segundo nao chegou a ocorrer, nao podemos continuar na mesma
                     return null;
+                }
+                String temp="";
+                switch(tokens[1]){
+                    case "real": temp="Real";
+                                break;
+                    case "int": temp="Integer";
+                                break;
                 }   
-                QuantitiesParser.quantityTable.put(typeName, new Quantity(tokens[1], tokens[0],typeName));
+                QuantitiesParser.quantityTable.put(typeName, new Quantity(temp, tokens[0],typeName));
 
             }
 
@@ -85,7 +92,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         if (a.value().equals(b.value()))
             value = a.value();
         else
-            value = "real";
+            value = "Real";
 
         return unit + "-" + value;
     }

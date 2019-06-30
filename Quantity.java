@@ -24,12 +24,13 @@ public class Quantity extends Type {
 
    @Override public boolean conformsTo(Type other) { // compor esta merda
       Boolean check;
+      System.out.println(this.value);
       if(!other.getClass().getName().equals("Quantity")){
-         check=(super.conformsTo(other) || other.name().equals("Real")) || this.value.equals(other.name);
+         check=(super.conformsTo(other) || this.value.equals(other.name()) || this.value.equals(other.name));
 
       }else{
          Quantity temp=(Quantity) other;
-         check=(super.conformsTo(other) || other.name().equals("Real")) || this.value.equals(temp.value());
+         check=(super.conformsTo(other) || this.value.equals(other.name())|| this.value.equals(temp.value()));
 
       }
       return check;
