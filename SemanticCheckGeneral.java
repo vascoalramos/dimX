@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.CharacterIterator;
 
 import javax.print.DocFlavor.STRING;
 
@@ -96,8 +97,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
         }
         if (res) {
-          System.out.println(sym.type());
-          System.out.println(ctx.expr().exprType);
+          //System.out.println(sym.type());
+          //System.out.println(ctx.expr().exprType);
 
           if (!sym.type().conformsTo(ctx.expr().exprType)) {
             ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
@@ -376,27 +377,41 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     if (check) {
       Type t1 = ctx.e1.exprType;
       Type t2 = ctx.e2.exprType;
-      ctx.dimension = ctx.e1.dimension;
+      //ctx.dimension = ctx.e1.dimension;
+      
 
       if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
         ctx.unit = "Void";
 
       } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
           | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
-        ErrorHandling.printError(ctx, "You must specify unit for both operads");
+        ErrorHandling.printError(ctx, "Operands have diferent dimensions");
         check = false;
       } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
         String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
         switch (op) {
         case "*": {
-          ctx.unit = unit1 + "." + unit2;
           
+          ctx.unit=unit1+"."+unit2;
+
           break;
         }
         case "/": {
-          ctx.unit = unit1 + "/" + unit2;
+          if(unit1.equals(unit2)){
+            ctx.unit="Void";
+            ctx.dimension="Adimensional";
+
+          }else{
+            ctx.unit = unit1 + "/" + unit2;
+
+          }
           break;
         }
+        }
+        for (Quantity q : QuantitiesParser.quantityTable.values()) {
+          if (!q.checkUnit(ctx.unit)) {
+            ctx.dimension = q.name();
+          }
         }
 
       }
@@ -482,8 +497,12 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitParentheses(GeneralParser.ParenthesesContext ctx) {
     Boolean res = visit(ctx.expr());
-    if (res)
+    if (res){
       ctx.exprType = ctx.expr().exprType;
+      ctx.unit=ctx.expr().unit;
+      ctx.dimension=ctx.expr().dimension;
+    }
+      
     return res;
   }
 
@@ -584,6 +603,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
+    System.out.println(dimensionA);
+    System.out.println(dimensionB);
 
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
