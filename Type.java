@@ -27,4 +27,8 @@ public abstract class Type {
     public String toString() {
         return name;
     }
+
+    public String getType() {
+        return name;
+    }
 }

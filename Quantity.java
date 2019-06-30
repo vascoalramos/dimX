@@ -51,4 +51,13 @@ public class Quantity extends Type {
       }
       return true;
    }
+
+   @Override
+   public String getType() {
+      if (value.equals("int"))
+         return "Integer";
+      else if (value.equals("real"))
+         return "Real";
+      return value;         
+  }
 }

@@ -118,7 +118,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         Symbol symbol = GeneralParser.map.get(id);
         symbol.setVarName(newVar()); //Change var name to v
-        decResult.add("type", symbol.type().name());
+        decResult.add("type", symbol.type().getType());
         decResult.add("var",symbol.varName());
 
         return decResult;
@@ -190,7 +190,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return getExprResult(ctx, 
                                 visit(ctx.e1).render(), 
                                 visit(ctx.e2).render(), 
-                                ctx.exprType.name(),
+                                ctx.exprType.getType(),
                                 ctx.e1.varName,
                                 ctx.op.getText(), 
                                 ctx.e2.varName,
@@ -204,7 +204,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return getExprResult(ctx, 
                                 visit(ctx.e1).render(), 
                                 visit(ctx.e2).render(), 
-                                ctx.exprType.name(),
+                                ctx.exprType.getType(),
                                 ctx.e1.varName,
                                 ctx.op.getText(), 
                                 ctx.e2.varName,
@@ -221,7 +221,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         ST powResult = stg.getInstanceOf("powerExpr");
         System.out.println(ctx.exprType);
-        powResult.add("type", ctx.exprType.name());
+        powResult.add("type", ctx.exprType.getType());
         powResult.add("var", ctx.varName);
         powResult.add("e1", ctx.e1.varName);
         powResult.add("e2", ctx.e2.varName);
@@ -296,7 +296,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
             ctx.varName = newVar();
             
-            idVarDecl.add("type",ctx.exprType.name());
+            idVarDecl.add("type",ctx.exprType.getType());
             idVarDecl.add("var",ctx.varName);
             idVarDecl.add("value",GeneralParser.map.get(id).varName());
 
