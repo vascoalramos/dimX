@@ -1,4 +1,25 @@
 import sampleQuantities;
 
+Distance d;
+Distance h;
+Speed v;
+Speed q;
+Integer w;
+v=40.0 [m/s];
+q=50.0 [m/s];
+q=q+v;
 Time t;
-t=2.0 [s];
+h=2.0 [m];
+t=2 [s];
+d=2.0[m];
+d=d-h;
+v=h/t;
+v=q+v;
+h=h^4;  
+Integer a;
+Real b;
+Boolean c;
+a = 1;
+b = 2.0;
+print("Ola");
+print(d);

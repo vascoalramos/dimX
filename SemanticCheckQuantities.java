@@ -48,7 +48,7 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
                                 break;
                     case "int": temp="Integer";
                                 break;
-                }   
+                }
                 QuantitiesParser.quantityTable.put(typeName, new Quantity(temp, tokens[0],typeName));
 
             }
@@ -92,7 +92,8 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
         if (a.value().equals(b.value()))
             value = a.value();
         else
-            value = "Real";
+            value = "real";
+
 
         return unit + "-" + value;
     }

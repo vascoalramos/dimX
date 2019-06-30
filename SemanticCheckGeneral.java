@@ -97,8 +97,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
         }
         if (res) {
-          System.out.println(sym.type());
-          System.out.println(ctx.expr().exprType);
+          //System.out.println(sym.type());
+          //System.out.println(ctx.expr().exprType);
 
           if (!sym.type().conformsTo(ctx.expr().exprType)) {
             ErrorHandling.printError(ctx, "Expression type does not conform to variable \"" + id + "\" type!");
@@ -612,8 +612,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
-    System.out.println(dimensionA);
-    System.out.println(dimensionB);
+    //System.out.println(dimensionA);
+    //System.out.println(dimensionB);
 
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");

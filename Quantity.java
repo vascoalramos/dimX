@@ -24,7 +24,7 @@ public class Quantity extends Type {
 
    @Override public boolean conformsTo(Type other) { // compor esta merda
       Boolean check;
-      System.out.println(this.value);
+      //System.out.println(this.value);
       if(!other.getClass().getName().equals("Quantity")){
          check=(super.conformsTo(other) || this.value.equals(other.name()) || this.value.equals(other.name));
 
