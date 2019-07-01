@@ -30,7 +30,7 @@ public class BigWomanTest {
         int v18 = 3;
         int v16 = v17 + v18;
         int v15 = -(v16);
-        int v14 = -(v15);
+        int v14 = Math.abs(v15);
         System.out.println(v14);
     }
 }

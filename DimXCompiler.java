@@ -175,7 +175,7 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     @Override
     public ST visitParentheses(GeneralParser.ParenthesesContext ctx) {
         ST result = visit(ctx.expr());
-        
+
         ctx.varName = ctx.expr().varName;
 
         return result;
@@ -497,8 +497,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     @Override
     public ST visitBinaryOperator(GeneralParser.BinaryOperatorContext ctx) {
         ctx.varName = newVar();
-        
-        return getBinaryOperator(ctx.exprType, visit(ctx.expr()).render(), ctx.expr().varName, ctx.varName, ctx.sign.getText());
+
+        return getBinaryOperator(ctx.exprType, visit(ctx.expr()).render(), ctx.expr().varName, ctx.varName,
+                ctx.sign.getText());
     }
 
     private ST getBinaryOperator(Type type, String e1Stats, String var1, String varOut, String operator) {
@@ -515,4 +516,26 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         return result;
     }
+
+    @Override
+    public ST visitAbsoluteValue(GeneralParser.AbsoluteValueContext ctx) {
+        ctx.varName = newVar();
+
+        return getAbsoluteValue(ctx.exprType, visit(ctx.expr()).render(), ctx.expr().varName, ctx.varName);
+    }
+
+    private ST getAbsoluteValue(Type type, String e1Stats, String var1, String varOut) {
+        ST result = stg.getInstanceOf("stats");
+        result.add("stat", e1Stats);
+
+        ST expression = stg.getInstanceOf("absoluteValue");
+        expression.add("type", type.getType());
+        expression.add("var", varOut);
+        expression.add("e1", var1);
+
+        result.add("stat", expression.render());
+
+        return result;
+    }
+
 }
