@@ -9,3 +9,6 @@ Integer e;
 e = a+b*c;
 print(d);
 print(e);
+Integer i11 = e ^ "string";
+print(abs(e));
+String s = 3* "ola";

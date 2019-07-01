@@ -116,9 +116,8 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
-    Boolean res = true; // visit(ctx.expr());
+    Boolean res = visit(ctx.expr());
     String id = ctx.declaration().ID().getText(), typeStr = ctx.declaration().type().getText();
-    visit(ctx.expr());
     if (res) {
       if (GeneralParser.map.exists(id)) {
         ErrorHandling.printError(ctx, "Variable \"" + id + "\" already declared!");
@@ -361,11 +360,15 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   }
 
   public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
-    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
-        && checkBooleanType(ctx, ctx.e2.exprType);
-    String op = ctx.op.getText();
+    Boolean check = visit(ctx.e1) && visit(ctx.e2) && ctx.e1.exprType.isNumeric() && ctx.e2.exprType.isNumeric();
+    if (!check) {
+      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+    }
     // associate dimension and calculate new unit
-    if (check) {
+    else {
+
+      String op = ctx.op.getText();
+
       Type t1 = ctx.e1.exprType;
       Type t2 = ctx.e2.exprType;
 
@@ -415,26 +418,47 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitPow(GeneralParser.PowContext ctx) {
-    Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
-        && checkBooleanType(ctx, ctx.e2.exprType);
-
+    Boolean check = visit(ctx.e1) && visit(ctx.e2) && ctx.e1.exprType.isNumeric() && ctx.e2.exprType.isNumeric();
+    if (!check) {
+      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+    }
     if (ctx.e2.dimension != "Adimensional" | ctx.e2.unit != "Void" | ctx.e2.exprType.equals(realType)) {
       ErrorHandling.printError(ctx, "Bad operand types for exponent \"" + ctx.e2.getText() + "\"");
       check = false;
     }
 
     if (check) {
-      Type t1 = ctx.e1.exprType;
-      Type t2 = ctx.e2.exprType;
-      if (!t1.isNumeric() && !t2.isNumeric()) {
-        ErrorHandling.printError(ctx, "Bad operand types for operator ^");
-        check = false;
-      }
       ctx.unit = ctx.e1.unit;
       ctx.dimension = ctx.e1.dimension;
       ctx.exprType = ctx.e1.exprType;
     }
     return check;
+  }
+
+  @Override
+  public Boolean visitBinaryOperator(GeneralParser.BinaryOperatorContext ctx) {
+    Boolean res = visit(ctx.expr()) && ctx.expr().exprType.isNumeric();
+    if (res) {
+      ctx.unit = ctx.expr().unit;
+      ctx.dimension = ctx.expr().dimension;
+      ctx.exprType = ctx.expr().exprType;
+    } else {
+      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+    }
+    return res;
+  }
+
+  @Override
+  public Boolean visitAbsoluteValue(GeneralParser.AbsoluteValueContext ctx) {
+    Boolean res = visit(ctx.expr()) && ctx.expr().exprType.isNumeric();
+    if (res) {
+      ctx.unit = ctx.expr().unit;
+      ctx.dimension = ctx.expr().dimension;
+      ctx.exprType = ctx.expr().exprType;
+    } else {
+      ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
+    }
+    return res;
   }
 
   @Override

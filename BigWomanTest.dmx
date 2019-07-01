@@ -2,12 +2,13 @@ import sampleQuantities;
 
 Integer inc = 0;
 
-while(inc != 1) {
+while(inc <= 10) {
     print("inc = " + inc);
-    inc = 1;
+    inc = inc + 1;
 };
 
 
-for inc = 0, inc < 5, inc + 1 {
+for inc = 0, inc < 100, inc + 1 {
     print("hello");
+    inc = inc + 9;
 };
