@@ -110,9 +110,11 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
             res = false;
 
           } else {
-            sym.setDimension(ctx.expr().dimension);
-            sym.setUnit(ctx.expr().unit);
-            sym.setValueDefined();
+            if (sym.type().getClass().getName().equals("Quantity")) {
+                sym.setDimension(ctx.expr().dimension);
+                sym.setUnit(ctx.expr().unit);
+              }
+              sym.setValueDefined();
           }
         }
 
@@ -387,7 +389,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
       if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
         ctx.unit = "Void";
-
+        ctx.dimension = "Adimensional";
       } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
           | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
         ErrorHandling.printError(ctx, "Operands have diferent dimensions");
@@ -432,6 +434,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       }
 
     }
+    System.out.println(ctx.exprType);
+    System.out.println(ctx.dimension);
+    System.out.println(ctx.unit);
 
     return check;
   }
