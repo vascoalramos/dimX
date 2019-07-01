@@ -392,8 +392,15 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
     public ST visitWhileConditional(GeneralParser.WhileConditionalContext ctx){
         ST result = stg.getInstanceOf("conditionalWhile");
 
-        result.add("stat", visit(ctx.expr()).render());
+        String exprFirst =  visit(ctx.expr()).render();
+        
+        String exprNext = "";
+        for(int i = 0 ; i < exprFirst.split("\n").length ; i++){
+            exprNext += exprFirst.split("\n")[i].substring(exprFirst.split("\n")[i].indexOf(' ')+1);
+        }
+        result.add("stat",exprFirst);
         result.add("var", ctx.expr().varName);
+        result.add("checkCondition","\n"+exprNext);
         result.add("trueStats", visit(ctx.trueStats).render());
 
         return result;
@@ -406,32 +413,46 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
         String incrementVarDec = visit(ctx.incVarDec).render();
         String breakCond = visit(ctx.breakCond).render();
-        String incrementCond = visit(ctx.incCond).render();
+        String incrementCondTemp = visit(ctx.incCond).render();
 
-        String incVar = incrementVarDec.split("\n")[0].split(" ")[1].replace(";","");
-        
+        String incVar = incrementVarDec.split("\n")[incrementVarDec.split("\n").length-1].split(" ")[0].replace(";","");
+
+
+        //Increment Condition
+        String incrementCond = "";
+        for(int i = 0 ; i < incrementCondTemp.split("\n").length - 1; i++){
+            incrementCond += incrementCondTemp.split("\n")[i] + "\n";
+        }
+
         String incCondition;
-        String lastIncCondStatement = incrementCond.split("\n")[incrementCond.split("\n").length-1];
+        String lastIncCondStatement = incrementCondTemp.split("\n")[incrementCondTemp.split("\n").length-1];
         incCondition = incVar + " = " + lastIncCondStatement.split(" = ")[1];
+        
+        incrementCond += incCondition;
 
-        String incDec;
+        
+        
+        //Increment Variable Declaration
+        String incDeclaration;
         String lastIncDec = incrementVarDec.split("\n")[incrementVarDec.split("\n").length-1];
-        incDec = incVar + " = " + lastIncDec.split(" = ")[1];
+        incDeclaration = incVar + " = " + lastIncDec.split(" = ")[1];
 
 
+        //Update Break Condition
         String breakCondUpdate = "";
         for(int i = 0 ; i < breakCond.split("\n").length ; i++){
             breakCondUpdate += breakCond.split("\n")[i].substring(breakCond.split("\n")[i].indexOf(' ')+1);
         }
 
+        //Update Increment Condition
         String updateIncrement = "";
-        for(int i = 0 ; i < incrementCond.split("\n").length ; i++){
+        for(int i = 0 ; i < incrementCond.split("\n").length-1 ; i++){
             updateIncrement += incrementCond.split("\n")[i].substring(incrementCond.split("\n")[i].indexOf(' ')+1);
         }
 
 
         result.add("stat", incrementVarDec + "\n\n" + breakCond + "\n\n" + incrementCond);
-        result.add("var", incDec);
+        result.add("var", incDeclaration);
         result.add("cond", ctx.breakCond.varName);
         result.add("inc", incCondition.replace(";", ""));
 

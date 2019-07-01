@@ -1,40 +1,13 @@
-Integer a = 5;
-Integer b = 2;
-print("a < b? ");
-print(a < b);
-print("a > b? ");
-print(a > b);
-print("a <= b? ");
-print(a <= b);
-print("a >= b? ");
-print(a >= b);
-print("a == b? ");
-print(a == b);
-print("a != b? ");
-print(not (a != b));
+import sampleQuantities;
 
-String d = input("prompt>>");
-if d === "Ola" {
-    print("Hello");
-    if true {
-        print("World");
-    };
-} else if d === "Mundo" {
-    print("World");
-} else if d === "outra coisa qualquer" {
-    print("Outra coisa qualquer");
-} else {
-    print("Outra coisa qualquer2");
-};
-
-/*
 Integer inc = 0;
+
 while(inc != 1) {
-    print("inc = ");
-    print(inc);
+    print("inc = " + inc);
     inc = 1;
 };
-Integer inc;
+
+
 for inc = 0, inc < 5, inc + 1 {
     print("hello");
-};*/
+};

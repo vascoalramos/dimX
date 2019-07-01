@@ -121,10 +121,11 @@ else {
 >>
 
 //Conditional WHILE
-conditionalWhile(stat,var,trueStats) ::= <<
+conditionalWhile(stat,var,checkCondition,trueStats) ::= <<
 <stats(stat)>
 while (<var>) {
     <trueStats>
+    <checkCondition> //Recheck Conditions
 }
 >>
 
@@ -132,9 +133,13 @@ while (<var>) {
 conditionalFor(stat,var,cond,updateCond,updateIncr,inc,trueStats) ::= <<
 <stats(stat)>
 for(<var><cond>;<inc>){
+    <updateCond> //Recheck Break Condition
+    if(!<cond>){
+        break;
+    }
+
     <trueStats>
 
-    <updateIncr>
-    <updateCond>
+    <updateIncr> //Update Increment variable
 }
 >>
