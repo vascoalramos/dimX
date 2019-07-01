@@ -9,7 +9,6 @@ public class Symbol {
     private String dimension = "Adimensional";
     private String unit = "Void";
 
-
     public Symbol(String name, Type type) {
         assert name != null;
         assert type != null;
@@ -17,7 +16,6 @@ public class Symbol {
         this.type = type;
     }
 
-    
     public void setDimension(String dimension){
         assert dimension != null;
 
@@ -76,7 +74,6 @@ public class Symbol {
 
         return value;
     }
-
 
     public boolean conformsToDimension(String otherDimension) {
         if(this.dimension.equals(otherDimension)){

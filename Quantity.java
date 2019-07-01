@@ -3,10 +3,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Quantity extends Type {
+   
    private String value;
    private List<String> units = new ArrayList<>();
 
-   public Quantity(String value, String unit,String name) {
+   public Quantity(String value, String unit, String name) {
       super(name);
       assert value != null;
       assert unit != null;
@@ -14,26 +15,26 @@ public class Quantity extends Type {
       this.units.add(unit);
    }
 
-   public Quantity(String name){
+   public Quantity(String name) {
       super(name);
    }
 
-   public boolean isNumeric(){
+   @Override
+   public boolean isNumeric() {
       return true;
    }
 
-   @Override public boolean conformsTo(Type other) {
+   @Override
+   public boolean conformsTo(Type other) {
       Boolean check;
-      if(!other.getClass().getName().equals("Quantity")){
-         check=(super.conformsTo(other) || this.value.equals(other.name()) || this.value.equals(other.name));
-
-      }else{
-         Quantity temp=(Quantity) other;
-         check=(super.conformsTo(other) || this.value.equals(other.name())|| this.value.equals(temp.value()));
-
+      if (!other.getClass().getName().equals("Quantity")) {
+         check = (super.conformsTo(other) || this.value.equals(other.name()) || this.value.equals(other.name));
+      } else {
+         Quantity temp = (Quantity) other;
+         check = (super.conformsTo(other) || this.value.equals(other.name()) || this.value.equals(temp.value()));
       }
       return check;
-  }
+   }
 
    public String value() {
       return value;
@@ -44,9 +45,9 @@ public class Quantity extends Type {
    }
 
    public boolean checkUnit(String unit) {
-      Iterator<String> it=units.listIterator();
-      while(it.hasNext()){
-         if(it.next().equals(unit))
+      Iterator<String> it = units.listIterator();
+      while (it.hasNext()) {
+         if (it.next().equals(unit))
             return false;
       }
       return true;
@@ -58,6 +59,6 @@ public class Quantity extends Type {
          return "Integer";
       else if (value.equals("real"))
          return "Real";
-      return value;         
-  }
+      return value;
+   }
 }

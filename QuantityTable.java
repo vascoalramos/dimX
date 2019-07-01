@@ -2,8 +2,9 @@ import java.util.*;
 
 public class QuantityTable {
 
-    public boolean exists(String name) {
+    private HashMap<String, Quantity> table = new HashMap<String, Quantity>();
 
+    public boolean exists(String name) {
         return table.containsKey(name);
     }
 
@@ -15,9 +16,7 @@ public class QuantityTable {
         return table.get(name);
     }
 
-    public Collection<Quantity> values(){
+    public Collection<Quantity> values() {
         return table.values();
     }
-
-    private HashMap<String, Quantity> table = new HashMap<String, Quantity>();
 }

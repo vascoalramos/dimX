@@ -2,10 +2,10 @@ import sampleQuantities;
 
 Distance d;
 Distance h;
-Speed v;
-Speed q;
+Speed v = 40.0 [m/s];
+/*Speed q;
 Integer w;
-v=40.0 [m/s];
+//v=40.0 [m/s];
 q=50.0 [m/s];
 q=q+v;
 Time t;
@@ -28,4 +28,4 @@ print("d -> " + d);
 print(d);
 
 String myStr = input("Write a string: ");
-print("myStr -> " + myStr);
+print("myStr -> " + myStr);*/

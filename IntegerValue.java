@@ -26,5 +26,4 @@ public class IntegerValue extends Value {
     public String toString() {
         return "" + val;
     }
-
 }

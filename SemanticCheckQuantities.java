@@ -51,20 +51,16 @@ public class SemanticCheckQuantities extends QuantitiesBaseVisitor<String> {
                     break;
                 }
                 QuantitiesParser.quantityTable.put(typeName, new Quantity(temp, tokens[0], typeName));
-
             }
-
         } else {
             return null;
         }
-
         return "success";
     }
 
     @Override
     public String visitSimpleType(QuantitiesParser.SimpleTypeContext ctx) {
         String unit = visit(ctx.unit()), value = visit(ctx.value());
-
         return unit + "-" + value;
     }
 

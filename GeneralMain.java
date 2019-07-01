@@ -9,11 +9,10 @@ import org.stringtemplate.v4.*;
 
 public class GeneralMain {
    public static void main(String[] args) throws Exception {
-      // create a CharStream that reads from standard input:
+
       CharStream input = null;
       try {
          input = CharStreams.fromStream(new FileInputStream(args[0]));
-
          if(!args[0].split("\\.")[1].equals("dmx")){
             ErrorHandling.printError("Unrecognisable file extension! Use .dmx");
             System.exit(1);
@@ -22,21 +21,13 @@ public class GeneralMain {
          ErrorHandling.printError("Couldn't find specified file \" " + args[0] + "\"");
          System.exit(1);
       }
-      // create a lexer that feeds off of input CharStream:
+      
       GeneralLexer lexer = new GeneralLexer(input);
-      // create a buffer of tokens pulled from the lexer:
       CommonTokenStream tokens = new CommonTokenStream(lexer);
-      // create a parser that feeds off the tokens buffer:
       GeneralParser parser = new GeneralParser(tokens);
-      // replace error listener:
-      // parser.removeErrorListeners(); // remove ConsoleErrorListener
-      // parser.addErrorListener(new ErrorHandlingListener());
-      // begin parsing at main rule:
       ParseTree tree = parser.main();
-      if (parser.getNumberOfSyntaxErrors() == 0) {
-         // print LISP-style tree:
-         // System.out.println(tree.toStringTree(parser));
 
+      if (parser.getNumberOfSyntaxErrors() == 0) {
          SemanticCheckGeneral visitorGeneral = new SemanticCheckGeneral();
          DimXCompiler compiler = new DimXCompiler();
 
