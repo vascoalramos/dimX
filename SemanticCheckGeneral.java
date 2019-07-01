@@ -359,58 +359,79 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     return res;
   }
 
-  public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
+  private Boolean moduloFunction(GeneralParser.MultDivContext ctx) {
     Boolean check = visit(ctx.e1) && visit(ctx.e2) && ctx.e1.exprType.isNumeric() && ctx.e2.exprType.isNumeric();
     if (!check) {
       ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
     }
-    // associate dimension and calculate new unit
-    else {
+    if (ctx.e2.dimension != "Adimensional" || ctx.e2.unit != "Void") {
+      ErrorHandling.printError(ctx, "Bad operand types for modulo \"" + ctx.e2.getText() + "\"");
+      check = false;
+    }
 
-      String op = ctx.op.getText();
+    if (check) {
+      ctx.unit = ctx.e1.unit;
+      ctx.dimension = ctx.e1.dimension;
+      ctx.exprType = ctx.e1.exprType;
+    }
+    return check;
+  }
 
-      Type t1 = ctx.e1.exprType;
-      Type t2 = ctx.e2.exprType;
-
-      if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
-        ctx.unit = "Void";
-        ctx.dimension = "Adimensional";
-      } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
-          | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
-        ErrorHandling.printError(ctx, "Operands have diferent dimensions");
-        check = false;
-      } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
-        String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
-        switch (op) {
-        case "*": {
-          ctx.unit = unit1 + "." + unit2;
-          break;
-        }
-        case "/": {
-          if (unit1.equals(unit2)) {
-            ctx.unit = "Void";
-            ctx.dimension = "Adimensional";
-          } else {
-            ctx.unit = unit1 + "/" + unit2;
-          }
-          break;
-        }
-        }
-        for (Quantity q : QuantitiesParser.quantityTable.values()) {
-          if (!q.checkUnit(ctx.unit)) {
-            ctx.dimension = q.name();
-          }
-        }
+  public Boolean visitMultDiv(GeneralParser.MultDivContext ctx) {
+    Boolean check = true;
+    String op = ctx.op.getText();
+    if (op.equals("%")) {
+      check = moduloFunction(ctx);
+    } else {
+      check = visit(ctx.e1) && visit(ctx.e2) && ctx.e1.exprType.isNumeric() && ctx.e2.exprType.isNumeric();
+      if (!check) {
+        ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
       }
+      // associate dimension and calculate new unit
+      else {
+        Type t1 = ctx.e1.exprType;
+        Type t2 = ctx.e2.exprType;
 
-      if (check) {
-        if (!t1.isNumeric() && !t2.isNumeric()) {
-          ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+        if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
+          ctx.unit = "Void";
+          ctx.dimension = "Adimensional";
+        } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
+            | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
+          ErrorHandling.printError(ctx, "Operands have diferent dimensions");
           check = false;
-        } else if (ctx.e1.exprType.conformsTo(realType) || ctx.e2.exprType.conformsTo(realType))
-          ctx.exprType = realType;
-        else
-          ctx.exprType = integerType;
+        } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+          String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
+          switch (op) {
+          case "*": {
+            ctx.unit = unit1 + "." + unit2;
+            break;
+          }
+          case "/": {
+            if (unit1.equals(unit2)) {
+              ctx.unit = "Void";
+              ctx.dimension = "Adimensional";
+            } else {
+              ctx.unit = unit1 + "/" + unit2;
+            }
+            break;
+          }
+          }
+          for (Quantity q : QuantitiesParser.quantityTable.values()) {
+            if (!q.checkUnit(ctx.unit)) {
+              ctx.dimension = q.name();
+            }
+          }
+        }
+
+        if (check) {
+          if (!t1.isNumeric() && !t2.isNumeric()) {
+            ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+            check = false;
+          } else if (ctx.e1.exprType.conformsTo(realType) || ctx.e2.exprType.conformsTo(realType))
+            ctx.exprType = realType;
+          else
+            ctx.exprType = integerType;
+        }
       }
     }
     return check;
@@ -422,7 +443,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     if (!check) {
       ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
     }
-    if (ctx.e2.dimension != "Adimensional" | ctx.e2.unit != "Void" | ctx.e2.exprType.equals(realType)) {
+    if (ctx.e2.dimension != "Adimensional" || ctx.e2.unit != "Void") {
       ErrorHandling.printError(ctx, "Bad operand types for exponent \"" + ctx.e2.getText() + "\"");
       check = false;
     }
