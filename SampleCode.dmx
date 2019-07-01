@@ -1,17 +1,19 @@
+import sampleQuantities;
 //EX 1:
 //Sabendo que te deslocas a uma velocidade de 5 m/s  queres percorrer 1 km quanto tempo demoras?
 
-//Boolean perc = true; //Deve ser capaz de converter de km para m automatico
 
-Velocity vel = 5 [m/s]; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
-//vel= 10 [m]+10[m]
+
+Speed vel = 5.0 [m/s] ; //Por omissao, cada grandeza tem um default, no caso da velocidade seria m/s, na distancia seria metros, etc...
+
+vel= 10.0 [m/s]+10.0[m/s];
 print(2+2);
 
 //String tempo = perc/vel; //Neste caso teriamos m / (m/s) == s
 
 //Alternativamente poderiamos ter:
 
-Tempo tempo = 1 [s] / 5 [s]; //Conversao para milisegundos e uso de literais
+Time tempo = 1 [s] / 5 [s]; //Conversao para milisegundos e uso de literais
 /*
 
 //EX 2:

@@ -395,11 +395,18 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
           ctx.unit = "Void";
           ctx.dimension = "Adimensional";
-        } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
-            | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
-          ErrorHandling.printError(ctx, "Operands have diferent dimensions");
-          check = false;
-        } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+        } else if (ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
+        {
+          String unit1 = ctx.e1.unit;
+          ctx.unit=unit1;
+
+
+        }else if (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void")) {
+
+          String unit2 = ctx.e2.unit;
+          ctx.unit=unit2;
+
+        }else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
           switch (op) {
           case "*": {
@@ -624,6 +631,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
+    
 
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");

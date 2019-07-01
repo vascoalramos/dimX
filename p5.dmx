@@ -1,0 +1,13 @@
+import sampleQuantities;
+
+Distance d = 1.0 [m];
+Time t = 2[s];
+String s = "ola";
+Boolean b = true;
+Real r = 2.2;
+Real i = 22;
+d=d/3;
+d=d*4;
+Speed v;
+v=d/t;
+print(v);
