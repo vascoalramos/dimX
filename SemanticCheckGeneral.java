@@ -15,7 +15,9 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitMain(GeneralParser.MainContext ctx) {
-    Boolean res = visit(ctx.importQuantities());
+    Boolean res = true;
+    if (ctx.importQuantities() != null)
+      res = visit(ctx.importQuantities());
     if(!ErrorHandling.error()){
       res = visit(ctx.statList());
     }
