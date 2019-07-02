@@ -198,7 +198,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     if (!ctx.e1.exprType.getClass().getName().equals("StringType")
         && !ctx.e2.exprType.getClass().getName().equals("StringType")) {
       check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
-
+        
       if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
         ctx.unit = "Void";
 
