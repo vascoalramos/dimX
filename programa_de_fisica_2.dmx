@@ -1,0 +1,31 @@
+// Um aluno pretende saber o volume de solução que tem, sabendo que a densidade da mesma é de 660 g/L.
+// Sabendo que a densidade calcula-se em função da massa e do volume, esceva um programa que apresente
+// uma "tabela" que mostre a densidade da solução preparada pelo aluno, em função de vários volumes possíveis,
+// para que o aluno obtenha a resposta à sua dúvida.
+
+// A solução foi preparada misturando-se 30 gramas de um sal em 300 gramas de água. 
+// Considerando-se que o volume está contido no intervalo de 0.1 a 1 litros.
+
+
+
+import exercicios_de_fisica_QUANTIDADES;
+
+
+Massa soluto = 30 [g];
+Massa solvente = 300 [g];
+Massa massa_total=soluto+solvente;
+
+Capacidade volume=0.1[l];
+
+Densidade densidade;
+
+while volume < 1 {
+
+    densidade = massa_total / volume;
+
+    print ( "Densidade:  "+densidade+"         Volume necessário: "+ volume );
+    
+    volume=volume+0.1 [l];
+
+};
+
