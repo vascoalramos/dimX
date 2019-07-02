@@ -1,6 +1,6 @@
 grammar Quantities;
 
-@parser::members{
+@parser::members {
     public static final QuantityTable quantityTable = new QuantityTable();
 }
 
