@@ -1,3 +1,7 @@
+/**
+ * Derived class from abstract class Value. It implements a concrete String
+ * Value object. Check Value class documentation for more details.
+ */
 public class StringValue extends Value {
 
     private String val;

@@ -1,3 +1,7 @@
+/**
+ * Derived class from abstract class Value. It implements a concrete Real Value
+ * object. Check Value class documentation for more details.
+ */
 public class RealValue extends Value {
 
     private double val;
