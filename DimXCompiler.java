@@ -3,20 +3,36 @@ import org.stringtemplate.v4.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+/**
+ * This class is responsible for generate the code in the defined output
+ * language. It extends the GeneralBaseVisitor class, so it uses the software
+ * pattern visitor. It uses a string template file, in order to convert our
+ * languange statements in valid statements to the output language.
+ */
 public class DimXCompiler extends GeneralBaseVisitor<ST> {
     protected int varCount = 0;
     protected STGroup stg = null;
     protected String targetLang = "java";
 
-    /* SUPPORT FUNCTIONS */
+    // SUPPORT FUNCTIONS
 
-    // Checks if the string template file exists
+    /**
+     * Checks if a string template file exists.
+     * 
+     * @param outputLang Name of the file.
+     * @return true or false.
+     */
     public boolean validTarget(String outputLang) {
         File stgFile = new File(outputLang + ".stg");
         return (stgFile.exists() && stgFile.isFile() && stgFile.canRead());
     }
 
-    // Set Output Lang Target
+    /**
+     * Definition the output language.
+     * 
+     * @param outputLang Name of the output language.
+     * @return always true
+     */
     public boolean setTarget(String outputLang) {
         assert validTarget(outputLang);
 
@@ -24,14 +40,21 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return true;
     }
 
-    // Returns a new usable variable name
+    /**
+     * Returns a new variable name to use in the output language.
+     * 
+     * @return A string representing a variable name.
+     */
     public String newVar() {
         return "v" + varCount++;
     }
 
-    /* MAIN RULES */
+    // MAIN RULES
 
-    // Main rule -> Starts module and adds all stats to the main function
+    /**
+     * The first rule to visit in the syntatic tree. It starts the module and add
+     * all the statements to the main function.
+     */
     @Override
     public ST visitMain(GeneralParser.MainContext ctx) {
         assert (validTarget(this.targetLang)); // Check if we have a valid stgFile
@@ -44,6 +67,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return resultModule;
     }
 
+    /**
+     * It visits all the present statements in the syntatic tree, and adds all
+     * statements in a collection of statements.
+     */
     @Override
     public ST visitStatList(GeneralParser.StatListContext ctx) {
         ST resultStats = this.stg.getInstanceOf("stats"); // Intermediate results of all stats
@@ -55,9 +82,12 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return resultStats;
     }
 
-    /* PRINT RULES */
+    // PRINT RULES
 
-    // Print rule -> Prints the expression
+    /**
+     * This method generates the output code for printing to the console an
+     * expression.
+     */
     @Override
     public ST visitPrint(GeneralParser.PrintContext ctx) {
         ST printResult = this.stg.getInstanceOf("print");
@@ -69,7 +99,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return printResult;
     }
 
-    // Check dimension rule -> Prints expression's dimension
+    /**
+     * This method generates the output code for printing to the console the
+     * dimension of an expression.
+     */
     @Override
     public ST visitDimensionCheck(GeneralParser.DimensionCheckContext ctx) {
         ST printResult = this.stg.getInstanceOf("print");
@@ -80,7 +113,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return printResult;
     }
 
-    // Check unit rule -> Prints expression's unit
+    /**
+     * This method generates the output code for printing to the console the unit of
+     * an expression.
+     */
     @Override
     public ST visitUnitCheck(GeneralParser.UnitCheckContext ctx) {
         ST printResult = this.stg.getInstanceOf("print");
@@ -91,9 +127,12 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return printResult;
     }
 
-    /* ASSIGNMENT FUNCTIONS */
+    // ASSIGNMENT RULES
 
-    // Assignment rule -> Assigns value to previously declared variable
+    /**
+     * This method generates the code for only assign a value to a previously
+     * declared variable.
+     */
     @Override
     public ST visitJustAssign(GeneralParser.JustAssignContext ctx) {
 
@@ -108,7 +147,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return assignResult;
     }
 
-    // Declare rule -> Declares new variable
+    /**
+     * This method declares a new variable.
+     */
     @Override
     public ST visitDeclaration(GeneralParser.DeclarationContext ctx) {
 
@@ -123,7 +164,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return decResult;
     }
 
-    // Declare and assign rule -> Declares new variable and assigns it a value
+    /**
+     * This method simultaneously declares a new variable and assigns a value to it.
+     */
     @Override
     public ST visitDeclareAndAssign(GeneralParser.DeclareAndAssignContext ctx) {
 
@@ -148,11 +191,22 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    /* EXPR RULES */
+    // EXPR RULES
 
-    // Base Expr ST Builder -> e1Stats : Stats of 1st operand ; e2Stats : Stats of
-    // 2nd operand ; type : Result type ; var1 : VarName of 1st operand ; op -
-    // Operation ; var2 : VarName of 2nd Operand ; varOut : VarName of output ;
+    /**
+     * This method generates the output code for an expression using the triple
+     * address code technique.
+     * 
+     * @param ctx     Context of the rule.
+     * @param e1Stats Statements of the first operand.
+     * @param e2Stat  Statements of the second operand.
+     * @param type    Result type of the expression.
+     * @param var1    Name of the variable of the first operand.
+     * @param op      Operation to be performed.
+     * @param var2    Name of the variable of the second operand.
+     * @param varOut  Name of the output variable that will old the result value of
+     *                the expression.
+     */
     private ST getExprResult(ParserRuleContext ctx, String e1Stats, String e2Stats, String type, String var1, String op,
             String var2, String varOut) {
         ST result = stg.getInstanceOf("stats");
@@ -171,7 +225,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Parenthesis Expr
+    /**
+     * Method to visit the parentheses expression.
+     */
     @Override
     public ST visitParentheses(GeneralParser.ParenthesesContext ctx) {
         ST result = visit(ctx.expr());
@@ -181,7 +237,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Addition/Subtraction Expr
+    /**
+     * Method to visit and generate the output code of the addition/subtraction
+     * expression.
+     */
     @Override
     public ST visitAddSub(GeneralParser.AddSubContext ctx) {
         ctx.varName = newVar();
@@ -189,7 +248,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                 ctx.e1.varName, ctx.op.getText(), ctx.e2.varName, ctx.varName);
     }
 
-    // Multiplication/Division Expr
+    /**
+     * Method to visit and generate the output code of the multiplication/division
+     * expression.
+     */
     @Override
     public ST visitMultDiv(GeneralParser.MultDivContext ctx) {
         ctx.varName = newVar();
@@ -197,7 +259,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                 ctx.e1.varName, ctx.op.getText(), ctx.e2.varName, ctx.varName);
     }
 
-    // Power Expr
+    /**
+     * Method to visit and generate the output code of the pow expression.
+     */
     @Override
     public ST visitPow(GeneralParser.PowContext ctx) {
         ctx.varName = newVar();
@@ -216,8 +280,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    /* LITERAL EXPR */
-    // Base int literal expression
+    /**
+     * Method to generate the base integer literal expression output code.
+     */
     @Override
     public ST visitIntValue(GeneralParser.IntValueContext ctx) {
         ST result = stg.getInstanceOf("declaration");
@@ -231,7 +296,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base real literal expression
+    /**
+     * Method to generate the base real literal expression output code.
+     */
     @Override
     public ST visitRealValue(GeneralParser.RealValueContext ctx) {
         ST result = stg.getInstanceOf("declaration");
@@ -244,7 +311,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base boolean literal expression
+    /**
+     * Method to generate the base boolean literal expression output code.
+     */
     @Override
     public ST visitBooleanValue(GeneralParser.BooleanValueContext ctx) {
         ST result = stg.getInstanceOf("declaration");
@@ -257,7 +326,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base String literal declaration
+    /**
+     * Method to generate the base string literal expression output code.
+     */
     @Override
     public ST visitStringValue(GeneralParser.StringValueContext ctx) {
         ST result = stg.getInstanceOf("declaration");
@@ -270,7 +341,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base ID value getter
+    /**
+     * Method to generate the ID value expression output code.
+     */
     @Override
     public ST visitIDvalue(GeneralParser.IDvalueContext ctx) {
         ST result = stg.getInstanceOf("stats");
@@ -289,7 +362,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    /* INPUT RULE */
+    // INPUT RULE
+    /**
+     * Method to generate the output code for input expression.
+     */
     @Override
     public ST visitInputValue(GeneralParser.InputValueContext ctx) {
         ST result = stg.getInstanceOf("input");
@@ -302,9 +378,12 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
 
     }
 
-    /* CONDITIONAL EXPRESSIONS */
+    // CONDITIONAL EXPRESSIONS
 
-    // Base Expr .EQUALS() ST Builder -> Used for comparing using the === operator
+    /**
+     * This method, similiar to the getExprResult, is used to generate the output
+     * code of an equality comparison between two expressions.
+     */
     private ST getExprEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2,
             String varOut) {
         ST result = stg.getInstanceOf("stats");
@@ -322,8 +401,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base Expr NOT .EQUALS() ST Builder -> Used for comparing using the !==
-    // operator
+    /**
+     * This method, similiar to the getExprResult, is used to generate the output
+     * code of a not equality comparison between two expressions.
+     */
     private ST getExprNotEquals(ParserRuleContext ctx, String e1Stats, String e2Stats, String var1, String var2,
             String varOut) {
         ST result = stg.getInstanceOf("stats");
@@ -341,7 +422,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // Base Expr NOT ST Builder -> Used for the Not <expr> rules
+    /**
+     * This method, similiar to the getExprResult, is used to generate the output
+     * code of a negation of one expression.
+     */
     private ST getExprNot(ParserRuleContext ctx, String e1Stats, String var1, String varOut) {
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
@@ -356,7 +440,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // If-Else Rule
+    /**
+     * This method is responsible for generating the output code of an 'if'
+     * statement.
+     */
     @Override
     public ST visitConditional(GeneralParser.ConditionalContext ctx) {
         ST result = stg.getInstanceOf("conditional");
@@ -374,7 +461,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // While Rule
+    /**
+     * This method is responsible for generating the output code of a 'while'
+     * statement.
+     */
     @Override
     public ST visitWhileConditional(GeneralParser.WhileConditionalContext ctx) {
         ST result = stg.getInstanceOf("conditionalWhile");
@@ -393,7 +483,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    // For Rule
+    /**
+     * This method is responsible for generating the output code of a 'for'
+     * statement.
+     */
     @Override
     public ST visitForConditional(GeneralParser.ForConditionalContext ctx) {
         ST result = stg.getInstanceOf("conditionalFor");
@@ -447,9 +540,12 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
-    /* CONDITIONAL CHECKS */
+    // CONDITIONAL CHECKS
 
-    // Equality Expressions (includes ==, ===, !=, !==)
+    /**
+     * This method is responsible to choose the correct function in order to
+     * generate the code for an equality expression.
+     */
     @Override
     public ST visitConditionalEquality(GeneralParser.ConditionalEqualityContext ctx) {
         ctx.varName = newVar();
@@ -467,7 +563,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         }
     }
 
-    // Binary Equality Expressions (includes ==, ===, !=, !==)
+    /**
+     * This method visits a conditional relational expression.
+     */
     @Override
     public ST visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) {
         ctx.varName = newVar();
@@ -476,7 +574,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                 ctx.op.getText(), ctx.e2.varName, ctx.varName);
     }
 
-    // Binary AND/OR Expressions
+    /**
+     * This method visits a binary 'and/or' conditional expression.
+     */
     @Override
     public ST visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
         ctx.varName = newVar();
@@ -485,7 +585,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                 ctx.op.getText(), ctx.e2.varName, ctx.varName);
     }
 
-    // Unary Negation Expression
+    /**
+     * This method visits a unary conditional negation expression.
+     */
     @Override
     public ST visitConditionalNegation(GeneralParser.ConditionalNegationContext ctx) {
         ctx.varName = newVar();
@@ -493,7 +595,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return getExprNot(ctx, visit(ctx.expr()).render(), ctx.expr().varName, ctx.varName);
     }
 
-    // Binary operator
+    /**
+     * This method visits a binary operator expression, to set its sign.
+     */
     @Override
     public ST visitBinaryOperator(GeneralParser.BinaryOperatorContext ctx) {
         ctx.varName = newVar();
@@ -502,6 +606,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
                 ctx.sign.getText());
     }
 
+    /**
+     * This method is responsible for generate the output code of a binary operator
+     * expression.
+     */
     private ST getBinaryOperator(Type type, String e1Stats, String var1, String varOut, String operator) {
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
@@ -517,6 +625,9 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return result;
     }
 
+    /**
+     * This method visits an absolute value expression, to set its absolute value.
+     */
     @Override
     public ST visitAbsoluteValue(GeneralParser.AbsoluteValueContext ctx) {
         ctx.varName = newVar();
@@ -524,6 +635,10 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         return getAbsoluteValue(ctx.exprType, visit(ctx.expr()).render(), ctx.expr().varName, ctx.varName);
     }
 
+    /**
+     * This method is responsible for generate the output code of an absolute value
+     * expression.
+     */
     private ST getAbsoluteValue(Type type, String e1Stats, String var1, String varOut) {
         ST result = stg.getInstanceOf("stats");
         result.add("stat", e1Stats);
