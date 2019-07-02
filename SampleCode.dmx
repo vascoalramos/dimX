@@ -13,7 +13,7 @@ print(2+2);
 
 //Alternativamente poderiamos ter:
 
-Time tempo = 1 [s] / 5 [s]; //Conversao para milisegundos e uso de literais
+Integer tempoI = 1 [s] / 5 [s]; //Conversao para milisegundos e uso de literais
 /*
 
 //EX 2:
