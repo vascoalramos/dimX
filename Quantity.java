@@ -2,25 +2,28 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/** Derived class from abstract class Type.
- * It implements a concrete Quantity Type.
- * This Quantity Type is defined by the programmer.
- * Check Type class documentation for more details.
+/**
+ * Derived class from abstract class Type. It implements a concrete Quantity
+ * Type. This Quantity Type is defined by the programmer. Check Type class
+ * documentation for more details.
  */
 public class Quantity extends Type {
    /**
     * Value: Attribute representing the concrete primitive type of the Quantity.
-   */
+    */
    private String value;
    /**
-    * units: List of units of the new Quantity. i.e.: meters and seconds for Velocity.
+    * units: List of units of the new Quantity. i.e.: meters and seconds for
+    * Velocity.
     */
    private List<String> units = new ArrayList<>();
 
-   /** Constructor of Quantity class.
+   /**
+    * Constructor of Quantity class.
+    * 
     * @param value Value of the new Quantity.
-    * @param unit Unit to express the new Quantity. i.e.: meters
-    * @param name Name of the new Quantity.
+    * @param unit  Unit to express the new Quantity. i.e.: meters
+    * @param name  Name of the new Quantity.
     */
    public Quantity(String value, String unit, String name) {
       super(name);
@@ -33,8 +36,10 @@ public class Quantity extends Type {
    public Quantity(String name) {
       super(name);
    }
-   
-   /** All new Quantities should be numeric.
+
+   /**
+    * All new Quantities should be numeric.
+    * 
     * @return always true
     */
    @Override
@@ -42,10 +47,12 @@ public class Quantity extends Type {
       return true;
    }
 
-   /** Check if 'this' is equal to another Type.
-   * @param other Another Type to compare with 'this'
-   * @return true or false
-   */
+   /**
+    * Check if 'this' is equal to another Type.
+    * 
+    * @param other Another Type to compare with 'this'
+    * @return true or false
+    */
    @Override
    public boolean conformsTo(Type other) {
       Boolean check;
@@ -72,7 +79,9 @@ public class Quantity extends Type {
       return this.units;
    }
 
-   /** Check if the Quantity already has a specific unit.
+   /**
+    * Check if the Quantity already has a specific unit.
+    * 
     * @param unit Unit to be checked.
     * @return true or false.
     */
@@ -85,7 +94,9 @@ public class Quantity extends Type {
       return true;
    }
 
-   /** Get the primitive type of a Quantity.
+   /**
+    * Get the primitive type of a Quantity.
+    * 
     * @return A string that can be "Integer" or "Real"
     */
    @Override

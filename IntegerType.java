@@ -1,9 +1,9 @@
-/** Derived class from abstract class Type.
- * It implements a concrete Integer Type object.
- * Check Type class documentation for more details.
+/**
+ * Derived class from abstract class Type. It implements a concrete Integer Type
+ * object. Check Type class documentation for more details.
  */
 public class IntegerType extends Type {
-    
+
     public IntegerType() {
         super("Integer");
     }
@@ -12,7 +12,10 @@ public class IntegerType extends Type {
     public boolean isNumeric() {
         return true;
     }
-    /** Check if 'this' is equal to another IntegerType or RealType.
+
+    /**
+     * Check if 'this' is equal to another IntegerType or RealType.
+     * 
      * @param other Another Type to compare with 'this'
      * @return true or false
      */

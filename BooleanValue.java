@@ -1,3 +1,7 @@
+/**
+ * Derived class from abstract class Value. It implements a concrete Boolean
+ * Value object. Check Value class documentation for more details.
+ */
 public class BooleanValue extends Value {
 
     private boolean val;

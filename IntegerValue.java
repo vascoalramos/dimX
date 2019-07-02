@@ -1,3 +1,7 @@
+/**
+ * Derived class from abstract class Value. It implements a concrete Integer
+ * Value object. Check Value class documentation for more details.
+ */
 public class IntegerValue extends Value {
 
     private int val;
