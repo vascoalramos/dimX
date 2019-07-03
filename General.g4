@@ -9,7 +9,7 @@ grammar General;
 /**
 	* General grammar main rule
 */
-main: (importQuantities)? statList EOF;
+main: (importQuantities)* statList EOF;
 
 /**
 	* List of zero or more statements.

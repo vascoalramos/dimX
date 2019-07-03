@@ -1,5 +1,6 @@
 import java.io.*;
 import java.text.CharacterIterator;
+import java.util.Iterator;
 
 import javax.print.DocFlavor.STRING;
 
@@ -16,8 +17,11 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   @Override
   public Boolean visitMain(GeneralParser.MainContext ctx) {
     Boolean res = true;
-    if (ctx.importQuantities() != null)
-      res = visit(ctx.importQuantities());
+    if (ctx.importQuantities() != null) {
+      Iterator<GeneralParser.ImportQuantitiesContext> iter = ctx.importQuantities().iterator();
+      while (iter.hasNext())
+        res = visit(iter.next());
+    }
     if (!ErrorHandling.error()) {
       res = visit(ctx.statList());
     }
@@ -38,14 +42,17 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
       ErrorHandling.printError(ctx, "ERROR: reading file!");
       res = false;
     }
-    QuantitiesLexer lexer = new QuantitiesLexer(input);
-    CommonTokenStream tokens = new CommonTokenStream(lexer);
-    QuantitiesParser parser = new QuantitiesParser(tokens);
-    ParseTree tree = parser.main();
+    if (res) {
+      QuantitiesLexer lexer = new QuantitiesLexer(input);
+      CommonTokenStream tokens = new CommonTokenStream(lexer);
+      QuantitiesParser parser = new QuantitiesParser(tokens);
+      ParseTree tree = parser.main();
 
-    if (parser.getNumberOfSyntaxErrors() == 0) {
-      SemanticCheckQuantities visitor0 = new SemanticCheckQuantities();
-      visitor0.visit(tree);
+      if (parser.getNumberOfSyntaxErrors() == 0) {
+        SemanticCheckQuantities visitor0 = new SemanticCheckQuantities();
+        visitor0.visit(tree);
+      }
+
     }
     return res;
   }
@@ -198,7 +205,7 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     if (!ctx.e1.exprType.getClass().getName().equals("StringType")
         && !ctx.e2.exprType.getClass().getName().equals("StringType")) {
       check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
-        
+
       if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
         ctx.unit = "Void";
 
@@ -234,128 +241,127 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
   /* Comparassion expressions */
   @Override
   public Boolean visitConditionalAndOr(GeneralParser.ConditionalAndOrContext ctx) {
-    visit(ctx.e1);
-    visit(ctx.e2);
-    Boolean res = true;
-    if (!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
-      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
-      res = false;
+    Boolean res = visit(ctx.e1) && visit(ctx.e2);
+    if (res) {
+      if (!ctx.e1.exprType.conformsTo(booleanType) || !ctx.e2.exprType.conformsTo(booleanType)) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+        res = false;
+      }
+      ctx.exprType = booleanType;
+      ctx.unit = "Void";
+      ctx.dimension = "Adimensional";
     }
-    ctx.exprType = booleanType;
-    ctx.unit = "Void";
-    ctx.dimension = "Adimensional";
     return res;
   }
 
   @Override
   public Boolean visitConditionalRelational(GeneralParser.ConditionalRelationalContext ctx) {
-    visit(ctx.e1);
-    visit(ctx.e2);
-
-    Boolean res = true;
-    if (!ctx.e1.exprType.isNumeric() || !ctx.e2.exprType.isNumeric()) {
-      ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
-      res = false;
+    Boolean res = visit(ctx.e1) && visit(ctx.e2);
+    if (res) {
+      if (!ctx.e1.exprType.isNumeric() || !ctx.e2.exprType.isNumeric()) {
+        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
+        res = false;
+      }
+      ctx.exprType = booleanType;
+      ctx.unit = "Void";
+      ctx.dimension = "Adimensional";
     }
-    ctx.exprType = booleanType;
-    ctx.unit = "Void";
-    ctx.dimension = "Adimensional";
     return res;
   }
 
   @Override
   public Boolean visitConditionalEquality(GeneralParser.ConditionalEqualityContext ctx) {
     String operation = ctx.op.getText();
-    visit(ctx.e1);
-    visit(ctx.e2);
-    Boolean res = true;
-    if (operation.equals("===") || operation.equals("!==")) {
-      if (!ctx.e1.exprType.conformsTo(stringType) || !ctx.e2.exprType.conformsTo(stringType)) {
-        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
-        res = false;
+    Boolean res = visit(ctx.e1) && visit(ctx.e2);
+    if (res) {
+      if (operation.equals("===") || operation.equals("!==")) {
+        if (!ctx.e1.exprType.conformsTo(stringType) || !ctx.e2.exprType.conformsTo(stringType)) {
+          ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+          res = false;
+        }
+      } else {
+        if (ctx.e1.exprType.conformsTo(stringType) || ctx.e2.exprType.conformsTo(stringType)) {
+          ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+          res = false;
+        } else if ((ctx.e1.exprType.conformsTo(booleanType) || ctx.e2.exprType.conformsTo(booleanType))
+            && !ctx.e1.exprType.conformsTo(ctx.e2.exprType)) {
+          ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
+          res = false;
+        }
       }
-    } else {
-      if (ctx.e1.exprType.conformsTo(stringType) || ctx.e2.exprType.conformsTo(stringType)) {
-        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
-        res = false;
-      } else if ((ctx.e1.exprType.conformsTo(booleanType) || ctx.e2.exprType.conformsTo(booleanType))
-          && !ctx.e1.exprType.conformsTo(ctx.e2.exprType)) {
-        ErrorHandling.printError(ctx, "Bad operand types for operator \"" + operation + "\"");
-        res = false;
-      }
+      ctx.exprType = booleanType;
+      ctx.unit = "Void";
+      ctx.dimension = "Adimensional";
     }
-    ctx.exprType = booleanType;
-    ctx.unit = "Void";
-    ctx.dimension = "Adimensional";
 
     return res;
   }
 
   @Override
   public Boolean visitConditionalNegation(GeneralParser.ConditionalNegationContext ctx) {
-    visit(ctx.expr());
-    Boolean res = true;
-    if (!ctx.expr().exprType.conformsTo(booleanType)) {
-      ErrorHandling.printError(ctx, "Bad operand type for operator \"not\"");
-      res = false;
+    Boolean res = visit(ctx.expr());
+    if (res) {
+      if (!ctx.expr().exprType.conformsTo(booleanType)) {
+        ErrorHandling.printError(ctx, "Bad operand type for operator \"not\"");
+        res = false;
+      }
+      ctx.exprType = booleanType;
+      ctx.unit = "Void";
+      ctx.dimension = "Adimensional";
     }
-    ctx.exprType = booleanType;
-    ctx.unit = "Void";
-    ctx.dimension = "Adimensional";
     return res;
   }
 
   @Override
   public Boolean visitConditional(GeneralParser.ConditionalContext ctx) {
-    Boolean res = true;
+    Boolean res = visit(ctx.expr());
+    if (res) {
+      if (!ctx.expr().exprType.conformsTo(booleanType)) {
+        ErrorHandling.printError(ctx, "Bad conditional expression for \"if\" statement");
+        res = false;
+      }
+      visit(ctx.trueStats);
+      ctx.expr().exprType = booleanType;
+      ctx.expr().unit = "Void";
+      ctx.expr().dimension = "Adimensional";
 
-    visit(ctx.expr());
-    if (!ctx.expr().exprType.conformsTo(booleanType)) {
-      ErrorHandling.printError(ctx, "Bad conditional expression for \"if\" statement");
-      res = false;
-    }
-    visit(ctx.trueStats);
-    ctx.expr().exprType = booleanType;
-    ctx.expr().unit = "Void";
-    ctx.expr().dimension = "Adimensional";
-
-    if (ctx.falseStats != null) {
-      visit(ctx.falseStats);
+      if (ctx.falseStats != null) {
+        visit(ctx.falseStats);
+      }
     }
     return res;
   }
 
   @Override
   public Boolean visitWhileConditional(GeneralParser.WhileConditionalContext ctx) {
-    Boolean res = true;
-    visit(ctx.expr());
-    if (!ctx.expr().exprType.conformsTo(booleanType)) {
-      ErrorHandling.printError(ctx, "Bad conditional expression for \"while\" statement");
-      res = false;
+    Boolean res = visit(ctx.expr());
+    if (res) {
+      if (!ctx.expr().exprType.conformsTo(booleanType)) {
+        ErrorHandling.printError(ctx, "Bad conditional expression for \"while\" statement");
+        res = false;
+      }
+      visit(ctx.trueStats);
+      ctx.expr().exprType = booleanType;
     }
-    visit(ctx.trueStats);
-    ctx.expr().exprType = booleanType;
     return res;
   }
 
   @Override
   public Boolean visitForConditional(GeneralParser.ForConditionalContext ctx) {
-    Boolean res = true;
-    visit(ctx.breakCond);
-    if (!ctx.breakCond.exprType.conformsTo(booleanType)) {
-      ErrorHandling.printError(ctx, "Bad break conditional expression for \"for\" statement");
-      res = false;
-    }
-    ctx.breakCond.exprType = booleanType;
+    Boolean res = visit(ctx.breakCond) && visit(ctx.incCond) && visit(ctx.incVarDec) && visit(ctx.trueStats);
+    if (res) {
+      if (!ctx.breakCond.exprType.conformsTo(booleanType)) {
+        ErrorHandling.printError(ctx, "Bad break conditional expression for \"for\" statement");
+        res = false;
+      }
+      ctx.breakCond.exprType = booleanType;
 
-    visit(ctx.incCond);
-    if (!ctx.incCond.exprType.isNumeric()) {
-      ErrorHandling.printError(ctx, "Bad increment conditional expression for \"for\" statement");
-      res = false;
+      if (!ctx.incCond.exprType.isNumeric()) {
+        ErrorHandling.printError(ctx, "Bad increment conditional expression for \"for\" statement");
+        res = false;
+      }
+      ctx.incCond.exprType = booleanType;
     }
-    visit(ctx.incVarDec);
-    visit(ctx.trueStats);
-    ctx.incCond.exprType = booleanType;
     return res;
   }
 
@@ -395,18 +401,16 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
           ctx.unit = "Void";
           ctx.dimension = "Adimensional";
-        } else if (ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
-        {
+        } else if (ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit;
-          ctx.unit=unit1;
+          ctx.unit = unit1;
 
-
-        }else if (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void")) {
+        } else if (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void")) {
 
           String unit2 = ctx.e2.unit;
-          ctx.unit=unit2;
+          ctx.unit = unit2;
 
-        }else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+        } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
           switch (op) {
           case "*": {
@@ -631,7 +635,6 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
 
   private Boolean checkDimension(ParserRuleContext ctx, String dimensionA, String dimensionB) {
     Boolean res = true;
-    
 
     if (!dimensionA.equals(dimensionB)) {
       ErrorHandling.printError(ctx, "Can't perform sums and subtractions on operands from diferent dimensions");
