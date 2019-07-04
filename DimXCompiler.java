@@ -108,7 +108,8 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST printResult = this.stg.getInstanceOf("print");
 
         printResult.add("stat", visit(ctx.expr()));
-        printResult.add("expr", ctx.expr().getText() + " is " + ctx.expr().dimension);
+        String res =  ctx.expr().getText() + " DIMENSION : " + ctx.expr().dimension;
+        printResult.add("expr", "\"" + res + "\"");
 
         return printResult;
     }
@@ -122,7 +123,8 @@ public class DimXCompiler extends GeneralBaseVisitor<ST> {
         ST printResult = this.stg.getInstanceOf("print");
 
         printResult.add("stat", visit(ctx.expr()));
-        printResult.add("expr", ctx.expr().getText() + " is " + ctx.expr().unit);
+        String res = ctx.expr().getText() + " UNIT : " + ctx.expr().unit;
+        printResult.add("expr", "\"" + res + "\"");
 
         return printResult;
     }
