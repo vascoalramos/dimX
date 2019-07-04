@@ -16,6 +16,9 @@ Massa soluto = 30 [g];
 Massa solvente = 300 [g];
 Massa massa_total=soluto+solvente;
 
+(soluto).dimension;
+(soluto).unit;
+
 Capacidade volume=0.1[l];
 
 Densidade densidade;
