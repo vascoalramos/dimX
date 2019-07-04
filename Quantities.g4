@@ -7,7 +7,6 @@ grammar Quantities;
 main: (stat ';')* EOF;
 
 stat: quantity_declare
-	| prefix_declare
 	;
 
 quantity_declare: TYPE_ID ':' type;
@@ -22,15 +21,6 @@ value:
 	 ;
 
 unit: '[' ID (op = ('/' | '*') ID)? ']';
-
-prefix_declare: 'prefix' ID ':' number_type; //TODO especificar uma grandeza para estar associado o prefixo
-
-number_type:  INT
-			| FLOAT
-			| SCF_NOTATION
-			;
-
-SCF_NOTATION: '10^' [0-9]*; //TODO: later date
 
 TYPE_ID: [A-Z]LETTER+;
 ID: LETTER (LETTER | DIGIT)*;

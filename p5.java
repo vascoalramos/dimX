@@ -25,25 +25,21 @@ public class p5 {
         double v12;
         int v13 = 22;
         v12 = v13;
-        double v15 = v0;
-        int v16 = 3;
-        double v14 = v15 / v16;
-        v0 = v14;
-        double v18 = v0;
-        int v19 = 4;
-        double v17 = v18 * v19;
-        v0 = v17;
-        double v20;
-        double v22 = v0;
-        int v23 = v4;
-        double v21 = v22 / v23;
-        v20 = v21;
-        double v24 = v20;
-        System.out.println(v24 + "m/s");
-        boolean v25 = true;
-        if (v25) {
-           String v26 = "joao";
-           System.out.println(v26);
+        double v14;
+        double v16 = v0;
+        int v17 = v4;
+        double v15 = v16 / v17;
+        v14 = v15;
+        double v18 = v14;
+        System.out.println(v18 + "m/s");
+        boolean v19 = true;
+        if (v19) {
+           String v20 = "joao";
+           System.out.println(v20);
         }
+        String v21;
+        System.out.print("ola");
+        String v22 = userInput.nextLine();
+        v21 = v22;
     }
 }

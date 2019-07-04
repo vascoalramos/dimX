@@ -2,16 +2,18 @@ import sampleQuantities;
 import sampleQuantities2;
 
 Distance d = 1.0 [m];
-Acelaration a=1.5 [m/ss];
+Acelaration a = 1.5 [m/ss];
 Time t = 2[s];
 String s = "ola";
 Boolean b = true;
 Real r = 2.2;
 Real i = 22;
-d=d/3;
-d=d*4;
+// d = d/3;
+// d = d*4;
 Speed v;
-v=d/t;
+v = d/t;
 print(v);
+//(v).dimension;
 
 if (true) {print("joao");} ;
+String sss = input("ola" );
