@@ -1,6 +1,8 @@
 import sampleQuantities;
+import sampleQuantities2;
 
 Distance d = 1.0 [m];
+Acelaration a=1.5 [m/ss];
 Time t = 2[s];
 String s = "ola";
 Boolean b = true;
@@ -11,3 +13,5 @@ d=d*4;
 Speed v;
 v=d/t;
 print(v);
+
+if (true) {print("joao");} ;
