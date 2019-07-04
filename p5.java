@@ -32,14 +32,16 @@ public class p5 {
         v14 = v15;
         double v18 = v14;
         System.out.println(v18 + "m/s");
-        boolean v19 = true;
-        if (v19) {
-           String v20 = "joao";
-           System.out.println(v20);
+        double v19 = v14;
+        System.out.println("v DIMENSION : Speed");
+        boolean v20 = true;
+        if (v20) {
+           String v21 = "joao";
+           System.out.println(v21);
         }
-        String v21;
+        String v22;
         System.out.print("ola");
-        String v22 = userInput.nextLine();
-        v21 = v22;
+        String v23 = userInput.nextLine();
+        v22 = v23;
     }
 }

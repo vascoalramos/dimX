@@ -13,7 +13,7 @@ Real i = 22;
 Speed v;
 v = d/t;
 print(v);
-//(v).dimension;
+(v).dimension;
 
 if (true) {print("joao");} ;
 String sss = input("ola" );
