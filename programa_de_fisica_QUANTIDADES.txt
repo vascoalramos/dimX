@@ -2,6 +2,8 @@ Distance : real [m];
 
 Time : int [s];
 
+Speed : Distance / Time [m/s];
+
 Capacidade : real [l];
 
 Massa : int [g];
