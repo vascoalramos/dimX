@@ -404,11 +404,16 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         } else if (ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit;
           ctx.unit = unit1;
+          //System.out.println(ctx.unit);
+
+          
 
         } else if (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void")) {
 
           String unit2 = ctx.e2.unit;
           ctx.unit = unit2;
+
+          
 
         } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
@@ -427,14 +432,24 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
             break;
           }
           }
-          for (Quantity q : QuantitiesParser.quantityTable.values()) {
-            if (!q.checkUnit(ctx.unit)) {
-              ctx.dimension = q.name();
-            }
-          }
+          
         }
 
         if (check) {
+          Boolean temp=false;
+          for (Quantity q : QuantitiesParser.quantityTable.values()) {
+
+            if (!q.checkUnit(ctx.unit)) {
+
+              ctx.dimension = q.name();
+              temp=true;
+            }
+          }
+          if(!temp){
+            ctx.dimension="Adimensional";
+          }
+
+
           if (!t1.isNumeric() && !t2.isNumeric()) {
             ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
             check = false;
@@ -642,5 +657,6 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     }
     return res;
   }
+  
 
 }

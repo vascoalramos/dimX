@@ -25,23 +25,33 @@ public class p5 {
         double v12;
         int v13 = 22;
         v12 = v13;
-        double v14;
-        double v16 = v0;
-        int v17 = v4;
-        double v15 = v16 / v17;
-        v14 = v15;
-        double v18 = v14;
-        System.out.println(v18 + "m/s");
-        double v19 = v14;
+        double v15 = v0;
+        int v16 = 3;
+        double v14 = v15 / v16;
+        v0 = v14;
+        double v17 = v0;
+        System.out.println(v17 + "m");
+        double v19 = v0;
+        int v20 = 4;
+        double v18 = v19 * v20;
+        v0 = v18;
+        double v21;
+        double v23 = v0;
+        int v24 = v4;
+        double v22 = v23 / v24;
+        v21 = v22;
+        double v25 = v21;
+        System.out.println(v25 + "m/s");
+        double v26 = v21;
         System.out.println("v DIMENSION : Speed");
-        boolean v20 = true;
-        if (v20) {
-           String v21 = "joao";
-           System.out.println(v21);
+        boolean v27 = true;
+        if (v27) {
+           String v28 = "joao";
+           System.out.println(v28);
         }
-        String v22;
+        String v29;
         System.out.print("ola");
-        String v23 = userInput.nextLine();
-        v22 = v23;
+        String v30 = userInput.nextLine();
+        v29 = v30;
     }
 }
