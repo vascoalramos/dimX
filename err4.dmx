@@ -1,4 +1,0 @@
-import sampleQuantities;
-Distance m=2.0 [m];
-Time h=2[s];
-print(h*"ola");
