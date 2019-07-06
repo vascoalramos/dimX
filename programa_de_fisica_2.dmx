@@ -6,8 +6,8 @@
 // A solução foi preparada misturando-se 30 gramas de um sal em 300 gramas de água. 
 // Considerando-se que o volume está contido no intervalo de 0.1 a 1 litros.
 
-
-import programa_de_fisica_QUANTIDADES;
+import programa_definicao_dimensoes_1;
+import programa_definicao_dimensoes_2;
 
 Massa soluto = 30 [g];
 Massa solvente = 300 [g];

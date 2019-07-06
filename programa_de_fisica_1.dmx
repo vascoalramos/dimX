@@ -1,8 +1,7 @@
 // Um condutor sabe que percorreu 150 000 metros em 1 hora, num autoestrada, e desconfia que a sua velocidade pode ter 
 // ultrapassado o valor máximo ( 120 km/h ( ou 33,5 m/s aproximadamente ) ). O condutor poderá ser multado?
 
-import programa_de_fisica_QUANTIDADES;
-import programa_de_fisica_QUANTIDADES1;
+import programa_definicao_dimensoes_1;
 
 Speed velocidade;
 

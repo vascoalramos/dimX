@@ -201,32 +201,32 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     Boolean check = visit(ctx.e1) && visit(ctx.e2) && checkBooleanType(ctx, ctx.e1.exprType)
         && checkBooleanType(ctx, ctx.e2.exprType);
 
-    // check if both belong to the same dimension
-    if (!ctx.e1.exprType.getClass().getName().equals("StringType")
-        && !ctx.e2.exprType.getClass().getName().equals("StringType")) {
-      check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
+    if (check) {
+      // check if both belong to the same dimension
+      if (!ctx.e1.exprType.getClass().getName().equals("StringType")
+          && !ctx.e2.exprType.getClass().getName().equals("StringType")) {
+        check = checkDimension(ctx, ctx.e2.dimension, ctx.e1.dimension);
 
-      if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
+        if (ctx.e2.unit.equals("Void") & ctx.e1.unit.equals("Void")) {
+          ctx.unit = "Void";
+
+        } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
+            | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
+          ErrorHandling.printError(ctx, "You must specify unit for both operads");
+          check = false;
+        } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
+          String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
+
+          if (unit1.equals(unit2)) {
+            ctx.unit = unit1;
+          } else {
+            ErrorHandling.printError(ctx, "Both operands must have the same unit");
+            check = false;
+          }
+        }
+      } else
         ctx.unit = "Void";
 
-      } else if ((ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void"))
-          | (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void"))) {
-        ErrorHandling.printError(ctx, "You must specify unit for both operads");
-        check = false;
-      } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
-        String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
-
-        if (unit1.equals(unit2)) {
-          ctx.unit = unit1;
-        } else {
-          ErrorHandling.printError(ctx, "Both operands must have the same unit");
-          check = false;
-        }
-      }
-    } else
-      ctx.unit = "Void";
-
-    if (check) {
       Type tp = fetchType(ctx.e1.exprType, ctx.e2.exprType, ctx.op.getText());
       if (tp == null) {
         ErrorHandling.printError(ctx, "Numeric operator applied to a non-numeric operand!");
@@ -404,16 +404,12 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
         } else if (ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit;
           ctx.unit = unit1;
-          //System.out.println(ctx.unit);
-
-          
+          // System.out.println(ctx.unit);
 
         } else if (ctx.e1.unit.equals("Void") & !ctx.e2.unit.equals("Void")) {
 
           String unit2 = ctx.e2.unit;
           ctx.unit = unit2;
-
-          
 
         } else if (!ctx.e2.unit.equals("Void") & !ctx.e1.unit.equals("Void")) {
           String unit1 = ctx.e1.unit, unit2 = ctx.e2.unit;
@@ -432,23 +428,22 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
             break;
           }
           }
-          
+
         }
 
         if (check) {
-          Boolean temp=false;
+          Boolean temp = false;
           for (Quantity q : QuantitiesParser.quantityTable.values()) {
 
             if (!q.checkUnit(ctx.unit)) {
 
               ctx.dimension = q.name();
-              temp=true;
+              temp = true;
             }
           }
-          if(!temp){
-            ctx.dimension="Adimensional";
+          if (!temp) {
+            ctx.dimension = "Adimensional";
           }
-
 
           if (!t1.isNumeric() && !t2.isNumeric()) {
             ErrorHandling.printError(ctx, "Bad operand types for operator \"" + ctx.op.getText() + "\"");
@@ -657,6 +652,5 @@ public class SemanticCheckGeneral extends GeneralBaseVisitor<Boolean> {
     }
     return res;
   }
-  
 
 }
