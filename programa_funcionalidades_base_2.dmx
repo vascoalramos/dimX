@@ -1,0 +1,18 @@
+Integer a = 2;
+
+Integer b;
+b = 4;
+
+Integer c;
+c = 6;
+
+Integer d;
+d = (a+b)*c;
+print(d);
+
+Integer e;
+e = a+b*c;
+print(e);
+
+Integer my_integer = 2*e+a;
+print(my_integer);

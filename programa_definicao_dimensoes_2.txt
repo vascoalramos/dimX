@@ -1,0 +1,3 @@
+Massa : int [g];
+
+Densidade : Massa / Capacidade [g/l];

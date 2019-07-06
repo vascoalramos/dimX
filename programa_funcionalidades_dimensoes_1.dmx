@@ -1,0 +1,29 @@
+import programa_definicao_dimensoes_1;
+
+Distance d;
+Distance h;
+Speed q;
+Speed v;
+Time t;
+
+v=40.0 [m/s];
+q=50.0 [m/s];
+q=q+v;
+print(q);
+
+h=2.0 [m];
+t=2 [s];
+d=2.0[m];d=d-h;
+print(d);
+
+v=h/t;
+print(v);
+
+v=q+v;
+print(v);
+
+h=h^4;
+print(h);
+
+Real r = h/h;
+print(r);

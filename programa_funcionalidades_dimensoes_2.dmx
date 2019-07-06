@@ -1,0 +1,27 @@
+import programa_definicao_dimensoes_1;
+
+Distance d = 1.0 [m];
+Time t = 2[s];
+Real r = 2.2;
+Real i = 22;
+
+d = d/3;
+print(d);
+
+d = d*4;
+print(d);
+
+Speed v;
+v = d/t;
+print(v);
+(v).dimension;
+
+Boolean b = true;
+String s_true = "This string only displays if true!";
+String s_false = "This string only displays if false!";
+
+if (not(b)) {
+    print(s_true);
+} else {
+    print(s_false);
+};
