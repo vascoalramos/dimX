@@ -1,4 +1,4 @@
-import sampleQuantities;
+import programa_de_fisica_QUANTIDADES;
 
 Distance d = 1.0 [m];
 Time t = 2[s];

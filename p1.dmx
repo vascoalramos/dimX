@@ -1,4 +1,4 @@
-String ola = input("ola>> "); // FIX
+String ola = input("Write something: ");
 print(ola);
 
 Integer a;
@@ -41,7 +41,7 @@ print(b^a);
 
 f = 3.0;
 print(b / f);
-String myVar = input("prompt>>");
-print(b * f); // - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
-print(b / f); //  - erro causa: esqueceram-se de declarar qual é a unidade resultante (unit)
+String myVar = input("Write another thing: ");
+print(b * f);
+print(b / f);
 print(myVar);

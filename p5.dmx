@@ -1,5 +1,5 @@
-import sampleQuantities;
-import sampleQuantities2;
+import programa_de_fisica_QUANTIDADES;
+import programa_de_fisica_QUANTIDADES2;
 
 Distance d = 1.0 [m];
 Acelaration a = 1.5 [m/ss];
