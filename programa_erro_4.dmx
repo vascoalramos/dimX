@@ -1,0 +1,7 @@
+import programa_definicao_dimensoes_1;
+
+Distance m = 2.0 [m];
+
+Time h = 2[s];
+
+print(h*"ola");
