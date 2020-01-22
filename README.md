@@ -1,7 +1,8 @@
 # DimX
-Este repositório serve como uma ferramenta de apoio ao desenvolvimento do projeto prático da UC de Compiladores da Universidade de Aveiro, a construção de um compilador para uma linguagem de análise dimensional para o ramo da física.
 
-# Autores
+This project is a product of a practical assignement of one of our classes: [Compilers](https://www.ua.pt/en/uc/12272) and the main idea behind it is to implement a lanuage capable to compute the task of dimensional analysis (an important issue of the physic's domain).
+
+# Authors
 * **Alina Yanchuk** - [alina-yanchuk02](https://github.com/alina-yanchuk02)
 * **Diogo Silva** - [HerouFenix](https://github.com/HerouFenix)
 * **Vasco Ramos** - [vascoalramos](https://github.com/vascoalramos)
