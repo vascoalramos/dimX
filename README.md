@@ -1,6 +1,6 @@
 # DimX
 
-This project is a product of a practical assignement of one of our classes: [Compilers](https://www.ua.pt/en/uc/12272) and the main idea behind it is to implement a lanuage capable to compute the task of dimensional analysis (an important issue of the physic's domain).
+This project is a product of a practical assignement of one of our classes: [Compilers](https://www.ua.pt/en/uc/12272) and the main idea behind it is to implement a language capable to compute the task of dimensional analysis (an important issue of the physic's domain).
 
 # Authors
 * **Alina Yanchuk** - [alina-yanchuk02](https://github.com/alina-yanchuk02)
